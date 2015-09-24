@@ -1,3 +1,4 @@
+set optimizer=:optimizer;
 set search_path=tpcds;
 -- start query 1 in stream 0 using template query45.tpl
 select  ca_zip, ca_county, sum(ws_sales_price)

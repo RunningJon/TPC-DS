@@ -1,3 +1,4 @@
+set optimizer=:optimizer;
 set search_path=tpcds;
 -- start query 1 in stream 0 using template query85.tpl
 select  substr(r_reason_desc,1,20)

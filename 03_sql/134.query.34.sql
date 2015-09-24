@@ -1,3 +1,4 @@
+set optimizer=:optimizer;
 set search_path=tpcds;
 -- start query 1 in stream 0 using template query34.tpl
 select c_last_name

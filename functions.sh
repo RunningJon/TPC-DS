@@ -7,16 +7,23 @@ source $PWD/variables.sh
 
 get_version()
 {
-	VERSION=`psql -t -A -c "SELECT CASE WHEN POSITION ('HAWQ' in version()) > 0 AND POSITION ('Greenplum' IN version()) > 0 THEN 'hawq' WHEN POSITION ('HAWQ' in version()) = 0 AND POSITION ('Greenplum' IN version()) > 0 THEN 'gp' ELSE 'OTHER' END;"`
+	VERSION=`psql -t -A -c "SELECT CASE WHEN POSITION ('HAWQ 2' in version) > 0 AND POSITION ('Greenplum' IN version) > 0 THEN 'hawq_2' WHEN POSITION ('HAWQ 1' in version) > 0 AND POSITION ('Greenplum' IN version) > 0 THEN 'hawq_1' WHEN POSITION ('HAWQ' in version) = 0 AND POSITION ('Greenplum' IN version) > 0 THEN 'gpdb' ELSE 'OTHER' END FROM version();"`
 
-	if [ "$VERSION" == "hawq" ]; then
+	if [[ "$VERSION" == *"hawq"* ]]; then
 		SMALL_STORAGE="appendonly=true, orientation=parquet"
 		MEDIUM_STORAGE="appendonly=true, orientation=parquet"
 		LARGE_STORAGE="appendonly=true, orientation=parquet"
+
+		if [ "$VERSION" == "hawq_2" ]; then
+			OPTIMIZER_CONFIG="$PWD/optimizer_hawq_2.txt"
+		elif [ "$VERSION" == "hawq_1" ]; then
+			OPTIMIZER_CONFIG="$PWD/optimizer_hawq_1.txt"
+		fi
 	else
 		SMALL_STORAGE="appendonly=true, orientation=column"
 		MEDIUM_STORAGE="appendonly=true, orientation=column"
 		LARGE_STORAGE="appendonly=true, orientation=column"
+		OPTIMIZER_CONFIG="$PWD/optimizer_gpdb.txt"
 	fi
 
 }

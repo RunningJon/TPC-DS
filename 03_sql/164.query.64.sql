@@ -1,4 +1,5 @@
 set search_path=tpcds;
+set optimizer=:optimizer;
 -- start query 1 in stream 0 using template query64.tpl
 with cs_ui as
  (select cs_item_sk

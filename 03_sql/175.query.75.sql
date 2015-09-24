@@ -1,3 +1,4 @@
+set optimizer=:optimizer;
 set search_path=tpcds;
 -- start query 1 in stream 0 using template query75.tpl
 WITH all_sales AS (

@@ -1,4 +1,5 @@
 set search_path=tpcds;
+set optimizer=:optimizer;
 -- start query 1 in stream 0 using template query14.tpl
 with  cross_items as
  (select i_item_sk ss_item_sk

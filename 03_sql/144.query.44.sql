@@ -1,3 +1,4 @@
+set optimizer=:optimizer;
 set search_path=tpcds;
 -- start query 1 in stream 0 using template query44.tpl
 select  asceding.rnk, i1.i_product_name best_performing, i2.i_product_name worst_performing

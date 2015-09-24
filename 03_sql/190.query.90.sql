@@ -1,3 +1,4 @@
+set optimizer=:optimizer;
 set search_path=tpcds;
 -- start query 1 in stream 0 using template query90.tpl
 select  cast(amc as decimal(15,4))/cast(pmc as decimal(15,4)) am_pm_ratio

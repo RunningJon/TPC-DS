@@ -1,3 +1,4 @@
+set optimizer=:optimizer;
 set search_path=tpcds;
 -- start query 1 in stream 0 using template query61.tpl
 select  promotions,total,cast(promotions as decimal(15,4))/cast(total as decimal(15,4))*100
