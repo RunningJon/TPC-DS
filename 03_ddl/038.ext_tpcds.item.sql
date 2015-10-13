@@ -1,0 +1,3 @@
+CREATE EXTERNAL TABLE ext_tpcds.item (like tpcds.item)
+LOCATION (:LOCATION)
+FORMAT 'TEXT' (DELIMITER '|' NULL AS '' ESCAPE AS E'\\');

@@ -1,9 +1,9 @@
 #!/bin/bash
 set -e
 
-PWD=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
+LOCAL_PWD=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
 
-source $PWD/variables.sh
+source $LOCAL_PWD/variables.sh
 
 get_version()
 {
@@ -13,24 +13,21 @@ get_version()
 		SMALL_STORAGE="appendonly=true, orientation=parquet"
 		MEDIUM_STORAGE="appendonly=true, orientation=parquet"
 		LARGE_STORAGE="appendonly=true, orientation=parquet"
-
-		if [ "$VERSION" == "hawq_2" ]; then
-			OPTIMIZER_CONFIG="$PWD/optimizer_hawq_2.txt"
-		elif [ "$VERSION" == "hawq_1" ]; then
-			OPTIMIZER_CONFIG="$PWD/optimizer_hawq_1.txt"
-		fi
 	else
 		SMALL_STORAGE="appendonly=true, orientation=column"
 		MEDIUM_STORAGE="appendonly=true, orientation=column"
 		LARGE_STORAGE="appendonly=true, orientation=column"
-		OPTIMIZER_CONFIG="$PWD/optimizer_gpdb.txt"
 	fi
 
 }
-init()
+init_log()
 {
+	if [ -f $LOCAL_PWD/log/end_$1.log ]; then
+		exit 0
+	fi
+
 	logfile=rollout_$1.log
-	rm -f $PWD/log/$logfile
+	rm -f $LOCAL_PWD/log/$logfile
 }
 
 start_log()
@@ -58,36 +55,49 @@ log()
 		M=0
 	fi
 
-	id=`echo $i | awk -F '.' ' { print $1 } '`
+	#this is done for steps that don't have id values
+	if [ "$id" == "" ]; then
+		id="1"
+	else
+		id=$(basename $i | awk -F '.' '{print $1}')
+	fi
 
-	printf "$id|$schema_name.$table_name|%02d:%02d:%02d.%03d\n" "$((S/3600%24))" "$((S/60%60))" "$((S%60))" "${M}" >> $PWD/log/$logfile
+	printf "$id|$schema_name.$table_name|%02d:%02d:%02d.%03d\n" "$((S/3600%24))" "$((S/60%60))" "$((S%60))" "${M}" >> $LOCAL_PWD/log/$logfile
 
+}
+
+end_step()
+{
+	local logfile=end_$1.log
+	touch $LOCAL_PWD/log/$logfile
 }
 
 create_directories()
 {
-	if [ ! -d $PWD/log ]; then
+	if [ ! -d $LOCAL_PWD/log ]; then
 		echo "Creating log directory"
-		mkdir $PWD/log
+		mkdir $LOCAL_PWD/log
 	fi
+}
+
+stop_gpfdist()
+{
+	for i in $(ps -ef | grep gpfdist | grep $GPFDIST_PORT | grep -v grep | awk -F ' ' '{print $2}'); do
+		echo "Stopping gpfdist on pid: $i"
+		kill $i
+		sleep 2
+	done
 }
 
 start_gpfdist()
 {
-	create_directories
+	stop_gpfdist
 
-	local count=`ps -ef | grep gpfdist | grep $GPFDIST_PORT | grep -v grep | wc -l`
-	if [ "$count" -eq "1" ]; then
-		gpfdist_pid=`ps -ef | grep gpfdist | grep $GPFDIST_PORT | grep -v grep | awk -F ' ' '{print $2}'`
-		if [ "$gpfdist_pid" != "" ]; then
-			echo "Stopping gpfdist on pid: $gpfdist_pid"
-			kill $gpfdist_pid
-			sleep 2
-		fi
-	fi
+	local GPFDIST_LOG=gpfdist_$GPFDIST_PORT.log
+
 	echo "Starting gpfdist port $GPFDIST_PORT"
-	echo "gpfdist -d $PWD/data -p $GPFDIST_PORT >> $PWD/log/$GPFDIST_LOG 2>&1 < $PWD/log/$GPFDIST_LOG &"
-	gpfdist -d $PWD/data -p $GPFDIST_PORT >> $PWD/log/$GPFDIST_LOG 2>&1 < $PWD/log/$GPFDIST_LOG &
+	echo "gpfdist -d $LOCAL_PWD -p $GPFDIST_PORT >> $LOCAL_PWD/log/$GPFDIST_LOG 2>&1 < $LOCAL_PWD/log/$GPFDIST_LOG &"
+	gpfdist -d $LOCAL_PWD -p $GPFDIST_PORT >> $LOCAL_PWD/log/$GPFDIST_LOG 2>&1 < $LOCAL_PWD/log/$GPFDIST_LOG &
 	gpfdist_pid=$!
 
 	# check gpfdist process was started
@@ -100,13 +110,5 @@ start_gpfdist()
 			echo "ERROR: gpfdist couldn't start on port $GPFDIST_PORT"
 			exit 1
 		fi
-	fi
-}
-
-stop_gpfdist()
-{
-	if [ "$gpfdist_pid" != "" ]; then
-		echo "Stopping gpfdist on pid: $gpfdist_pid"
-		kill $gpfdist_pid
 	fi
 }

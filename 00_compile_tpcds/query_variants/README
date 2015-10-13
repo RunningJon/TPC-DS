@@ -1,0 +1,16 @@
+-- $Id: README,v 1.3 2007/09/25 18:47:34 jms Exp $
+--
+-- README
+-- ====================
+-- this directory contains all of the query variants
+-- approved for TPC-DS. Base templates are located in query_templates/.
+--
+-- LOG
+-- +++++++
+-- $Log: README,v $
+-- Revision 1.3  2007/09/25 18:47:34  jms
+-- update from Meikel (9/22/07)
+--
+-- Revision 1.2  2006/04/20 19:30:33  jms
+-- Add first set of query variant
+--
