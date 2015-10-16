@@ -1,24 +1,37 @@
+########################################################################################
 TPC-DS benchmark scripts for HAWQ and Greenplum database.
+########################################################################################
 
-1. ssh to the host that will be home to these scripts and files with gpadmins
-ssh gpadmin@mdw
+########################################################################################
+Prerequisites
+########################################################################################
+1. Greenplum Database or Apache HAWQ installed and running
+2. Connectivity is possible to the MASTER_HOST and from the Data Nodes / Segment Hosts
+3. Root access
 
-2.  Yum installs
-sudo yum install git
-sudo yum install recode
-sudo yum install gcc
+########################################################################################
+Installation
+########################################################################################
+1. ssh to the host that will be home to these scripts and files with root
+ssh root@mdw
 
-3.  Clone the repo
-git clone --depth=1 https://github.com/pivotalguru/TPC-DS
+2. Download the tpcds.sh file
+curl https://raw.githubusercontent.com/pivotalguru/TPC-DS/master/tpcds.sh > tpcds.sh
+chmod 755 tpcds.sh
 
-4.  Start Pivotal HAWQ or Greenplum Database.
+3. Execute tpcds.sh and specify the scale in Gigabtes
+./tpcds.sh 100
 
-5.  Edit the variables.sh to modify the MASTER_HOST and GEN_DATA_SCALE variables.
+This example will create a 100 GB TPC-DS dataset and run all of the queries.
 
-6.  Ensure connectivity is possible to the MASTER_HOST and from the Data Nodes / Segment Hosts to the host you installed this repo.
+########################################################################################
+Notes
+########################################################################################
+- tpch_variables.sh file will be created with variables you can adjust
+- The default location for the repo is /pivotalguru/TPC-DS but can be changed in the 
+tpch_variables.sh file.
+- Additional storage options are in /pivotalguru/TPC-DS/functions.sh
+- Files for the benchmark will be created in /pivotalguru/TPC-DS/data[1-8]/
+You can update these directories to be symbolic links to better utilize the disk 
+volumes you have available.
 
-7.  Execute the TPC-DS benchmark.
-cd TPC-DS/
-./rollout.sh
-
-Note: Additional storage options are in functions.sh.

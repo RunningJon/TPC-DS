@@ -26,8 +26,8 @@ for i in $(ls $PWD/*.sql); do
 	file_name+="_[1-$GEN_DATA_THREADS]_$GEN_DATA_THREADS.dat"
 	LOCATION="'gpfdist://$HOSTNAME:$GPFDIST_PORT/$directory/$file_name'"
 
-	echo "psql -h $MASTER_HOST -a -P pager=off -v ON_ERROR_STOP=1 -f $i -v LOCATION=\"$LOCATION\" -v SMALL_STORAGE=\"$SMALL_STORAGE\" -v MEDIUM_STORAGE=\"$MEDIUM_STORAGE\" -v LARGE_STORAGE=\"$LARGE_STORAGE\""
-	psql -h $MASTER_HOST -a -P pager=off -v ON_ERROR_STOP=1 -f $i -v LOCATION="$LOCATION" -v SMALL_STORAGE="$SMALL_STORAGE" -v MEDIUM_STORAGE="$MEDIUM_STORAGE" -v LARGE_STORAGE="$LARGE_STORAGE"
+	echo "psql -h $MASTER_HOST -a -P pager=off -v client_encoding=latin1 -v ON_ERROR_STOP=1 -f $i -v LOCATION=\"$LOCATION\" -v SMALL_STORAGE=\"$SMALL_STORAGE\" -v MEDIUM_STORAGE=\"$MEDIUM_STORAGE\" -v LARGE_STORAGE=\"$LARGE_STORAGE\""
+	psql -h $MASTER_HOST -a -P pager=off -v client_encoding=latin1 -v ON_ERROR_STOP=1 -f $i -v LOCATION="$LOCATION" -v SMALL_STORAGE="$SMALL_STORAGE" -v MEDIUM_STORAGE="$MEDIUM_STORAGE" -v LARGE_STORAGE="$LARGE_STORAGE"
 
 	log
 done
