@@ -1,8 +1,9 @@
 #!/bin/bash
 set -e
-PWD=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
 
+PWD=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
 source $PWD/../functions.sh
+source_bashrc
 
 for i in $(ls $PWD/*.sql | grep -v report.sql); do
 	table_name=`echo $i | awk -F '.' '{print $3}'`

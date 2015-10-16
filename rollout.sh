@@ -3,6 +3,16 @@
 set -e
 PWD=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
 source $PWD/functions.sh
+source_bashrc
+
+GEN_DATA_SCALE=$1
+
+if [ "$GEN_DATA_SCALE" == "" ]; then
+	echo "You must provide the scale as a parameter in terms of Gigabytes."
+	echo "Example: ./tpcds.sh 100"
+	echo "This will create 100 GB of data for this test."
+	exit 1
+fi
 
 create_directories
 
@@ -45,5 +55,5 @@ fi
 
 for i in $(ls -d $PWD/0*); do
 	echo "$i/rollout.sh"
-	$i/rollout.sh
+	$i/rollout.sh $GEN_DATA_SCALE
 done

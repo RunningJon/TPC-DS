@@ -1,8 +1,17 @@
 #!/bin/bash
-
 set -e
+
 PWD=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
 source $PWD/../functions.sh
+source_bashrc
+
+GEN_DATA_SCALE=$1
+if [ "$GEN_DATA_SCALE" == "" ]; then
+	echo "You must provide the scale as a parameter in terms of Gigabytes."
+	echo "Example: ./rollout.sh 100"
+	echo "This will create 100 GB of data for this test."
+	exit 1
+fi
 
 get_count_generate_data()
 {
@@ -36,8 +45,8 @@ echo "rm -rf rm $PWD/../data*/*.dat"
 rm -rf rm $PWD/../data*/*.dat
 echo ""
 for f in $(seq 1 $GEN_DATA_THREADS); do
-	echo "nohup $PWD/generate_data.sh $GEN_DATA_THREADS $f > $PWD/../log/generate_data_$f.log 2>&1 < $PWD/../log/generate_data_$f.log &"
-	nohup $PWD/generate_data.sh $GEN_DATA_THREADS $f > $PWD/../log/generate_data_$f.log 2>&1 < $PWD/../log/generate_data_$f.log &
+	echo "nohup $PWD/generate_data.sh $GEN_DATA_THREADS $f $GEN_DATA_SCALE > $PWD/../log/generate_data_$f.log 2>&1 < $PWD/../log/generate_data_$f.log &"
+	nohup $PWD/generate_data.sh $GEN_DATA_THREADS $f $GEN_DATA_SCALE > $PWD/../log/generate_data_$f.log 2>&1 < $PWD/../log/generate_data_$f.log &
 done
 sleep 1
 echo ""

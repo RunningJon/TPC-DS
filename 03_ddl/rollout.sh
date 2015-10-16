@@ -1,8 +1,9 @@
 #!/bin/bash
-
 set -e
+
 PWD=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
 source $PWD/../functions.sh
+source_bashrc
 
 step=ddl
 init_log $step

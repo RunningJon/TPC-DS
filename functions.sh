@@ -5,9 +5,19 @@ LOCAL_PWD=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
 
 source $LOCAL_PWD/variables.sh
 
+source_bashrc()
+{
+	echo "############################################################################"
+	echo "Source .bashrc"
+	echo "############################################################################"
+	source ~/.bashrc
+	echo ""
+}
+
 get_version()
 {
-	VERSION=`psql -t -A -c "SELECT CASE WHEN POSITION ('HAWQ 2' in version) > 0 AND POSITION ('Greenplum' IN version) > 0 THEN 'hawq_2' WHEN POSITION ('HAWQ 1' in version) > 0 AND POSITION ('Greenplum' IN version) > 0 THEN 'hawq_1' WHEN POSITION ('HAWQ' in version) = 0 AND POSITION ('Greenplum' IN version) > 0 THEN 'gpdb' ELSE 'OTHER' END FROM version();"`
+	#need to call source_bashrc first
+	VERSION=$(psql -t -A -c "SELECT CASE WHEN POSITION ('HAWQ 2' in version) > 0 AND POSITION ('Greenplum' IN version) > 0 THEN 'hawq_2' WHEN POSITION ('HAWQ 1' in version) > 0 AND POSITION ('Greenplum' IN version) > 0 THEN 'hawq_1' WHEN POSITION ('HAWQ' in version) = 0 AND POSITION ('Greenplum' IN version) > 0 THEN 'gpdb' ELSE 'OTHER' END FROM version();")
 
 	if [[ "$VERSION" == *"hawq"* ]]; then
 		SMALL_STORAGE="appendonly=true, orientation=parquet"
