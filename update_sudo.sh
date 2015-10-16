@@ -1,9 +1,9 @@
 #!/bin/sh
 PWD=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
-source $PWD/variables.sh
+source $PWD/tpcds_variables.sh
 
 if [ "$ADMIN_USER" == "" ]; then
-	echo "ADMIN username not found in variables.sh!"
+	echo "ADMIN username not found in tpcds_variables.sh!"
 	exit 1
 else
 
