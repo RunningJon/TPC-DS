@@ -2,38 +2,39 @@
 set -e
 
 PWD=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
-
+MYCMD="tpcds.sh"
+MYVAR="tpcds_variables.sh"
 ##################################################################################################################################################
 # Functions
 ##################################################################################################################################################
 check_variables()
 {
 	### Make sure variables file is available
-	if [ ! -f "$PWD/variables.sh" ]; then
-		touch $PWD/variables.sh
+	if [ ! -f "$PWD/$MYVAR" ]; then
+		touch $PWD/$MYVAR
 	fi
-	local count=`grep "REPO=" variables.sh | wc -l`
+	local count=`grep "REPO=" $MYVAR | wc -l`
 	if [ "$count" -eq "0" ]; then
-		echo "REPO=\"TPC-DS\"" >> variables.sh
+		echo "REPO=\"TPC-DS\"" >> $MYVAR
 	fi
-	local count=`grep "REPO_URL=" variables.sh | wc -l`
+	local count=`grep "REPO_URL=" $MYVAR | wc -l`
 	if [ "$count" -eq "0" ]; then
-		echo "REPO_URL=\"https://github.com/pivotalguru/TPC-DS\"" >> variables.sh
+		echo "REPO_URL=\"https://github.com/pivotalguru/TPC-DS\"" >> $MYVAR
 	fi
-	local count=`grep "ADMIN_USER=" variables.sh | wc -l`
+	local count=`grep "ADMIN_USER=" $MYVAR | wc -l`
 	if [ "$count" -eq "0" ]; then
-		echo "ADMIN_USER=\"gpadmin\"" >> variables.sh
+		echo "ADMIN_USER=\"gpadmin\"" >> $MYVAR
 	fi
-	local count=`grep "INSTALL_DIR=" variables.sh | wc -l`
+	local count=`grep "INSTALL_DIR=" $MYVAR | wc -l`
 	if [ "$count" -eq "0" ]; then
-		echo "INSTALL_DIR=\"pivotalguru\"" >> variables.sh
+		echo "INSTALL_DIR=\"pivotalguru\"" >> $MYVAR
 	fi
 
 	echo "############################################################################"
-	echo "Sourcing variables.sh"
+	echo "Sourcing $MYVAR"
 	echo "############################################################################"
 	echo ""
-	source variables.sh
+	source $MYVAR
 }
 
 check_user()
@@ -112,16 +113,16 @@ script_check()
 	echo "############################################################################"
 	echo ""
 	# Must be executed after the repo has been pulled
-	local d=`diff $PWD/tpcds.sh /$INSTALL_DIR/$REPO/tpcds.sh | wc -l`
+	local d=`diff $PWD/$MYCMD /$INSTALL_DIR/$REPO/$MYCMD | wc -l`
 
 	if [ "$d" -eq "0" ]; then
-		echo "tpcds.sh script is up to date so continuing to TPC-DS."
+		echo "$MYCMD script is up to date so continuing to TPC-DS."
 	else
-		echo "tpcds.sh script is NOT up to date."
+		echo "$MYCMD script is NOT up to date."
 		echo ""
-		cp /$INSTALL_DIR/$REPO/tpcds.sh $PWD/tpcds.sh
-		echo "After this script completes, restart the tpcds.sh with this command:"
-		echo "./tpcds.sh"
+		cp /$INSTALL_DIR/$REPO/$MYCMD $PWD/$MYCMD
+		echo "After this script completes, restart the $MYCMD with this command:"
+		echo "./$MYCMD"
 		exit 1
 	fi
 
@@ -133,10 +134,15 @@ check_sudo()
 	$PWD/update_sudo.sh
 }
 
+##################################################################################################################################################
+# Body
+##################################################################################################################################################
+
 check_user
 check_variables
 yum_installs
 repo_init
 script_check
 check_sudo
-echo "done"
+
+su --session-command="cd \"/$INSTALL_DIR/$REPO\"; ./rollout.sh" $ADMIN_USER
