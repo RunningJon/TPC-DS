@@ -70,6 +70,7 @@ yum_installs()
 	# Install git and gcc if not found
 	local CURL_INSTALLED=`yum -C list installed gcc | grep gcc | wc -l`
 	local GIT_INSTALLED=`yum -C list installed git | grep git | wc -l`
+	local RECODE_INSTALLED=`yum -C list installed recode | grep git | wc -l`
 
 	if [ "$CURL_INSTALLED" -eq "0" ]; then
 		yum -y install gcc
@@ -81,6 +82,12 @@ yum_installs()
 		yum -y install git
 	else
 		echo "git already installed"
+	fi
+
+	if [ "$RECODE_INSTALLED" -eq "0" ]; then
+		yum -y install recode
+	else
+		echo "recode already installed"
 	fi
 	echo ""
 }

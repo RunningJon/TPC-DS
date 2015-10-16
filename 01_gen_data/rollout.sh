@@ -61,23 +61,23 @@ done
 
 echo "Done generating data"
 echo ""
-#echo "Fixing character set issue with the customer file"
+echo "Fixing character set issue with the customer file"
 
-#for x in $(cat $PWD/../tables.txt); do
-#	table_name=`echo $x | awk -F '|' '{print $2}'`
-#	if [ "$table_name" == "customer" ]; then
-#		directory=`echo $x | awk -F '|' '{print $3}'`
-#	fi
-#done
+for x in $(cat $PWD/../tables.txt); do
+	table_name=`echo $x | awk -F '|' '{print $2}'`
+	if [ "$table_name" == "customer" ]; then
+		directory=`echo $x | awk -F '|' '{print $3}'`
+	fi
+done
 
-#for f in $(ls $PWD/../$directory/customer_[1-$GEN_DATA_THREADS]_$GEN_DATA_THREADS.dat); do
-#	echo "cat $f | recode iso-8859-1..u8 > $f.new"
-#	cat $f | recode iso-8859-1..u8 > $f.new
-#	echo "mv $f $f.bak"
-#	mv $f $f.bak
-#	echo "mv $f.new $f"
-#	mv $f.new $f
-#done
+for f in $(ls $PWD/../$directory/customer_[1-$GEN_DATA_THREADS]_$GEN_DATA_THREADS.dat); do
+	echo "cat $f | recode iso-8859-1..u8 > $f.new"
+	cat $f | recode iso-8859-1..u8 > $f.new
+	echo "mv $f $f.bak"
+	mv $f $f.bak
+	echo "mv $f.new $f"
+	mv $f.new $f
+done
 
 log
 
