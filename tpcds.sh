@@ -64,13 +64,13 @@ yum_installs()
 {
 	### Install and Update Demos ###
 	echo "############################################################################"
-	echo "Install git and gcc with yum."
+	echo "Install git, gcc, and recode with yum."
 	echo "############################################################################"
 	echo ""
 	# Install git and gcc if not found
 	local CURL_INSTALLED=`yum -C list installed gcc | grep gcc | wc -l`
 	local GIT_INSTALLED=`yum -C list installed git | grep git | wc -l`
-	local RECODE_INSTALLED=`yum -C list installed recode | grep git | wc -l`
+	local RECODE_INSTALLED=`yum -C list installed recode | grep recode | wc -l`
 
 	if [ "$CURL_INSTALLED" -eq "0" ]; then
 		yum -y install gcc
