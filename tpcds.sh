@@ -2,6 +2,15 @@
 set -e
 
 PWD=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
+
+GEN_DATA_SCALE=$1
+if [ "$GEN_DATA_SCALE" == "" ]; then
+	echo "You must provide the scale as a parameter in terms of Gigabytes."
+	echo "Example: ./tpcds.sh 100"
+	echo "This will create 100 GB of data for this test."
+	exit 1
+fi
+
 MYCMD="tpcds.sh"
 MYVAR="tpcds_variables.sh"
 ##################################################################################################################################################
@@ -145,4 +154,4 @@ repo_init
 script_check
 check_sudo
 
-su --session-command="cd \"/$INSTALL_DIR/$REPO\"; ./rollout.sh" $ADMIN_USER
+su --session-command="cd \"/$INSTALL_DIR/$REPO\"; ./rollout.sh $GEN_DATA_SCALE" $ADMIN_USER

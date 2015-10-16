@@ -9,7 +9,7 @@ GEN_DATA_SCALE=$1
 
 if [ "$GEN_DATA_SCALE" == "" ]; then
 	echo "You must provide the scale as a parameter in terms of Gigabytes."
-	echo "Example: ./tpcds.sh 100"
+	echo "Example: ./rollout.sh 100"
 	echo "This will create 100 GB of data for this test."
 	exit 1
 fi
