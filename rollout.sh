@@ -26,9 +26,6 @@ echo "FORCE the script to run all steps, regardless if it has run successfully b
 echo "if some steps have already completed.  This would be useful if you wish to change"
 echo "the size of the TPC-DS test."
 echo ""
-echo "To change the size of the TPC-DS dataset, edit the variables.sh file before running"
-echo "this script."
-echo ""
 PS3='Start Normally or FORCE from the beginning? '
 options=("Normal" "FORCE" "Quit")
 select opt in "${options[@]}"
