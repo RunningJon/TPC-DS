@@ -6,10 +6,12 @@ source $PWD/../functions.sh
 source_bashrc
 
 GEN_DATA_SCALE=$1
-if [ "$GEN_DATA_SCALE" == "" ]; then
-	echo "You must provide the scale as a parameter in terms of Gigabytes."
-	echo "Example: ./rollout.sh 100"
-	echo "This will create 100 GB of data for this test."
+GEN_DATA_THREADS=$2
+
+if [[ "$GEN_DATA_SCALE" == "" || "$GEN_DATA_THREADS" == "" ]]; then
+	echo "You must provide the scale as a parameter in terms of Gigabytes and the number of threads to build."
+	echo "Example: ./rollout.sh 100 8"
+	echo "This will create 100 GB of data for this test using 8 threads."
 	exit 1
 fi
 

@@ -4,12 +4,14 @@ set -e
 PWD=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
 
 GEN_DATA_SCALE=$1
-if [ "$GEN_DATA_SCALE" == "" ]; then
-	echo "You must provide the scale as a parameter in terms of Gigabytes."
-	echo "Example: ./tpcds.sh 100"
-	echo "This will create 100 GB of data for this test."
+GEN_DATA_THREADS=$2
+if [[ "$GEN_DATA_SCALE" == "" || "$GEN_DATA_THREADS" == "" ]]; then
+	echo "You must provide the scale as a parameter in terms of Gigabytes and the number of threads."
+	echo "Example: ./tpcds.sh 100 8"
+	echo "This will create 100 GB of data for this test using 8 threads."
 	exit 1
 fi
+QUIET=$3
 
 MYCMD="tpcds.sh"
 MYVAR="tpcds_variables.sh"
@@ -161,4 +163,4 @@ repo_init
 script_check
 check_sudo
 
-su --session-command="cd \"/$INSTALL_DIR/$REPO\"; ./rollout.sh $GEN_DATA_SCALE" $ADMIN_USER
+su --session-command="cd \"/$INSTALL_DIR/$REPO\"; ./rollout.sh $GEN_DATA_SCALE $GEN_DATA_THREADS $QUIET" $ADMIN_USER
