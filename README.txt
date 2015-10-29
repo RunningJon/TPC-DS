@@ -19,10 +19,18 @@ ssh root@mdw
 curl https://raw.githubusercontent.com/pivotalguru/TPC-DS/master/tpcds.sh > tpcds.sh
 chmod 755 tpcds.sh
 
-3. Execute tpcds.sh and specify the scale in Gigabtes
-./tpcds.sh 100
+3. Execute tpcds.sh and specify the scale in Gigabtes and the number of threads that
+will create the data
+./tpcds.sh 100 8
 
 This example will create a 100 GB TPC-DS dataset and run all of the queries.
+
+Note: Increase the number of threads when building larger datasets and the host has 
+available cores to process the data.
+
+Aditionally, a quiet mode with no user prompts is available when an optional third 
+parameter is provided with any value.  Example:
+./tpcds.sh 100 8 shhh
 
 ########################################################################################
 Notes
