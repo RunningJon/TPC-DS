@@ -35,7 +35,7 @@ for f in $(cat $PWD/build_tables.txt); do
 	directory=`echo $f | awk -F '|' '{print $2}'`
 
 	if [[ ! -d "$PWD/../$directory" && ! -L "$PWD/../$directory" ]]; then
-		echo "mkdir \"PWD/../$directory\""
+		echo "mkdir \"$PWD/../$directory\""
 		mkdir "$PWD/../$directory"
 	fi
 done
