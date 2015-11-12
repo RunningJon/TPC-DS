@@ -14,19 +14,31 @@ table_name="init"
 update_config="0"
 
 #check optimizer
-counter=$(gpconfig -s optimizer | grep Master | grep on | wc -l)
+counter=$(psql -t -A -h $MASTER_HOST -c "show optimizer" | grep on | wc -l)
 if [ "$counter" -eq "0" ]; then
-	echo "enabling optimizer"
-	gpconfig -c optimizer -v on --masteronly
-	update_config="1"
+	if [ "$MASTER_HOST" <> "$HOSTNAME" ]; then
+		echo "Unable to proceed.  Log into the master host and execute the following command:"
+		echo "gpconfig -c optimizer -v on --masteronly"
+		exit 1
+	else
+		echo "enabling optimizer"
+		gpconfig -c optimizer -v on --masteronly
+		update_config="1"
+	fi
 fi
 
 #check analyze_root_partition
-counter=$(gpconfig -s optimizer_analyze_root_partition | grep Master | grep on | wc -l)
+counter=$(psql -t -A -h $MASTER_HOST -c "show optimizer_analyze_root_partition" | grep on | wc -l)
 if [ "$counter" -eq "0" ]; then
-	echo "enabling analyze_root_partition"
-	gpconfig -c optimizer_analyze_root_partition -v on --masteronly
-	update_config="1"
+	if [ "$MASTER_HOST" <> "$HOSTNAME" ]; then
+		echo "Unable to proceed.  Log into the master host and execute the following command:"
+		echo "gpconfig -c optimizer_analyze_root_partition -v on --masteronly"
+		exit 1
+	else
+		echo "enabling analyze_root_partition"
+		gpconfig -c optimizer_analyze_root_partition -v on --masteronly
+		update_config="1"
+	fi
 fi
 
 if [ "$update_config" -eq "1" ]; then

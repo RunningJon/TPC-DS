@@ -1,4 +1,4 @@
-CREATE EXTERNAL WEB TABLE reports.ddl
+CREATE EXTERNAL TABLE reports.ddl
 (id int, description varchar, duration time) 
-EXECUTE :CMD ON MASTER 
+LOCATION (:LOCATION)
 FORMAT 'TEXT' (DELIMITER '|');

@@ -1,5 +1,5 @@
-CREATE EXTERNAL WEB TABLE reports.load
+CREATE EXTERNAL TABLE reports.load
 (id int, description varchar, duration time) 
-EXECUTE :CMD ON MASTER  
+LOCATION (:LOCATION)
 FORMAT 'TEXT' (DELIMITER '|');
 

@@ -66,8 +66,8 @@ echo ""
 echo "Fixing character set issue with the customer file"
 
 for x in $(cat $PWD/../tables.txt); do
-	table_name=`echo $x | awk -F '|' '{print $2}'`
-	if [ "$table_name" == "customer" ]; then
+	table_name2=`echo $x | awk -F '|' '{print $2}'`
+	if [ "$table_name2" == "customer" ]; then
 		directory=`echo $x | awk -F '|' '{print $3}'`
 	fi
 done

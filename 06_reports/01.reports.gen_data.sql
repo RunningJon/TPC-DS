@@ -1,4 +1,4 @@
-CREATE EXTERNAL WEB TABLE reports.gen_data
+CREATE EXTERNAL TABLE reports.gen_data
 (id int, description varchar, duration time) 
-EXECUTE :CMD ON MASTER 
+LOCATION (:LOCATION)
 FORMAT 'TEXT' (DELIMITER '|');
