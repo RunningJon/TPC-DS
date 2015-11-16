@@ -42,4 +42,5 @@ tpch_variables.sh file.
 - Files for the benchmark will be created in /pivotalguru/TPC-DS/data[1-8]/
 You can update these directories to be symbolic links to better utilize the disk 
 volumes you have available.
-
+- Example of running tpcds as root as a background process:
+nohup ./tpcds.sh 3000 48 shh > tpcds.log 2>&1 < tpcds.log &
