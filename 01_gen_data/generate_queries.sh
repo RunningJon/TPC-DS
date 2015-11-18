@@ -18,8 +18,10 @@ if [ "$GEN_DATA_SCALE" == "" ]; then
 	exit 1
 fi
 
-echo "$PWD/dsqgen -input $PWD/query_templates/templates.lst -directory $PWD/query_templates -dialect netezza -scale $GEN_DATA_SCALE -verbose y"
-$PWD/dsqgen -input $PWD/query_templates/templates.lst -directory $PWD/query_templates -dialect netezza -scale $GEN_DATA_SCALE -verbose y
+rm -f $PWD/query_0.sql
+
+echo "$PWD/dsqgen -input $PWD/query_templates/templates.lst -directory $PWD/query_templates -dialect netezza -scale $GEN_DATA_SCALE -verbose y -output $PWD"
+$PWD/dsqgen -input $PWD/query_templates/templates.lst -directory $PWD/query_templates -dialect netezza -scale $GEN_DATA_SCALE -verbose y -output $PWD
 
 rm -f $PWD/../05_sql/*.query.*.sql
 
