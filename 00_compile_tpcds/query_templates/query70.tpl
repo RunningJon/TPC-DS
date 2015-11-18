@@ -35,7 +35,7 @@
  define _LIMIT=100;
 
  [_LIMITA] select [_LIMITB] * FROM (
-    sum(ss_net_profit) as total_sum
+    select sum(ss_net_profit) as total_sum
    ,s_state
    ,s_county
    ,grouping(s_state)+grouping(s_county) as lochierarchy

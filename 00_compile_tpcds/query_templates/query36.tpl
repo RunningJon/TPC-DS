@@ -42,7 +42,7 @@
  define STATE_H=distmember(fips_county,[STATENUMBER.8], 3);
  define _LIMIT=100;
  [_LIMITA] select [_LIMITB] * FROM (
-    sum(ss_net_profit)/sum(ss_ext_sales_price) as gross_margin
+    select sum(ss_net_profit)/sum(ss_ext_sales_price) as gross_margin
    ,i_category
    ,i_class
    ,grouping(i_category)+grouping(i_class) as lochierarchy
