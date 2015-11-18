@@ -33,6 +33,7 @@
  define YEAR=random(1998,2002,uniform);
  define DMS = random(1176,1224,uniform); -- Qualification: 1176
  define _LIMIT=100; 
+SELECT * FROM (
  [_LIMITA] select [_LIMITB]  
     sum(ws_net_paid) as total_sum
    ,i_category
@@ -51,6 +52,7 @@
  and d1.d_date_sk = ws_sold_date_sk
  and i_item_sk  = ws_item_sk
  group by rollup(i_category,i_class)
+) AS sub
  order by
    lochierarchy desc,
    case when lochierarchy = 0 then i_category end,

@@ -33,8 +33,8 @@
  define YEAR=random(1998,2002,uniform);
  define DMS = random(1176,1224,uniform); -- Qualification: 1176
  define _LIMIT=100;
- 
- [_LIMITA] select [_LIMITB] 
+
+ [_LIMITA] select [_LIMITB] * FROM (
     sum(ss_net_profit) as total_sum
    ,s_state
    ,s_county
@@ -64,6 +64,7 @@
                where ranking <= 5
              )
  group by rollup(s_state,s_county)
+) AS sub
  order by
    lochierarchy desc
   ,case when lochierarchy = 0 then s_state end

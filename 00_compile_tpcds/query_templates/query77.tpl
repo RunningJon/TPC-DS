@@ -43,7 +43,7 @@
       store
  where ss_sold_date_sk = d_date_sk
        and d_date between cast('[SALES_DATE]' as date) 
-                  and (cast('[SALES_DATE]' as date) +  30 days) 
+                  and (cast('[SALES_DATE]' as date) +  '30 days'::interval) 
        and ss_store_sk = s_store_sk
  group by s_store_sk)
  ,
@@ -56,7 +56,7 @@
       store
  where sr_returned_date_sk = d_date_sk
        and d_date between cast('[SALES_DATE]' as date)
-                  and (cast('[SALES_DATE]' as date) +  30 days)
+                  and (cast('[SALES_DATE]' as date) +  '30 days'::interval)
        and sr_store_sk = s_store_sk
  group by s_store_sk), 
  cs as
@@ -67,7 +67,7 @@
       date_dim
  where cs_sold_date_sk = d_date_sk
        and d_date between cast('[SALES_DATE]' as date)
-                  and (cast('[SALES_DATE]' as date) +  30 days)
+                  and (cast('[SALES_DATE]' as date) +  '30 days'::interval)
  group by cs_call_center_sk 
  ), 
  cr as
@@ -78,7 +78,7 @@
       date_dim
  where cr_returned_date_sk = d_date_sk
        and d_date between cast('[SALES_DATE]' as date)
-                  and (cast('[SALES_DATE]' as date) +  30 days)
+                  and (cast('[SALES_DATE]' as date) +  '30 days'::interval)
  ), 
  ws as
  ( select wp_web_page_sk,
@@ -89,7 +89,7 @@
       web_page
  where ws_sold_date_sk = d_date_sk
        and d_date between cast('[SALES_DATE]' as date)
-                  and (cast('[SALES_DATE]' as date) +  30 days)
+                  and (cast('[SALES_DATE]' as date) +  '30 days'::interval)
        and ws_web_page_sk = wp_web_page_sk
  group by wp_web_page_sk), 
  wr as
@@ -101,7 +101,7 @@
       web_page
  where wr_returned_date_sk = d_date_sk
        and d_date between cast('[SALES_DATE]' as date)
-                  and (cast('[SALES_DATE]' as date) +  30 days)
+                  and (cast('[SALES_DATE]' as date) +  '30 days'::interval)
        and wr_web_page_sk = wp_web_page_sk
  group by wp_web_page_sk)
  [_LIMITA] select [_LIMITB] channel

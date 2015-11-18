@@ -1,7 +1,7 @@
 #!/bin/bash
 
 PWD=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
-source $PWD/../variables.sh
+source $PWD/../functions.sh
 source_bashrc
 
 set -e
@@ -24,7 +24,7 @@ for i in $(cat $PWD/build_tables.txt); do
 	directory=`echo $i | awk -F '|' '{print $2}'`
 	directory=$PWD/../$directory
 
-	echo "PWD/dsdgen -table $table_name -scale $GEN_DATA_SCALE -dir $directory -parallel $PARALLEL -child $CHILD -terminate n"
+	echo "$PWD/dsdgen -table $table_name -scale $GEN_DATA_SCALE -dir $directory -parallel $PARALLEL -child $CHILD -terminate n"
 	$PWD/dsdgen -table $table_name -scale $GEN_DATA_SCALE -dir $directory -parallel $PARALLEL -child $CHILD -terminate n
 
 done

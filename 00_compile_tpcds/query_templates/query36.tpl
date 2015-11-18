@@ -41,8 +41,7 @@
  define STATE_G=distmember(fips_county,[STATENUMBER.7], 3);
  define STATE_H=distmember(fips_county,[STATENUMBER.8], 3);
  define _LIMIT=100;
- 
- [_LIMITA] select [_LIMITB] 
+ [_LIMITA] select [_LIMITB] * FROM (
     sum(ss_net_profit)/sum(ss_ext_sales_price) as gross_margin
    ,i_category
    ,i_class
@@ -64,6 +63,7 @@
  and s_state in ('[STATE_A]','[STATE_B]','[STATE_C]','[STATE_D]',
                  '[STATE_E]','[STATE_F]','[STATE_G]','[STATE_H]')
  group by rollup(i_category,i_class)
+) AS sub
  order by
    lochierarchy desc
   ,case when lochierarchy = 0 then i_category end

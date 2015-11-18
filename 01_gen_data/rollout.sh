@@ -81,6 +81,9 @@ for f in $(ls $PWD/../$directory/customer_[1-$GEN_DATA_THREADS]_$GEN_DATA_THREAD
 	mv $f.new $f
 done
 
+echo "Generate queries based on scale"
+$PWD/generate_queries.sh $GEN_DATA_SCALE
+
 log
 
 end_step $step
