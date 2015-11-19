@@ -16,9 +16,9 @@ done
 
 start_gpfdist
 
-psql -h $MASTER_HOST -P pager=off -f $PWD/detailed_report.sql
+psql -v ON_ERROR_STOP=1 -h $MASTER_HOST -P pager=off -f $PWD/detailed_report.sql
 echo ""
-psql -h $MASTER_HOST -P pager=off -f $PWD/summary_report.sql
+psql -v ON_ERROR_STOP=1 -h $MASTER_HOST -P pager=off -f $PWD/summary_report.sql
 
 
 stop_gpfdist

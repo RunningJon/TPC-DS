@@ -14,13 +14,13 @@ table_name="init"
 update_config="0"
 
 #check search_path
-counter=$(psql -t -A -h $MASTER_HOST -c "show search_path" | grep tpcds | wc -l)
+counter=$(psql -v ON_ERROR_STOP=1 -t -A -h $MASTER_HOST -c "show search_path" | grep tpcds | wc -l)
 if [ "$counter" -eq "0" ]; then
-	psql -h $MASTER_HOST -c "ALTER USER gpadmin SET search_path=tpcds,public;"
+	psql -v ON_ERROR_STOP=1 -h $MASTER_HOST -c "ALTER USER gpadmin SET search_path=tpcds,public;"
 fi
 
 #check optimizer
-counter=$(psql -t -A -h $MASTER_HOST -c "show optimizer" | grep on | wc -l)
+counter=$(psql -v ON_ERROR_STOP=1 -t -A -h $MASTER_HOST -c "show optimizer" | grep on | wc -l)
 if [ "$counter" -eq "0" ]; then
 	if [ "$MASTER_HOST" <> "$HOSTNAME" ]; then
 		echo "Unable to proceed.  Log into the master host and execute the following command:"
@@ -34,7 +34,7 @@ if [ "$counter" -eq "0" ]; then
 fi
 
 #check analyze_root_partition
-counter=$(psql -t -A -h $MASTER_HOST -c "show optimizer_analyze_root_partition" | grep on | wc -l)
+counter=$(psql -v ON_ERROR_STOP=1 -t -A -h $MASTER_HOST -c "show optimizer_analyze_root_partition" | grep on | wc -l)
 if [ "$counter" -eq "0" ]; then
 	if [ "$MASTER_HOST" <> "$HOSTNAME" ]; then
 		echo "Unable to proceed.  Log into the master host and execute the following command:"

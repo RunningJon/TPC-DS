@@ -19,7 +19,7 @@ step=testing_$session_id
 
 init_log $step
 
-for i in $(psql -h $MASTER_HOST -P pager=off -t -A -c "select lpad(i, 2, '0') as i from generate_series(1,99) as i order by random()"); do
+for i in $(psql -v ON_ERROR_STOP=1 -h $MASTER_HOST -P pager=off -t -A -c "select lpad(i, 2, '0') as i from generate_series(1,99) as i order by random()"); do
 
 	start_log
 	id=$i

@@ -17,7 +17,7 @@ source_bashrc()
 get_version()
 {
 	#need to call source_bashrc first
-	VERSION=$(psql -h $MASTER_HOST -t -A -c "SELECT CASE WHEN POSITION ('HAWQ 2' in version) > 0 AND POSITION ('Greenplum' IN version) > 0 THEN 'hawq_2' WHEN POSITION ('HAWQ 1' in version) > 0 AND POSITION ('Greenplum' IN version) > 0 THEN 'hawq_1' WHEN POSITION ('HAWQ' in version) = 0 AND POSITION ('Greenplum' IN version) > 0 THEN 'gpdb' ELSE 'OTHER' END FROM version();")
+	VERSION=$(psql -v ON_ERROR_STOP=1 -h $MASTER_HOST -t -A -c "SELECT CASE WHEN POSITION ('HAWQ 2' in version) > 0 AND POSITION ('Greenplum' IN version) > 0 THEN 'hawq_2' WHEN POSITION ('HAWQ 1' in version) > 0 AND POSITION ('Greenplum' IN version) > 0 THEN 'hawq_1' WHEN POSITION ('HAWQ' in version) = 0 AND POSITION ('Greenplum' IN version) > 0 THEN 'gpdb' ELSE 'OTHER' END FROM version();")
 
 	if [[ "$VERSION" == *"hawq"* ]]; then
 		SMALL_STORAGE="appendonly=true, orientation=parquet"
