@@ -1,0 +1,6 @@
+DROP EXTERNAL TABLE IF EXISTS public.stop_gpfdist;
+
+CREATE WRITABLE EXTERNAL WEB TABLE public.stop_gpfdist
+(foo text)
+EXECUTE :EXECUTE
+FORMAT 'TEXT' (DELIMITER '|');

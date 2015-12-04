@@ -1,5 +1,5 @@
-CREATE EXTERNAL TABLE reports.sql
-(id int, description varchar, duration time) 
-LOCATION (:LOCATION)
+CREATE EXTERNAL WEB TABLE reports.sql
+(id int, description varchar, tuples int, duration time) 
+EXECUTE :EXECUTE ON MASTER
 FORMAT 'TEXT' (DELIMITER '|');
 

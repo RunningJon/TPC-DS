@@ -1,0 +1,6 @@
+DROP EXTERNAL TABLE IF EXISTS public.gen_data;
+
+CREATE WRITABLE EXTERNAL WEB TABLE public.gen_data
+(gen_data_scale int)
+EXECUTE :EXECUTE
+FORMAT 'TEXT' (DELIMITER '|');

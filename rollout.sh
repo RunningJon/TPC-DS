@@ -6,16 +6,23 @@ source $PWD/functions.sh
 source_bashrc
 
 GEN_DATA_SCALE=$1
-GEN_DATA_THREADS=$2
 
-if [[ "$GEN_DATA_SCALE" == "" || "$GEN_DATA_THREADS" == "" ]]; then
-	echo "You must provide the scale as a parameter in terms of Gigabytes and the number of threads to execute."
+if [ "$GEN_DATA_SCALE" == "" ]; then
+	echo "You must provide the scale as a parameter in terms of Gigabytes."
 	echo "Example: ./rollout.sh 100 8"
-	echo "This will create 100 GB of data for this test using 8 threads."
+	echo "This will create 100 GB of data for this test."
 	exit 1
 fi
 
-QUIET=$3
+QUIET=$2
+
+create_directories()
+{
+	if [ ! -d $LOCAL_PWD/log ]; then
+		echo "Creating log directory"
+		mkdir $LOCAL_PWD/log
+	fi
+}
 
 create_directories
 
@@ -23,33 +30,36 @@ clear
 
 echo "TPC-DS Script for Pivotal Greenplum Database and Pivotal HAWQ."
 echo ""
-echo "VARIABLES:"
-echo "MASTER_HOST=$MASTER_HOST"
-echo "HOSTNAME=$HOSTNAME"
-echo "GPFDIST_PORT=$GPFDIST_PORT"
-echo ""
-echo "If you need to change any of these variables, exit this script, update variables.sh,"
+echo "If you need to change any variables, exit this script, update functions.sh,"
 echo "and restart tpcds.sh."
 echo ""
-echo "In the event of an error, the script will stop but the script can be re-run.  When"
-echo "re-run, the script will automatically restart at the correct step.  You can also"
-echo "FORCE the script to run all steps, regardless if it has run successfully before or"
+echo "Skip-Completed: The script will execute each step in order.  If the script fails and is restarted,"
+echo "the script will skip completed steps."
+echo ""
+echo "Smart: The script will skip the TPC-DS compile, data generation, and database initialization"
+echo "steps if the steps have completed before.  This is useful when you may want to re-run the TPC-DS"
+echo "scripts but not go through the data generation again."
+echo ""
+echo "FORCE: The script will run all steps, regardless if it has run successfully before or"
 echo "if some steps have already completed.  This would be useful if you wish to change"
 echo "the size of the TPC-DS test."
 echo ""
-
 if [ "$QUIET" == "" ]; then
-	PS3='Start Normally or FORCE from the beginning? '
-	options=("Normal" "FORCE" "Quit")
+	PS3='Start Skip-Completed, Smart, FORCE, or Quit?'
+	options=("Skip-Completed" "Smart" "FORCE" "Quit")
 	select opt in "${options[@]}"
 	do
 	    case $opt in
-		"Normal")
-			force="0"
+		"Skip-Completed")
+			start_level="0"
+			break
+			;;
+		"Smart")
+			start_level="1"
 			break
 			;;
 		"FORCE")
-			force="1"
+			start_level="2"
 			break
 			;;
 		"Quit")
@@ -59,14 +69,21 @@ if [ "$QUIET" == "" ]; then
 	    esac
 	done
 else
-	force="0"
+	#running in quiet mode so run in Smart mode
+	start_level="1"
 fi
 
-if [ "$force" -eq 1 ]; then
+if [ "$start_level" -eq 1 ]; then
+	rm -f $PWD/log/end_ddl.log
+	rm -f $PWD/log/end_load.log
+	rm -f $PWD/log/end_sql.log
+fi
+
+if [ "$start_level" -eq 2 ]; then
 	rm -f $PWD/log/end_*.log
 fi
 
 for i in $(ls -d $PWD/0*); do
 	echo "$i/rollout.sh"
-	$i/rollout.sh $GEN_DATA_SCALE $GEN_DATA_THREADS
+	$i/rollout.sh $GEN_DATA_SCALE
 done

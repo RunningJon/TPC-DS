@@ -4,14 +4,13 @@ set -e
 PWD=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
 
 GEN_DATA_SCALE=$1
-GEN_DATA_THREADS=$2
-if [[ "$GEN_DATA_SCALE" == "" || "$GEN_DATA_THREADS" == "" ]]; then
-	echo "You must provide the scale as a parameter in terms of Gigabytes and the number of threads."
-	echo "Example: ./tpcds.sh 100 8"
-	echo "This will create 100 GB of data for this test using 8 threads."
+if [ "$GEN_DATA_SCALE" == "" ]; then
+	echo "You must provide the scale as a parameter in terms of Gigabytes."
+	echo "Example: ./tpcds.sh 100"
+	echo "This will create 100 GB of data for this test."
 	exit 1
 fi
-QUIET=$3
+QUIET=$2
 
 MYCMD="tpcds.sh"
 MYVAR="tpcds_variables.sh"
@@ -38,7 +37,7 @@ check_variables()
 	fi
 	local count=`grep "INSTALL_DIR=" $MYVAR | wc -l`
 	if [ "$count" -eq "0" ]; then
-		echo "INSTALL_DIR=\"pivotalguru\"" >> $MYVAR
+		echo "INSTALL_DIR=\"/pivotalguru\"" >> $MYVAR
 	fi
 
 	echo "############################################################################"
@@ -66,13 +65,12 @@ yum_installs()
 {
 	### Install and Update Demos ###
 	echo "############################################################################"
-	echo "Install git, gcc, and recode with yum."
+	echo "Install git and gcc with yum."
 	echo "############################################################################"
 	echo ""
 	# Install git and gcc if not found
 	local CURL_INSTALLED=`yum -C list installed gcc | grep gcc | wc -l`
 	local GIT_INSTALLED=`yum -C list installed git | grep git | wc -l`
-	local RECODE_INSTALLED=`yum -C list installed recode | grep recode | wc -l`
 
 	if [ "$CURL_INSTALLED" -eq "0" ]; then
 		yum -y install gcc
@@ -86,11 +84,6 @@ yum_installs()
 		echo "git already installed"
 	fi
 
-	if [ "$RECODE_INSTALLED" -eq "0" ]; then
-		yum -y install recode
-	else
-		echo "recode already installed"
-	fi
 	echo ""
 }
 
@@ -101,25 +94,25 @@ repo_init()
 	echo "Install the github repository."
 	echo "############################################################################"
 	echo ""
-	if [ ! -d /$INSTALL_DIR ]; then
+	if [ ! -d $INSTALL_DIR ]; then
 		echo ""
 		echo "Creating install dir"
 		echo "-------------------------------------------------------------------------"
-		mkdir /$INSTALL_DIR
-		chown $ADMIN_USER /$INSTALL_DIR
+		mkdir $INSTALL_DIR
+		chown $ADMIN_USER $INSTALL_DIR
 	fi
 
-	if [ ! -d /$INSTALL_DIR/$REPO ]; then
+	if [ ! -d $INSTALL_DIR/$REPO ]; then
 		echo ""
 		echo "Creating $REPO directory"
 		echo "-------------------------------------------------------------------------"
-		mkdir /$INSTALL_DIR/$REPO
-		chown $ADMIN_USER /$INSTALL_DIR/$REPO
-		su -c "cd /$INSTALL_DIR; git clone --depth=1 $REPO_URL" $ADMIN_USER
+		mkdir $INSTALL_DIR/$REPO
+		chown $ADMIN_USER $INSTALL_DIR/$REPO
+		su -c "cd $INSTALL_DIR; git clone --depth=1 $REPO_URL" $ADMIN_USER
 	else
 		git config --global user.email "$ADMIN_USER@$HOSTNAME"
 		git config --global user.name "$ADMIN_USER"
-		su -c "cd /$INSTALL_DIR/$REPO; git fetch --all; git reset --hard origin/master" $ADMIN_USER
+		su -c "cd $INSTALL_DIR/$REPO; git fetch --all; git reset --hard origin/master" $ADMIN_USER
 	fi
 }
 
@@ -131,14 +124,14 @@ script_check()
 	echo "############################################################################"
 	echo ""
 	# Must be executed after the repo has been pulled
-	local d=`diff $PWD/$MYCMD /$INSTALL_DIR/$REPO/$MYCMD | wc -l`
+	local d=`diff $PWD/$MYCMD $INSTALL_DIR/$REPO/$MYCMD | wc -l`
 
 	if [ "$d" -eq "0" ]; then
 		echo "$MYCMD script is up to date so continuing to TPC-DS."
 	else
 		echo "$MYCMD script is NOT up to date."
 		echo ""
-		cp /$INSTALL_DIR/$REPO/$MYCMD $PWD/$MYCMD
+		cp $INSTALL_DIR/$REPO/$MYCMD $PWD/$MYCMD
 		echo "After this script completes, restart the $MYCMD with this command:"
 		echo "./$MYCMD"
 		exit 1
@@ -148,7 +141,7 @@ script_check()
 
 check_sudo()
 {
-	cp /$INSTALL_DIR/$REPO/update_sudo.sh $PWD/update_sudo.sh
+	cp $INSTALL_DIR/$REPO/update_sudo.sh $PWD/update_sudo.sh
 	$PWD/update_sudo.sh
 }
 
@@ -163,4 +156,4 @@ repo_init
 script_check
 check_sudo
 
-su --session-command="cd \"/$INSTALL_DIR/$REPO\"; ./rollout.sh $GEN_DATA_SCALE $GEN_DATA_THREADS $QUIET" $ADMIN_USER
+su --session-command="cd \"$INSTALL_DIR/$REPO\"; ./rollout.sh $GEN_DATA_SCALE $QUIET" $ADMIN_USER

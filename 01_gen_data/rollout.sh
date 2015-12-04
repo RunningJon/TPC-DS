@@ -6,18 +6,47 @@ source $PWD/../functions.sh
 source_bashrc
 
 GEN_DATA_SCALE=$1
-GEN_DATA_THREADS=$2
 
-if [[ "$GEN_DATA_SCALE" == "" || "$GEN_DATA_THREADS" == "" ]]; then
-	echo "You must provide the scale as a parameter in terms of Gigabytes and the number of threads to build."
-	echo "Example: ./rollout.sh 100 8"
-	echo "This will create 100 GB of data for this test using 8 threads."
+if [ "$GEN_DATA_SCALE" == "" ]; then
+	echo "You must provide the scale as a parameter in terms of Gigabytes." 
+	echo "Example: ./rollout.sh 100"
+	echo "This will create 100 GB of data for this test."
 	exit 1
 fi
 
 get_count_generate_data()
 {
-	count=$(ps -ef | grep generate_data.sh | grep -v grep | wc -l)
+	count=$(ps -ef | grep insert_gen_data.sql | grep -v grep | wc -l)
+}
+
+create_table()
+{
+	EXECUTE="'$ADMIN_HOME/generate_data.sh'"
+	psql -a -v ON_ERROR_STOP=1 -v EXECUTE="$EXECUTE" -f $PWD/gen_data.sql
+}
+
+gen_data()
+{
+	SEGMENT_COUNT=$(gpstate | grep "Total primary segments" | awk -F '=' '{print $2}')
+	nohup psql -a -v ON_ERROR_STOP=1 -v SEGMENT_COUNT="$SEGMENT_COUNT" -v GEN_DATA_SCALE="$GEN_DATA_SCALE" -f $PWD/insert_gen_data.sql > $PWD/../log/generate_data.log 2>&1 < $PWD/../log/generate_data.log &
+}
+
+copy_script()
+{
+	#copy the generate_data.sh script to the hosts in the cluster
+	for i in $(psql -t -A -c "SELECT DISTINCT hostname FROM gp_segment_configuration ORDER BY hostname"); do
+		echo "scp $PWD/generate_data.sh $ADMIN_USER@$i:$ADMIN_HOME/"
+		scp $PWD/generate_data.sh $ADMIN_USER@$i:$ADMIN_HOME/
+	done
+}
+
+kill_orphaned_data_gen()
+{
+	for x in $(ps -ef | grep insert_gen_data | grep -v grep | awk -F ' ' '{print $2}'); do
+		echo "killing $x"
+		kill $x
+		sleep .4
+	done
 }
 
 step=gen_data
@@ -26,31 +55,11 @@ start_log
 schema_name="tpcds"
 table_name="gen_data"
 
-for x in $(ps -ef | grep generate_data.sh | grep -v grep | awk -F ' ' '{print $2}'); do
-	echo "killing $x"
-	kill $x
-	sleep .4
-done
+kill_orphaned_data_gen
+create_table
+copy_script
+gen_data $GEN_DATA_SCALE
 
-echo "Make data directories if needed..."
-for f in $(cat $PWD/build_tables.txt); do
-	directory=`echo $f | awk -F '|' '{print $2}'`
-
-	if [[ ! -d "$PWD/../$directory" && ! -L "$PWD/../$directory" ]]; then
-		echo "mkdir \"$PWD/../$directory\""
-		mkdir "$PWD/../$directory"
-	fi
-done
-echo ""
-echo "Remove any previous data generation"
-echo "rm -rf rm $PWD/../data*/*.dat"
-rm -rf rm $PWD/../data*/*.dat
-echo ""
-for f in $(seq 1 $GEN_DATA_THREADS); do
-	echo "nohup $PWD/generate_data.sh $GEN_DATA_THREADS $f $GEN_DATA_SCALE > $PWD/../log/generate_data_$f.log 2>&1 < $PWD/../log/generate_data_$f.log &"
-	nohup $PWD/generate_data.sh $GEN_DATA_THREADS $f $GEN_DATA_SCALE > $PWD/../log/generate_data_$f.log 2>&1 < $PWD/../log/generate_data_$f.log &
-done
-sleep 1
 echo ""
 get_count_generate_data
 echo "Now generating data.  This make take a while."
@@ -63,23 +72,6 @@ done
 
 echo "Done generating data"
 echo ""
-echo "Fixing character set issue with the customer file"
-
-for x in $(cat $PWD/../tables.txt); do
-	table_name2=`echo $x | awk -F '|' '{print $2}'`
-	if [ "$table_name2" == "customer" ]; then
-		directory=`echo $x | awk -F '|' '{print $3}'`
-	fi
-done
-
-for f in $(ls $PWD/../$directory/customer_[1-$GEN_DATA_THREADS]_$GEN_DATA_THREADS.dat); do
-	echo "cat $f | recode iso-8859-1..u8 > $f.new"
-	cat $f | recode iso-8859-1..u8 > $f.new
-	echo "mv $f $f.bak"
-	mv $f $f.bak
-	echo "mv $f.new $f"
-	mv $f.new $f
-done
 
 echo "Generate queries based on scale"
 $PWD/generate_queries.sh $GEN_DATA_SCALE

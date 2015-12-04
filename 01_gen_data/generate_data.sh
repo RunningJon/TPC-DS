@@ -1,32 +1,34 @@
 #!/bin/bash
+set -e
 
 PWD=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
-source $PWD/../functions.sh
-source_bashrc
 
-set -e
-PARALLEL=$1
-CHILD=$2
-GEN_DATA_SCALE=$3
+PARALLEL="$GP_SEGMENT_COUNT"
 
-if [ "$GEN_DATA_SCALE" == "" ]; then
-	echo "Usage: generate_data.sh parallel child scale"
-	echo "Example: ./generate_data.sh 4 1 100"
-	echo "This creates 100GB of data using 4 parallel threads and this is thread number 1."
-	echo "Example: ./generate_data.sh 4 2 100"
-	echo "This creates 100GB of data using 4 parallel threads and this is thread number 2."
-	echo "etc..."
-	exit 1
+while read line; do
+	#segment_id is zero based but dsdgen starts at 1
+	CHILD=$(($GP_SEGMENT_ID + 1))
+	GEN_DATA_SCALE="$line"
+done < "${1:-/dev/stdin}"
+
+DATA_DIRECTORY="$GP_SEG_DATADIR"/pivotalguru
+
+if [ ! -d "$DATA_DIRECTORY" ]; then
+	mkdir $DATA_DIRECTORY
 fi
 
-for i in $(cat $PWD/build_tables.txt); do
-	table_name=`echo $i | awk -F '|' '{print $1}'`
-	directory=`echo $i | awk -F '|' '{print $2}'`
-	directory=$PWD/../$directory
+rm -f $DATA_DIRECTORY/*
 
-	echo "$PWD/dsdgen -table $table_name -scale $GEN_DATA_SCALE -dir $directory -parallel $PARALLEL -child $CHILD -terminate n"
-	$PWD/dsdgen -table $table_name -scale $GEN_DATA_SCALE -dir $directory -parallel $PARALLEL -child $CHILD -terminate n
+cd $PWD
+$PWD/dsdgen -scale $GEN_DATA_SCALE -dir $DATA_DIRECTORY -parallel $PARALLEL -child $CHILD -terminate n
 
+# make sure there is a file in each directory so that gpfdist doesn't throw an error
+declare -a tables=("call_center" "catalog_page" "catalog_returns" "catalog_sales" "customer" "customer_address" "customer_demographics" "date_dim" "household_demographics" "income_band" "inventory" "item" "promotion" "reason" "ship_mode" "store" "store_returns" "store_sales" "time_dim" "warehouse" "web_page" "web_returns" "web_sales" "web_site")
+
+for i in "${tables[@]}"; do
+	filename="$DATA_DIRECTORY/"$i"_"$CHILD"_"$PARALLEL".dat"
+	echo $filename
+	if [ ! -f $filename ]; then
+		touch $filename
+	fi
 done
-
-echo "COMPLETE: dsdgen parallel $PARALLEL child $CHILD scale $GEN_DATA_SCALE"

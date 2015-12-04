@@ -7,18 +7,16 @@ source_bashrc
 
 for i in $(ls $PWD/*.sql | grep -v report.sql); do
 	table_name=`echo $i | awk -F '.' '{print $3}'`
-	LOCATION="'gpfdist://$HOSTNAME:$GPFDIST_PORT/log/rollout_$table_name.log'"
+	EXECUTE="'cat $PWD/../log/rollout_$table_name.log'"
 
-	echo "psql -h $MASTER_HOST -v ON_ERROR_STOP=1 -a -f $i -v LOCATION=\"$LOCATION\""
-	psql -h $MASTER_HOST -v ON_ERROR_STOP=1 -a -f $i -v LOCATION="$LOCATION"
+	echo "psql -v ON_ERROR_STOP=1 -a -f $i -v EXECUTE=\"$EXECUTE\""
+	psql -v ON_ERROR_STOP=1 -a -f $i -v EXECUTE="$EXECUTE"
 	echo ""
 done
 
-start_gpfdist
-
-psql -v ON_ERROR_STOP=1 -h $MASTER_HOST -P pager=off -f $PWD/detailed_report.sql
+psql -q -t -A -v ON_ERROR_STOP=1 -P pager=off -f $PWD/detailed_report.sql -o $PWD/../log/detailed_report.csv
 echo ""
-psql -v ON_ERROR_STOP=1 -h $MASTER_HOST -P pager=off -f $PWD/summary_report.sql
+psql -q -t -A -v ON_ERROR_STOP=1 -P pager=off -f $PWD/summary_report.sql -o $PWD/../log/summary_report.csv
 
-
-stop_gpfdist
+echo "Detailed report located in $PWD/../log/detailed_report.csv"
+echo "Summary report located in $PWD/../log/summary_report.csv"

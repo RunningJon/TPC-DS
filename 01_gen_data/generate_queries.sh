@@ -20,8 +20,8 @@ fi
 
 rm -f $PWD/query_0.sql
 
-echo "$PWD/dsqgen -input $PWD/query_templates/templates.lst -directory $PWD/query_templates -dialect netezza -scale $GEN_DATA_SCALE -verbose y -output $PWD"
-$PWD/dsqgen -input $PWD/query_templates/templates.lst -directory $PWD/query_templates -dialect netezza -scale $GEN_DATA_SCALE -verbose y -output $PWD
+echo "$PWD/../dsqgen -input $PWD/query_templates/templates.lst -directory $PWD/query_templates -dialect netezza -scale $GEN_DATA_SCALE -verbose y -output $PWD"
+$PWD/../dsqgen -input $PWD/query_templates/templates.lst -directory $PWD/query_templates -dialect netezza -scale $GEN_DATA_SCALE -verbose y -output $PWD
 
 rm -f $PWD/../05_sql/*.query.*.sql
 
