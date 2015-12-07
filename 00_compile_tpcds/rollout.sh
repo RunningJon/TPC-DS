@@ -22,6 +22,9 @@ make_tpc()
 
 copy_tpc()
 {
+	cp $PWD/tools/dsqgen ../*gen_data/
+	cp $PWD/tools/tpcds.idx ../*gen_data/
+
 	#copy the compiled dsdgen program to the segment hosts
 	for i in $(cat $PWD/../segment_hosts.txt); do
 		echo "copy tpcds binaries to $i:$ADMIN_HOME"
