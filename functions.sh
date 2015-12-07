@@ -3,8 +3,9 @@ set -e
 
 LOCAL_PWD=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
 OSVERSION=`uname`
-ADMIN_HOME=$(eval echo ~$ADMIN_USER)
 ADMIN_USER=`whoami`
+ADMIN_HOME=$(eval echo ~$ADMIN_USER)
+GPFDIST_PORT=9000
 
 source_bashrc()
 {
