@@ -15,12 +15,6 @@ check_gucs()
 {
 	update_config="0"
 
-	echo "check search_path"
-	counter=$(psql -v ON_ERROR_STOP=1 -t -A -c "show search_path" | grep tpcds | wc -l)
-	if [ "$counter" -eq "0" ]; then
-		psql -v ON_ERROR_STOP=1 -c "ALTER USER gpadmin SET search_path=tpcds,public;"
-	fi
-
 	echo "check optimizer"
 	counter=$(psql -v ON_ERROR_STOP=1 -t -A -c "show optimizer" | grep on | wc -l)
 	if [ "$counter" -eq "0" ]; then
@@ -54,8 +48,9 @@ copy_config()
 
 set_psqlrc()
 {
-	echo "make sure timing and any other option is not in the psqlrc file"
-	echo "" > ~/.psqlrc
+	echo "set search_path=tpcds,public;" > ~/.psqlrc
+	echo "\timing" >> ~/.psqlrc
+	chmod 600 ~/.psqlrc
 }
 
 check_gucs

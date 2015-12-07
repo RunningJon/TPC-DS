@@ -22,19 +22,11 @@ make_tpc()
 
 copy_tpc()
 {
-	cd $PWD/tools
-
 	#copy the compiled dsdgen program to the segment hosts
-	for i in $(psql -t -A -c "SELECT DISTINCT hostname FROM gp_segment_configuration ORDER BY hostname"); do
-		echo "scp dsdgen dsqgen tpcds.idx $ADMIN_USER@$i:$ADMIN_HOME/"
-		scp dsdgen dsqgen tpcds.idx $ADMIN_USER@$i:$ADMIN_HOME/
+	for i in $(cat $PWD/../segment_hosts.txt); do
+		echo "copy tpcds binaries to $i:$ADMIN_HOME"
+		scp tools/dsdgen tools/dsqgen tools/tpcds.idx $i:$ADMIN_HOME/
 	done
-
-	cd ..
-
-	cp $PWD/tools/dsdgen $PWD/../
-	cp $PWD/tools/dsqgen $PWD/../
-	cp $PWD/tools/tpcds.idx $PWD/../
 }
 
 copy_queries()
@@ -44,6 +36,7 @@ copy_queries()
 }
 
 make_tpc
+create_hosts_file
 copy_tpc
 copy_queries
 log

@@ -17,14 +17,16 @@ for i in $(ls $PWD/*.sql); do
 	table_name=`echo $i | awk -F '.' '{print $3}'`
 
 	counter=0
-	for x in $(psql -t -A -c "SELECT hostname FROM gp_segment_configuration WHERE content >= 0 ORDER BY hostname"); do
+	for x in $(psql -A -t -c "SELECT row_number() over(), trim(hostname) FROM public.data_dir"); do
+		CHILD=$(echo $x | awk -F '|' '{print $1}')
+		EXT_HOST=$(echo $x | awk -F '|' '{print $2}')
+		PORT=$(($GPFDIST_PORT + $CHILD))
 		if [ "$counter" -eq "0" ]; then
 			LOCATION="'"
 		else
 			LOCATION+="', '"
 		fi
-		GPFDIST_PORT=$((8000+$counter))
-		LOCATION+="gpfdist://$x:$GPFDIST_PORT/"$table_name"_[0-9]_[0-9].dat"
+		LOCATION+="gpfdist://$EXT_HOST:$PORT/"$table_name"_[0-9]_[0-9].dat"
 
 		counter=$(($counter + 1))
 	done

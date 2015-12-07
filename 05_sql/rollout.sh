@@ -17,6 +17,8 @@ for i in $(ls $PWD/*.sql); do
 	echo "psql -A -q -t -P pager=off -v ON_ERROR_STOP=1 -f $i | wc -l"
 	start_log
 	tuples=$(psql -A -q -t -P pager=off -v ON_ERROR_STOP=1 -f $i | wc -l)
+	#remove the extra line that \timing adds
+	tuples=$(($tuples-1))
 	log $tuples
 done
 

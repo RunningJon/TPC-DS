@@ -1,18 +1,8 @@
 #!/bin/bash
 set -e
+PWD=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
 
-logfile=$(eval echo ~/)
-logfile+=test.log
+GPFDIST_PORT=$1
+GEN_DATA_PATH=$2
 
-i=0
-GPFDIST_PORT=8000
-
-while read line; do
-	GPFDIST_PORT=$(($GPFDIST_PORT + $GP_SEGMENT_ID))
-done < "${1:-/dev/stdin}"
-
-DATA_DIRECTORY="$GP_SEG_DATADIR"/pivotalguru
-
-echo "Starting gpfdist on port: $GPFDIST_PORT" >> $logfile
-
-gpfdist -p $GPFDIST_PORT -d $DATA_DIRECTORY >> $DATA_DIRECTORY/gpfdist_"$GPFDIST_PORT".log 2>&1 < $DATA_DIRECTORY/gpfdist_"$GPFDIST_PORT".log & 
+gpfdist -p $GPFDIST_PORT -d $GEN_DATA_PATH > gpfdist.$GPFDIST_PORT.log 2>&1 < gpfdist.$GPFDIST_PORT.log &

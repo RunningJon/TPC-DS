@@ -3,15 +3,12 @@ set -e
 
 PWD=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
 
-PARALLEL="$GP_SEGMENT_COUNT"
+GEN_DATA_SCALE=$1
+CHILD=$2
+PARALLEL=$3
+GEN_DATA_PATH=$4
 
-while read line; do
-	#segment_id is zero based but dsdgen starts at 1
-	CHILD=$(($GP_SEGMENT_ID + 1))
-	GEN_DATA_SCALE="$line"
-done < "${1:-/dev/stdin}"
-
-DATA_DIRECTORY="$GP_SEG_DATADIR"/pivotalguru
+DATA_DIRECTORY="$GEN_DATA_PATH"/pivotalguru
 
 if [ ! -d "$DATA_DIRECTORY" ]; then
 	mkdir $DATA_DIRECTORY

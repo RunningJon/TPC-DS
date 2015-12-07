@@ -16,36 +16,45 @@ fi
 
 get_count_generate_data()
 {
-	count=$(ps -ef | grep insert_gen_data.sql | grep -v grep | wc -l)
+	#count=$(ps -ef | grep generate_data.sh | grep -v grep | wc -l)
+	count="0"
+	for i in $(cat $PWD/../segment_hosts.txt); do
+		next_count=$(ssh -n -f $i "bash -c 'ps -ef | grep generate_data.sh | grep -v grep | wc -l'")
+		count=$(($count + $next_count))
+	done
 }
 
-create_table()
+create_table_data_dir()
 {
-	EXECUTE="'$ADMIN_HOME/generate_data.sh'"
-	psql -a -v ON_ERROR_STOP=1 -v EXECUTE="$EXECUTE" -f $PWD/gen_data.sql
+	# this table shows the path to each segment's data directory
+	psql -a -v ON_ERROR_STOP=1 -f $PWD/data_dir.sql
+}
+
+kill_orphaned_data_gen()
+{	for i in $(cat $PWD/../segment_hosts.txt); do
+		echo "kill any orphaned processes"
+		ssh -n -f $i "bash -c 'for x in $(ps -ef | grep dsdgen | grep -v grep | awk -F ' ' '{print $2}'); do echo "killing $x"; kill $x; done'"
+	done
+}
+
+copy_generate_data()
+{
+	#copy generate_data.sh to ~/
+	for i in $(cat $PWD/../segment_hosts.txt); do
+		echo "copy generate_data.sh to $i:$ADMIN_HOME"
+		scp $PWD/generate_data.sh $i:$ADMIN_HOME/
+	done
 }
 
 gen_data()
 {
-	SEGMENT_COUNT=$(gpstate | grep "Total primary segments" | awk -F '=' '{print $2}')
-	nohup psql -a -v ON_ERROR_STOP=1 -v SEGMENT_COUNT="$SEGMENT_COUNT" -v GEN_DATA_SCALE="$GEN_DATA_SCALE" -f $PWD/insert_gen_data.sql > $PWD/../log/generate_data.log 2>&1 < $PWD/../log/generate_data.log &
-}
-
-copy_script()
-{
-	#copy the generate_data.sh script to the hosts in the cluster
-	for i in $(psql -t -A -c "SELECT DISTINCT hostname FROM gp_segment_configuration ORDER BY hostname"); do
-		echo "scp $PWD/generate_data.sh $ADMIN_USER@$i:$ADMIN_HOME/"
-		scp $PWD/generate_data.sh $ADMIN_USER@$i:$ADMIN_HOME/
-	done
-}
-
-kill_orphaned_data_gen()
-{
-	for x in $(ps -ef | grep insert_gen_data | grep -v grep | awk -F ' ' '{print $2}'); do
-		echo "killing $x"
-		kill $x
-		sleep .4
+	PARALLEL=$(gpstate | grep "Total primary segments" | awk -F '=' '{print $2}')
+	echo "parallel: $PARALLEL"
+	for i in $(psql -A -t -c "SELECT row_number() over(), trim(hostname), trim(path) FROM public.data_dir"); do
+		CHILD=$(echo $i | awk -F '|' '{print $1}')
+		EXT_HOST=$(echo $i | awk -F '|' '{print $2}')
+		GEN_DATA_PATH=$(echo $i | awk -F '|' '{print $3}')
+		ssh -n -f $EXT_HOST "bash -c 'cd ~/; ./generate_data.sh $GEN_DATA_SCALE $CHILD $PARALLEL $GEN_DATA_PATH > generate_data.$CHILD.log 2>&1 < generate_data.$CHILD.log &'"
 	done
 }
 
@@ -56,9 +65,9 @@ schema_name="tpcds"
 table_name="gen_data"
 
 kill_orphaned_data_gen
-create_table
-copy_script
-gen_data $GEN_DATA_SCALE
+copy_generate_data
+create_table_data_dir
+gen_data
 
 echo ""
 get_count_generate_data
@@ -74,7 +83,7 @@ echo "Done generating data"
 echo ""
 
 echo "Generate queries based on scale"
-$PWD/generate_queries.sh $GEN_DATA_SCALE
+#$PWD/generate_queries.sh $GEN_DATA_SCALE
 
 log
 
