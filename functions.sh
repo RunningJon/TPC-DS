@@ -90,6 +90,12 @@ end_step()
 
 create_hosts_file()
 {
-	psql -t -A -v ON_ERROR_STOP=1 -c "SELECT DISTINCT hostname FROM gp_segment_configuration WHERE role = 'p' AND content >= 0" -o $LOCAL_PWD/segment_hosts.txt
+	get_version
 
+	if [[ "$VERSION" == "gpdb" || "$VERSION" == "hawq_1" ]]; then
+		psql -t -A -v ON_ERROR_STOP=1 -c "SELECT DISTINCT hostname FROM gp_segment_configuration WHERE role = 'p' AND content >= 0" -o $LOCAL_PWD/segment_hosts.txt
+	else
+		#must be HAWQ 2 which doesn't have content column
+		psql -t -A -v ON_ERROR_STOP=1 -c "SELECT DISTINCT hostname FROM gp_segment_configuration WHERE role = 'p'" -o $LOCAL_PWD/segment_hosts.txt
+	fi
 }

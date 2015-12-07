@@ -27,7 +27,14 @@ get_count_generate_data()
 create_table_data_dir()
 {
 	# this table shows the path to each segment's data directory
-	psql -a -v ON_ERROR_STOP=1 -f $PWD/data_dir.sql
+	get_version
+	if [[ "$VERSION" == "gpdb" || "$VERSION" == "hawq_1" ]]; then
+		SEGMENTS="all"
+	else
+		#must be HAWQ 2
+		SEGMENTS=$(hawq state | grep "Total segments count" | awk -F '=' '{print $2}')
+	fi
+	psql -a -v ON_ERROR_STOP=1 -v SEGMENTS="$SEGMENTS" -f $PWD/data_dir.sql
 }
 
 kill_orphaned_data_gen()
@@ -48,7 +55,13 @@ copy_generate_data()
 
 gen_data()
 {
-	PARALLEL=$(gpstate | grep "Total primary segments" | awk -F '=' '{print $2}')
+	get_version
+	if [[ "$VERSION" == "gpdb" || "$VERSION" == "hawq_1" ]]; then
+		PARALLEL=$(gpstate | grep "Total primary segments" | awk -F '=' '{print $2}')
+	else
+		PARALLEL=$(hawq state | grep "Total segments count" | awk -F '=' '{print $2}')
+	fi
+
 	echo "parallel: $PARALLEL"
 	for i in $(psql -A -t -c "SELECT row_number() over(), trim(hostname), trim(path) FROM public.data_dir"); do
 		CHILD=$(echo $i | awk -F '|' '{print $1}')
