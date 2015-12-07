@@ -87,3 +87,9 @@ end_step()
 	local logfile=end_$1.log
 	touch $LOCAL_PWD/log/$logfile
 }
+
+create_hosts_file()
+{
+	psql -t -A -v ON_ERROR_STOP=1 -c "SELECT DISTINCT hostname FROM gp_segment_configuration WHERE role = 'p' AND content >= 0" -o $LOCAL_PWD/segment_hosts.txt
+
+}
