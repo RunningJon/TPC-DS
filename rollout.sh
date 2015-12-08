@@ -9,7 +9,7 @@ GEN_DATA_SCALE=$1
 
 if [ "$GEN_DATA_SCALE" == "" ]; then
 	echo "You must provide the scale as a parameter in terms of Gigabytes."
-	echo "Example: ./rollout.sh 100 8"
+	echo "Example: ./rollout.sh 100"
 	echo "This will create 100 GB of data for this test."
 	exit 1
 fi
@@ -36,9 +36,9 @@ echo ""
 echo "Skip-Completed: The script will execute each step in order.  If the script fails and is restarted,"
 echo "the script will skip completed steps."
 echo ""
-echo "Smart: The script will skip the TPC-DS compile, data generation, and database initialization"
-echo "steps if the steps have completed before.  This is useful when you may want to re-run the TPC-DS"
-echo "scripts but not go through the data generation again."
+echo "Smart: The script will execute the DDL, Load, SQL, and Reports steps but skip the TPC-DS compile, "
+echo "data generation, and database initialization steps if the steps have completed before.  This is "
+echo "useful when you may want to re-run the TPC-DS scripts but not go through the data generation again."
 echo ""
 echo "FORCE: The script will run all steps, regardless if it has run successfully before or"
 echo "if some steps have already completed.  This would be useful if you wish to change"

@@ -45,16 +45,6 @@ start_gpfdist()
 	done
 }
 
-analyze_tables()
-{
-	#ANALYZE
-	echo "analyze tables and partitions with missing statistics"
-	psql -A -t -v ON_ERROR_STOP=1 -c "SELECT 'ANALYZE ' || n.nspname || '.' || c.relname || ';' FROM pg_class c JOIN pg_namespace n on c.relnamespace = n.oid WHERE n.nspname = 'tpcds' AND c.relname NOT IN (SELECT DISTINCT tablename FROM pg_partitions p WHERE schemaname = 'tpcds') AND c.reltuples::bigint = 0" | psql -a -e -v ON_ERROR_STOP=1
-
-	echo "analyze the root partition of partitioned tables with missing statistics"
-	psql -A -t -v ON_ERROR_STOP=1 -c "SELECT 'ANALYZE ROOTPARTITION ' || n.nspname || '.' || c.relname || ';' FROM pg_class c JOIN pg_namespace n on c.relnamespace = n.oid WHERE n.nspname = 'tpcds' AND c.relname IN (SELECT DISTINCT tablename FROM pg_partitions p WHERE schemaname = 'tpcds') AND c.reltuples::bigint = 0" | psql -a -e -v ON_ERROR_STOP=1
-}
-
 copy_script
 start_gpfdist
 
@@ -72,5 +62,31 @@ for i in $(ls $PWD/*.sql); do
 done
 
 stop_gpfdist
-analyze_tables
+
+#only analyze tables that need to be analyzed
+for i in $(psql -A -t -v ON_ERROR_STOP=1 -c "SELECT n.nspname || '.' || c.relname FROM pg_class c JOIN pg_namespace n on c.relnamespace = n.oid WHERE n.nspname = 'tpcds' AND c.relname NOT IN (SELECT DISTINCT tablename FROM pg_partitions p WHERE schemaname = 'tpcds') AND c.reltuples::bigint = 0"); do
+	start_log
+
+	schema_name=`echo $i | awk -F '.' '{print $1}'`
+	table_name=`echo $i | awk -F '.' '{print $2}'`
+
+	echo "psql -a -v ON_ERROR_STOP=1 -c \"ANALYZE $schema_name.$table_name\""
+	psql -a -v ON_ERROR_STOP=1 -c "ANALYZE $schema_name.$table_name"
+	tuples="0"
+	log $tuples
+done
+
+#only analyze root partitions that need to be analyzed
+for i in $(psql -A -t -v ON_ERROR_STOP=1 -c "SELECT n.nspname || '.' || c.relname FROM pg_class c JOIN pg_namespace n on c.relnamespace = n.oid WHERE n.nspname = 'tpcds' AND c.relname IN (SELECT DISTINCT tablename FROM pg_partitions p WHERE schemaname = 'tpcds') AND c.reltuples::bigint = 0"); do
+	start_log
+
+	schema_name=`echo $i | awk -F '.' '{print $1}'`
+	table_name=`echo $i | awk -F '.' '{print $2}'`
+
+	echo "psql -a -v ON_ERROR_STOP=1 -c \"ANALYZE ROOTPARTITION $schema_name.$table_name\""
+	psql -a -v ON_ERROR_STOP=1 -c "ANALYZE ROOTPARTITION $schema_name.$table_name"
+	tuples="0"
+	log $tuples
+done
+
 end_step $step

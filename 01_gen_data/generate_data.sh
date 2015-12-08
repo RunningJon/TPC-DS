@@ -10,7 +10,7 @@ GEN_DATA_PATH=$4
 
 DATA_DIRECTORY="$GEN_DATA_PATH"/pivotalguru
 
-if [ ! -d "$DATA_DIRECTORY" ]; then
+if [[ ! -d "$DATA_DIRECTORY" && ! -L "$DATA_DIRECTORY" }]; then
 	mkdir $DATA_DIRECTORY
 fi
 
