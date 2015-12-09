@@ -19,16 +19,30 @@ ssh root@mdw
 curl https://raw.githubusercontent.com/pivotalguru/TPC-DS/master/tpcds.sh > tpcds.sh
 chmod 755 tpcds.sh
 
-3. Execute tpcds.sh and specify the scale in Gigabtes 
+########################################################################################
+Variables and Configuration
+########################################################################################
+By default, the installation will create the scripts in /pivotalguru/TPC-DS on the 
+Master host.  This can be changed by editing the dynamically configured 
+tpcds_variables.sh file that is created the first time tpcds.sh is run.  
+
+Also by default, TPC-DS files are generated on each Segment Host / Data Node in the 
+Segement's PGDATA/pivotalguru directory.  If there isn't enough space in this directory
+in each Segment, you can create a symbolic link to a drive location that does have 
+enough space.
+
+########################################################################################
+Execution
+########################################################################################
+1. Execute tpcds.sh and specify the scale in Gigabtes 
 ./tpcds.sh 100 
 
 This example will create a 100 GB TPC-DS dataset and run all of the queries.
 
-Note: Increase the number of threads when building larger datasets and the host has 
-available cores to process the data.
+A quiet mode with no user prompts is available when an optional second parameter is 
+provided with any value.
 
-Aditionally, a quiet mode with no user prompts is available when an optional second
-parameter is provided with any value.  Example:
+Example:
 ./tpcds.sh 100 shhh
 
 ########################################################################################
