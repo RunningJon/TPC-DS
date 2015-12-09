@@ -75,13 +75,14 @@ for i in $(psql -A -t -v ON_ERROR_STOP=1 -c "SELECT n.nspname || '.' || c.relnam
 	tuples="0"
 	log $tuples
 done
+max_id=$(ls $PWD/*.sql | awk -F '.' '{print $1}' | tail -1)
 
 #only analyze root partitions that need to be analyzed
-for i in $(psql -A -t -v ON_ERROR_STOP=1 -c "SELECT n.nspname || '.' || c.relname FROM pg_class c JOIN pg_namespace n on c.relnamespace = n.oid WHERE n.nspname = 'tpcds' AND c.relname IN (SELECT DISTINCT tablename FROM pg_partitions p WHERE schemaname = 'tpcds') AND c.reltuples::bigint = 0"); do
+for i in $(psql -A -t -v ON_ERROR_STOP=1 -c "SELECT lpad(row_number() over() + $max_id, 3, '0') || '.' || n.nspname || '.' || c.relname FROM pg_class c JOIN pg_namespace n on c.relnamespace = n.oid WHERE n.nspname = 'tpcds' AND c.relname IN (SELECT DISTINCT tablename FROM pg_partitions p WHERE schemaname = 'tpcds') AND c.reltuples::bigint = 0"); do
 	start_log
 
-	schema_name=`echo $i | awk -F '.' '{print $1}'`
-	table_name=`echo $i | awk -F '.' '{print $2}'`
+	schema_name=`echo $i | awk -F '.' '{print $2}'`
+	table_name=`echo $i | awk -F '.' '{print $3}'`
 
 	echo "psql -a -v ON_ERROR_STOP=1 -c \"ANALYZE ROOTPARTITION $schema_name.$table_name\""
 	psql -a -v ON_ERROR_STOP=1 -c "ANALYZE ROOTPARTITION $schema_name.$table_name"
