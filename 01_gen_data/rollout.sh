@@ -32,7 +32,10 @@ create_table_data_dir()
 		SEGMENTS="all"
 	else
 		#must be HAWQ 2
-		SEGMENTS=$(hawq state | grep "Total segments count" | awk -F '=' '{print $2}')
+		#HAWQ 2 has 1 segment directory per host with the same PGDATA value
+		#ON ALL isn't supported either so use just 1 segment and use the segment_hosts.txt file
+		SEGMENTS="1"
+		#SEGMENTS=$(hawq state | grep "Total segments count" | awk -F '=' '{print $2}')
 	fi
 	psql -a -v ON_ERROR_STOP=1 -v SEGMENTS="$SEGMENTS" -f $PWD/data_dir.sql
 }
@@ -58,17 +61,31 @@ gen_data()
 	get_version
 	if [[ "$VERSION" == "gpdb" || "$VERSION" == "hawq_1" ]]; then
 		PARALLEL=$(gpstate | grep "Total primary segments" | awk -F '=' '{print $2}')
+		echo "parallel: $PARALLEL"
+		for i in $(psql -A -t -c "SELECT row_number() over(), trim(hostname), trim(path) FROM public.data_dir"); do
+			CHILD=$(echo $i | awk -F '|' '{print $1}')
+			EXT_HOST=$(echo $i | awk -F '|' '{print $2}')
+			GEN_DATA_PATH=$(echo $i | awk -F '|' '{print $3}')
+			ssh -n -f $EXT_HOST "bash -c 'cd ~/; ./generate_data.sh $GEN_DATA_SCALE $CHILD $PARALLEL $GEN_DATA_PATH > generate_data.$CHILD.log 2>&1 < generate_data.$CHILD.log &'"
+		done
 	else
+		#HAWQ 2
 		PARALLEL=$(hawq state | grep "Total segments count" | awk -F '=' '{print $2}')
+		echo "parallel: $PARALLEL"
+
+		#get the PGDATA value which is the same on all hosts for HAWQ 2
+		for i in $(psql -A -t -c "SELECT trim(path) FROM public.data_dir"); do
+			GEN_DATA_PATH="$i"
+		done
+
+		CHILD="0"
+		for i in $(cat $PWD/../segment_hosts.txt)
+			CHILD=$(($CHILD+1))
+			EXT_HOST=$i
+			ssh -n -f $EXT_HOST "bash -c 'cd ~/; ./generate_data.sh $GEN_DATA_SCALE $CHILD $PARALLEL $GEN_DATA_PATH > generate_data.$CHILD.log 2>&1 < generate_data.$CHILD.log &'"
+		done
 	fi
 
-	echo "parallel: $PARALLEL"
-	for i in $(psql -A -t -c "SELECT row_number() over(), trim(hostname), trim(path) FROM public.data_dir"); do
-		CHILD=$(echo $i | awk -F '|' '{print $1}')
-		EXT_HOST=$(echo $i | awk -F '|' '{print $2}')
-		GEN_DATA_PATH=$(echo $i | awk -F '|' '{print $3}')
-		ssh -n -f $EXT_HOST "bash -c 'cd ~/; ./generate_data.sh $GEN_DATA_SCALE $CHILD $PARALLEL $GEN_DATA_PATH > generate_data.$CHILD.log 2>&1 < generate_data.$CHILD.log &'"
-	done
 }
 
 step=gen_data

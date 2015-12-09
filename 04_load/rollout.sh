@@ -66,6 +66,7 @@ stop_gpfdist
 max_id=$(ls $PWD/*.sql | tail -1)
 max_id=$(basename $max_id | awk -F '.' '{print $1}')
 
+#might be able to remove this as Orca doesn't use the stats on partitions.  It only uses the root partition
 #only analyze tables that need to be analyzed
 for i in $(psql -A -t -v ON_ERROR_STOP=1 -c "SELECT lpad(row_number() over() + $max_id, 3, '0') || '.' || n.nspname || '.' || c.relname FROM pg_class c JOIN pg_namespace n on c.relnamespace = n.oid WHERE n.nspname = 'tpcds' AND c.relname NOT IN (SELECT DISTINCT tablename FROM pg_partitions p WHERE schemaname = 'tpcds') AND c.reltuples::bigint = 0"); do
 	start_log
