@@ -80,7 +80,7 @@ gen_data()
 
 		CHILD="0"
 		for i in $(cat $PWD/../segment_hosts.txt)
-			CHILD=$(($CHILD+1))
+			CHILD=$(($CHILD + 1))
 			EXT_HOST=$i
 			ssh -n -f $EXT_HOST "bash -c 'cd ~/; ./generate_data.sh $GEN_DATA_SCALE $CHILD $PARALLEL $GEN_DATA_PATH > generate_data.$CHILD.log 2>&1 < generate_data.$CHILD.log &'"
 		done
