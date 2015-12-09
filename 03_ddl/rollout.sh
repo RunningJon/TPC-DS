@@ -17,19 +17,38 @@ for i in $(ls $PWD/*.sql); do
 	table_name=`echo $i | awk -F '.' '{print $3}'`
 
 	counter=0
-	for x in $(psql -A -t -c "SELECT row_number() over(), trim(hostname) FROM public.data_dir"); do
-		CHILD=$(echo $x | awk -F '|' '{print $1}')
-		EXT_HOST=$(echo $x | awk -F '|' '{print $2}')
-		PORT=$(($GPFDIST_PORT + $CHILD))
-		if [ "$counter" -eq "0" ]; then
-			LOCATION="'"
-		else
-			LOCATION+="', '"
-		fi
-		LOCATION+="gpfdist://$EXT_HOST:$PORT/"$table_name"_[0-9]_[0-9].dat"
 
-		counter=$(($counter + 1))
-	done
+	if [[ "$VERSION" == "gpdb" || "$VERSION" == "hawq_1" ]]; then
+		for x in $(psql -A -t -c "SELECT row_number() over(), trim(hostname) FROM public.data_dir"); do
+			CHILD=$(echo $x | awk -F '|' '{print $1}')
+			EXT_HOST=$(echo $x | awk -F '|' '{print $2}')
+			PORT=$(($GPFDIST_PORT + $CHILD))
+			if [ "$counter" -eq "0" ]; then
+				LOCATION="'"
+			else
+				LOCATION+="', '"
+			fi
+			LOCATION+="gpfdist://$EXT_HOST:$PORT/"$table_name"_[0-9]_[0-9].dat"
+
+			counter=$(($counter + 1))
+		done
+	else
+		#HAWQ 2
+		CHILD="0"
+		for x in $(cat $PWD/../segment_hosts.txt); do
+			CHILD=$(($CHILD + 1))
+			EXT_HOST=$x
+			PORT=$(($GPFDIST_PORT + $CHILD))
+			if [ "$counter" -eq "0" ]; then
+				LOCATION="'"
+			else
+				LOCATION+="', '"
+			fi
+			LOCATION+="gpfdist://$EXT_HOST:$PORT/"$table_name"_[0-9]_[0-9].dat"
+
+			counter=$(($counter + 1))
+		done
+	fi
 
 	LOCATION+="'"
 
