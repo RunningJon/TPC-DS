@@ -34,13 +34,12 @@ start_gpfdist()
 
 	get_version
 	if [[ "$VERSION" == "gpdb" || "$VERSION" == "hawq_1" ]]; then
-		for i in $(psql -A -t -c "SELECT row_number() over(), trim(hostname), trim(path) FROM public.data_dir"); do
+		for i in $(psql -A -t -c "select rank() over (partition by hostname order by path), trim(hostname), trim(path) from data_dir order by hostname"); do
 			CHILD=$(echo $i | awk -F '|' '{print $1}')
 			EXT_HOST=$(echo $i | awk -F '|' '{print $2}')
 			GEN_DATA_PATH=$(echo $i | awk -F '|' '{print $3}')
 			GEN_DATA_PATH=$GEN_DATA_PATH/pivotalguru
 			PORT=$(($GPFDIST_PORT + $CHILD))
-			echo "child: $CHILD"
 			echo "executing on $EXT_HOST ./start_gpfdist.sh $PORT $GEN_DATA_PATH"
 			ssh -n -f $EXT_HOST "bash -c 'cd ~/; ./start_gpfdist.sh $PORT $GEN_DATA_PATH'"
 			sleep 1
@@ -51,14 +50,10 @@ start_gpfdist()
 			GEN_DATA_PATH=$i
 		done
 
-		CHILD="0"
 		for i in $(cat $PWD/../segment_hosts.txt); do
-			CHILD=$(($CHILD + 1))
 			EXT_HOST=$i
-			PORT=$(($GPFDIST_PORT + $CHILD))
-			echo "child: $CHILD"
-			echo "executing on $EXT_HOST ./start_gpfdist.sh $PORT $GEN_DATA_PATH"
-			ssh -n -f $EXT_HOST "bash -c 'cd ~/; ./start_gpfdist.sh $PORT $GEN_DATA_PATH'"
+			echo "executing on $EXT_HOST ./start_gpfdist.sh $GPFDIST_PORT $GEN_DATA_PATH"
+			ssh -n -f $EXT_HOST "bash -c 'cd ~/; ./start_gpfdist.sh $GPFDIST_PORT $GEN_DATA_PATH'"
 			sleep 1
 		done
 	fi
