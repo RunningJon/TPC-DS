@@ -4,24 +4,19 @@ set -e
 echo "#######################################"
 echo "5 User Test"
 echo "#######################################"
-./rollout.sh 5
-./report.sh
+./rollout.sh 3000 5
 
 echo "#######################################"
 echo "10 User Test"
 echo "#######################################"
-./rollout.sh 10
-./report.sh
+./rollout.sh 3000 10
 
 echo "#######################################"
 echo "15 User Test"
 echo "#######################################"
-./rollout.sh 15
-./report.sh
+./rollout.sh 3000 15
 
 echo "#######################################"
 echo "20 User Test"
 echo "#######################################"
-./rollout.sh 20
-./report.sh
-
+./rollout.sh 3000 20

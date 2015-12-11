@@ -23,7 +23,9 @@ make_tpc()
 copy_tpc()
 {
 	cp $PWD/tools/dsqgen ../*gen_data/
+	cp $PWD/tools/dsqgen ../testing/
 	cp $PWD/tools/tpcds.idx ../*gen_data/
+	cp $PWD/tools/tpcds.idx ../testing/
 
 	#copy the compiled dsdgen program to the segment hosts
 	for i in $(cat $PWD/../segment_hosts.txt); do
@@ -35,7 +37,9 @@ copy_tpc()
 copy_queries()
 {
 	rm -rf $PWD/../*_gen_data/query_templates
+	rm -rf $PWD/../testing/query_templates
 	cp -R query_templates $PWD/../*_gen_data/
+	cp -R query_templates $PWD/../testing/
 }
 
 make_tpc
