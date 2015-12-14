@@ -34,6 +34,7 @@ for i in $(ls $PWD/*.sql); do
 		done
 	else
 		#HAWQ 2
+		HAWQ_2="--"
 		for x in $(cat $PWD/../segment_hosts.txt); do
 			EXT_HOST=$x
 			if [ "$counter" -eq "0" ]; then
@@ -49,8 +50,8 @@ for i in $(ls $PWD/*.sql); do
 
 	LOCATION+="'"
 
-	echo "psql -a -P pager=off -v ON_ERROR_STOP=1 -f $i -v LOCATION=\"$LOCATION\" -v SMALL_STORAGE=\"$SMALL_STORAGE\" -v MEDIUM_STORAGE=\"$MEDIUM_STORAGE\" -v LARGE_STORAGE=\"$LARGE_STORAGE\""
-	psql -a -P pager=off -v ON_ERROR_STOP=1 -f $i -v LOCATION="$LOCATION" -v SMALL_STORAGE="$SMALL_STORAGE" -v MEDIUM_STORAGE="$MEDIUM_STORAGE" -v LARGE_STORAGE="$LARGE_STORAGE"
+	echo "psql -a -P pager=off -v ON_ERROR_STOP=1 -f $i -v LOCATION=\"$LOCATION\" -v SMALL_STORAGE=\"$SMALL_STORAGE\" -v MEDIUM_STORAGE=\"$MEDIUM_STORAGE\" -v LARGE_STORAGE=\"$LARGE_STORAGE\" -v HAWQ_2=\"$HAWQ_2\"" 
+	psql -a -P pager=off -v ON_ERROR_STOP=1 -f $i -v LOCATION="$LOCATION" -v SMALL_STORAGE="$SMALL_STORAGE" -v MEDIUM_STORAGE="$MEDIUM_STORAGE" -v LARGE_STORAGE="$LARGE_STORAGE" -v HAWQ_2="$HAWQ_2"
 
 	log
 done

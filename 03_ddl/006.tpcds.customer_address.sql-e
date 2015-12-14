@@ -14,5 +14,4 @@ CREATE TABLE tpcds.customer_address (
     ca_location_type character(20)
 )
 WITH (:MEDIUM_STORAGE)
-:HAWQ_2 DISTRIBUTED BY (ca_address_sk)
-;
+DISTRIBUTED BY (ca_address_sk);

@@ -35,7 +35,7 @@ CREATE TABLE tpcds.catalog_sales (
     cs_net_profit numeric(7,2)
 )
 WITH (:LARGE_STORAGE)
-DISTRIBUTED BY (cs_item_sk)
+:HAWQ_2 DISTRIBUTED BY (cs_item_sk)
 PARTITION BY RANGE (cs_sold_date_sk)
 (
 PARTITION part_1998_01 START (2450815) END (2450846),

@@ -21,5 +21,4 @@ CREATE TABLE tpcds.store_returns (
     sr_net_loss numeric(7,2)
 )
 WITH (:MEDIUM_STORAGE)
-:HAWQ_2 DISTRIBUTED BY (sr_item_sk ,sr_ticket_number)
-;
+DISTRIBUTED BY (sr_item_sk ,sr_ticket_number);

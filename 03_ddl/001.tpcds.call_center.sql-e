@@ -32,5 +32,4 @@ CREATE TABLE tpcds.call_center (
     cc_tax_percentage numeric(5,2)
 )
 WITH (:SMALL_STORAGE)
-:HAWQ_2 DISTRIBUTED BY (cc_call_center_sk)
-;
+DISTRIBUTED BY (cc_call_center_sk);

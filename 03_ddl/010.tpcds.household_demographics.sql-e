@@ -6,5 +6,4 @@ CREATE TABLE tpcds.household_demographics (
     hd_vehicle_count integer
 )
 WITH (:SMALL_STORAGE)
-:HAWQ_2 DISTRIBUTED BY (hd_demo_sk)
-;
+DISTRIBUTED BY (hd_demo_sk);

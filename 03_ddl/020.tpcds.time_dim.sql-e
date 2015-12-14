@@ -11,5 +11,4 @@ CREATE TABLE tpcds.time_dim (
     t_meal_time character(20)
 )
 WITH (:SMALL_STORAGE)
-:HAWQ_2 DISTRIBUTED BY (t_time_sk)
-;
+DISTRIBUTED BY (t_time_sk);

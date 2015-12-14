@@ -94,25 +94,43 @@ repo_init()
 	echo "Install the github repository."
 	echo "############################################################################"
 	echo ""
+	ping_loss=$(ping -q -c 1 github.com 2>&1 | grep "loss" | awk -F ' ' '{print $6}' | awk -F '%' '{print $1}')
+
+	if [ "$ping_loss" == "" ]; then
+		ping_loss="100"
+	fi
+
 	if [ ! -d $INSTALL_DIR ]; then
-		echo ""
-		echo "Creating install dir"
-		echo "-------------------------------------------------------------------------"
-		mkdir $INSTALL_DIR
-		chown $ADMIN_USER $INSTALL_DIR
+		if [ "$ping_loss" -ne "0" ]; then
+			echo "Unable to continue because repo hasn't been downloaded and Internet is not available."
+			exit 1
+		else
+			echo ""
+			echo "Creating install dir"
+			echo "-------------------------------------------------------------------------"
+			mkdir $INSTALL_DIR
+			chown $ADMIN_USER $INSTALL_DIR
+		fi
 	fi
 
 	if [ ! -d $INSTALL_DIR/$REPO ]; then
-		echo ""
-		echo "Creating $REPO directory"
-		echo "-------------------------------------------------------------------------"
-		mkdir $INSTALL_DIR/$REPO
-		chown $ADMIN_USER $INSTALL_DIR/$REPO
-		su -c "cd $INSTALL_DIR; git clone --depth=1 $REPO_URL" $ADMIN_USER
+		if [ "$ping_loss" -ne "0" ]; then
+			echo "Unable to continue because repo hasn't been downloaded and Internet is not available."
+			exit 1
+		else
+			echo ""
+			echo "Creating $REPO directory"
+			echo "-------------------------------------------------------------------------"
+			mkdir $INSTALL_DIR/$REPO
+			chown $ADMIN_USER $INSTALL_DIR/$REPO
+			su -c "cd $INSTALL_DIR; git clone --depth=1 $REPO_URL" $ADMIN_USER
+		fi
 	else
-		git config --global user.email "$ADMIN_USER@$HOSTNAME"
-		git config --global user.name "$ADMIN_USER"
-		su -c "cd $INSTALL_DIR/$REPO; git fetch --all; git reset --hard origin/master" $ADMIN_USER
+		if [ "$ping_loss" -eq "0" ]; then
+			git config --global user.email "$ADMIN_USER@$HOSTNAME"
+			git config --global user.name "$ADMIN_USER"
+			su -c "cd $INSTALL_DIR/$REPO; git fetch --all; git reset --hard origin/master" $ADMIN_USER
+		fi
 	fi
 }
 

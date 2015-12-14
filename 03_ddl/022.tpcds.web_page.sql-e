@@ -15,5 +15,4 @@ CREATE TABLE tpcds.web_page (
     wp_max_ad_count integer
 )
 WITH (:SMALL_STORAGE)
-:HAWQ_2 DISTRIBUTED BY (wp_web_page_sk)
-;
+DISTRIBUTED BY (wp_web_page_sk);

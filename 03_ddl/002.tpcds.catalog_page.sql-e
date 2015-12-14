@@ -10,5 +10,4 @@ CREATE TABLE tpcds.catalog_page (
     cp_type character varying(100)
 )
 WITH (:SMALL_STORAGE)
-:HAWQ_2 DISTRIBUTED BY (cp_catalog_page_sk)
-;
+DISTRIBUTED BY (cp_catalog_page_sk);
