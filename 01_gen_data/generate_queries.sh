@@ -46,6 +46,7 @@ for p in $(seq 1 99); do
 	query_id=$(($query_id + 1))
 	file_id=$(($file_id + 1))
 	echo "Completed: $PWD/../05_sql/$filename"
+done
 
 echo ""
 echo "queries 114, 123, 124, and 139 have 2 queries in each file.  Need to add :EXPLAIN_ANALYZE to second query in these files"
