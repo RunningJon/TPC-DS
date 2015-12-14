@@ -1,3 +1,4 @@
+:EXPLAIN_ANALYZE
 -- start query 25 in stream 0 using template query16.tpl and seed 1074627561
 select  
    count(distinct cs_order_number) as "order count"

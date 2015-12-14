@@ -1,3 +1,4 @@
+:EXPLAIN_ANALYZE
 -- start query 24 in stream 0 using template query62.tpl and seed 1687020872
 select  
    substr(w_warehouse_name,1,20)

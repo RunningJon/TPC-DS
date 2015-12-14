@@ -1,3 +1,4 @@
+:EXPLAIN_ANALYZE
 -- start query 51 in stream 0 using template query11.tpl and seed 912660779
 with year_total as (
  select c_customer_id customer_id

@@ -1,3 +1,4 @@
+:EXPLAIN_ANALYZE
 -- start query 33 in stream 0 using template query85.tpl and seed 752506663
 select  substr(r_reason_desc,1,20)
        ,avg(ws_quantity)

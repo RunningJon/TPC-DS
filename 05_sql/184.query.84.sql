@@ -1,3 +1,4 @@
+:EXPLAIN_ANALYZE
 -- start query 80 in stream 0 using template query84.tpl and seed 1544719825
 select  c_customer_id as customer_id
        ,c_last_name || ', ' || c_first_name as customername

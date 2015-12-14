@@ -1,3 +1,4 @@
+:EXPLAIN_ANALYZE
 -- start query 27 in stream 0 using template query63.tpl and seed 500836084
 select  * 
 from (select i_manager_id

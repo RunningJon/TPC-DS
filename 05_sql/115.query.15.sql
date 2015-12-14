@@ -1,3 +1,4 @@
+:EXPLAIN_ANALYZE
 -- start query 57 in stream 0 using template query15.tpl and seed 1802692165
 select  ca_zip
        ,sum(cs_sales_price)

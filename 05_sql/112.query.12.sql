@@ -1,3 +1,4 @@
+:EXPLAIN_ANALYZE
 -- start query 64 in stream 0 using template query12.tpl and seed 2046637381
 select  i_item_desc 
       ,i_category 

@@ -1,3 +1,4 @@
+:EXPLAIN_ANALYZE
 -- start query 77 in stream 0 using template query87.tpl and seed 554042021
 select count(*) 
 from ((select distinct c_last_name, c_first_name, d_date

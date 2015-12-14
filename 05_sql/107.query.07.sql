@@ -1,3 +1,4 @@
+:EXPLAIN_ANALYZE
 -- start query 2 in stream 0 using template query7.tpl and seed 963045304
 select  i_item_id, 
         avg(ss_quantity) agg1,

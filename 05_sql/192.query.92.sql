@@ -1,3 +1,4 @@
+:EXPLAIN_ANALYZE
 -- start query 44 in stream 0 using template query92.tpl and seed 600679247
 select  
    sum(ws_ext_discount_amt)  as "Excess Discount Amount" 

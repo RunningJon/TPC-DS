@@ -1,3 +1,4 @@
+:EXPLAIN_ANALYZE
 -- start query 15 in stream 0 using template query43.tpl and seed 70442549
 select  s_store_name, s_store_id,
         sum(case when (d_day_name='Sunday') then ss_sales_price else null end) sun_sales,

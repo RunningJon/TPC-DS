@@ -1,3 +1,4 @@
+:EXPLAIN_ANALYZE
 -- start query 20 in stream 0 using template query64.tpl and seed 1594189085
 with cs_ui as
  (select cs_item_sk

@@ -1,3 +1,4 @@
+:EXPLAIN_ANALYZE
 -- start query 55 in stream 0 using template query22.tpl and seed 714369915
 select  i_product_name
              ,i_brand

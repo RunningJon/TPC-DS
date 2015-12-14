@@ -41,7 +41,7 @@ check_variables()
 	fi
 	local count=`grep "EXPLAIN_ANALYZE=" $MYVAR | wc -l`
 	if [ "$count" -eq "0" ]; then
-		echo "EXPLAIN_ANALYZE=\"/false\"" >> $MYVAR
+		echo "EXPLAIN_ANALYZE=\"false\"" >> $MYVAR
 	fi
 
 	echo "############################################################################"

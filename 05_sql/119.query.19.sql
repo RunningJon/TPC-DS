@@ -1,3 +1,4 @@
+:EXPLAIN_ANALYZE
 -- start query 8 in stream 0 using template query19.tpl and seed 1327317894
 select  i_brand_id brand_id, i_brand brand, i_manufact_id, i_manufact,
  	sum(ss_ext_sales_price) ext_price

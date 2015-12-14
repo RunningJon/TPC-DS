@@ -1,3 +1,4 @@
+:EXPLAIN_ANALYZE
 -- start query 30 in stream 0 using template query59.tpl and seed 103687277
 with wss as 
  (select d_week_seq,

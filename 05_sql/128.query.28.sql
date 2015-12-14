@@ -1,3 +1,4 @@
+:EXPLAIN_ANALYZE
 -- start query 36 in stream 0 using template query28.tpl and seed 1691345837
 select  *
 from (select avg(ss_list_price) B1_LP

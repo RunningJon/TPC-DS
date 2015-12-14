@@ -1,3 +1,4 @@
+:EXPLAIN_ANALYZE
 -- start query 63 in stream 0 using template query8.tpl and seed 2011478448
 select  s_store_name
       ,sum(ss_net_profit)

@@ -1,3 +1,4 @@
+:EXPLAIN_ANALYZE
 -- start query 83 in stream 0 using template query56.tpl and seed 1252078980
 with ss as (
  select i_item_id,sum(ss_ext_sales_price) total_sales

@@ -1,3 +1,4 @@
+:EXPLAIN_ANALYZE
 -- start query 21 in stream 0 using template query36.tpl and seed 263878583
 select  * FROM (
     select sum(ss_net_profit)/sum(ss_ext_sales_price) as gross_margin

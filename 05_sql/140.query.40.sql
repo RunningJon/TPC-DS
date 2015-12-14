@@ -1,3 +1,4 @@
+:EXPLAIN_ANALYZE
 -- start query 86 in stream 0 using template query40.tpl and seed 546477866
 select  
    w_state

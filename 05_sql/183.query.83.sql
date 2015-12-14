@@ -1,3 +1,4 @@
+:EXPLAIN_ANALYZE
 -- start query 96 in stream 0 using template query83.tpl and seed 509912626
 with sr_items as
  (select i_item_id item_id,

@@ -14,7 +14,7 @@
 14|reason|r_reason_sk
 15|ship_mode|sm_ship_mode_sk
 16|store|s_store_sk
-17|store_returns|sr_item_sk, sr_ticket_number
+17|store_returns|sr_item_sk,sr_ticket_number
 18|store_sales|ss_item_sk
 19|time_dim|t_time_sk
 20|warehouse|w_warehouse_sk

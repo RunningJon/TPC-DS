@@ -1,3 +1,4 @@
+:EXPLAIN_ANALYZE
 -- start query 32 in stream 0 using template query98.tpl and seed 286676265
 select i_item_desc 
       ,i_category 

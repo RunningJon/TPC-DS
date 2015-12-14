@@ -1,3 +1,4 @@
+:EXPLAIN_ANALYZE
 -- start query 69 in stream 0 using template query14.tpl and seed 409180973
 with  cross_items as
  (select i_item_sk ss_item_sk
@@ -100,6 +101,8 @@ with  cross_items as
  group by rollup (channel, i_brand_id,i_class_id,i_category_id)
  order by channel,i_brand_id,i_class_id,i_category_id
  limit 100;
+
+:EXPLAIN_ANALYZE
 with  cross_items as
  (select i_item_sk ss_item_sk
  from item,

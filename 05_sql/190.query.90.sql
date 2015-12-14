@@ -1,3 +1,4 @@
+:EXPLAIN_ANALYZE
 -- start query 40 in stream 0 using template query90.tpl and seed 519866178
 select  cast(amc as decimal(15,4))/cast(pmc as decimal(15,4)) am_pm_ratio
  from ( select count(*) amc

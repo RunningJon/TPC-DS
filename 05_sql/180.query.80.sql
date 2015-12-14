@@ -1,3 +1,4 @@
+:EXPLAIN_ANALYZE
 -- start query 6 in stream 0 using template query80.tpl and seed 253348748
 with ssr as
  (select  s_store_id as store_id,

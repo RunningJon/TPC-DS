@@ -1,3 +1,4 @@
+:EXPLAIN_ANALYZE
 -- start query 99 in stream 0 using template query76.tpl and seed 284560140
 select  channel, col_name, d_year, d_qoy, i_category, COUNT(*) sales_cnt, SUM(ext_sales_price) sales_amt FROM (
         SELECT 'store' as channel, 'ss_hdemo_sk' col_name, d_year, d_qoy, i_category, ss_ext_sales_price ext_sales_price

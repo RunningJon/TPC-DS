@@ -1,3 +1,4 @@
+:EXPLAIN_ANALYZE
 -- start query 35 in stream 0 using template query67.tpl and seed 554533094
 select  *
 from (select i_category

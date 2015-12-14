@@ -1,3 +1,4 @@
+:EXPLAIN_ANALYZE
 -- start query 47 in stream 0 using template query35.tpl and seed 1176268290
 select   
   ca_state,

@@ -1,3 +1,4 @@
+:EXPLAIN_ANALYZE
 -- start query 78 in stream 0 using template query77.tpl and seed 2106057962
 with ss as
  (select s_store_sk,

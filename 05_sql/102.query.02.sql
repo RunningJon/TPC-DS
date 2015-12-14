@@ -1,3 +1,4 @@
+:EXPLAIN_ANALYZE
 -- start query 84 in stream 0 using template query2.tpl and seed 1309431767
 with wscs as
  (select sold_date_sk

@@ -1,3 +1,4 @@
+:EXPLAIN_ANALYZE
 -- start query 12 in stream 0 using template query1.tpl and seed 1711160884
 with customer_total_return as
 (select sr_customer_sk as ctr_customer_sk

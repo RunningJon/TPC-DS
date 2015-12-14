@@ -1,3 +1,4 @@
+:EXPLAIN_ANALYZE
 -- start query 61 in stream 0 using template query42.tpl and seed 415456288
 select  dt.d_year
  	,item.i_category_id

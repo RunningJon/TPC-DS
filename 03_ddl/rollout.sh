@@ -54,7 +54,7 @@ for i in $(ls $PWD/*.sql); do
 		for z in $(cat $PWD/distribution.txt); do
 			table_name2=`echo $z | awk -F '|' '{print $2}'`	
 			if [ "$table_name2" == "$table_name" ]; then
-				distribution+=`echo $z | awk -F '|' '{print $3}'`
+				distribution=`echo $z | awk -F '|' '{print $3}'`
 			fi
 		done
 		DISTRIBUTED_BY="DISTRIBUTED BY (""$distribution"")"

@@ -1,3 +1,4 @@
+:EXPLAIN_ANALYZE
 -- start query 10 in stream 0 using template query78.tpl and seed 402556283
 with ws as
   (select d_year AS ws_sold_year, ws_item_sk,

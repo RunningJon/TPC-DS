@@ -1,3 +1,4 @@
+:EXPLAIN_ANALYZE
 -- start query 34 in stream 0 using template query70.tpl and seed 30096973
 select  * FROM (
     select sum(ss_net_profit) as total_sum

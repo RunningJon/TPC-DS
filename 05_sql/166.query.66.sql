@@ -1,3 +1,4 @@
+:EXPLAIN_ANALYZE
 -- start query 39 in stream 0 using template query66.tpl and seed 1841336971
 select   
          w_warehouse_name

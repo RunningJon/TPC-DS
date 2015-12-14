@@ -1,3 +1,4 @@
+:EXPLAIN_ANALYZE
 -- start query 4 in stream 0 using template query44.tpl and seed 1563063847
 select  asceding.rnk, i1.i_product_name best_performing, i2.i_product_name worst_performing
 from(select *

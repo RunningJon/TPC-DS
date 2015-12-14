@@ -1,3 +1,4 @@
+:EXPLAIN_ANALYZE
 -- start query 58 in stream 0 using template query6.tpl and seed 187079505
 select  a.ca_state state, count(*) cnt
  from customer_address a

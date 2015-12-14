@@ -1,3 +1,4 @@
+:EXPLAIN_ANALYZE
 -- start query 16 in stream 0 using template query27.tpl and seed 487481716
 select  i_item_id,
         s_state, grouping(s_state) g_state,

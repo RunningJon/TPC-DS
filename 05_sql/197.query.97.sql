@@ -1,3 +1,4 @@
+:EXPLAIN_ANALYZE
 -- start query 38 in stream 0 using template query97.tpl and seed 576012569
 with ssci as (
 select ss_customer_sk customer_sk

@@ -1,3 +1,4 @@
+:EXPLAIN_ANALYZE
 -- start query 91 in stream 0 using template query13.tpl and seed 1920330291
 select avg(ss_quantity)
        ,avg(ss_ext_sales_price)

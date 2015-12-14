@@ -1,3 +1,4 @@
+:EXPLAIN_ANALYZE
 -- start query 62 in stream 0 using template query41.tpl and seed 1095731851
 select  distinct(i_product_name)
  from item i1

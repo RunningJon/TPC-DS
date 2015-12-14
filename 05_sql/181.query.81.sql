@@ -1,3 +1,4 @@
+:EXPLAIN_ANALYZE
 -- start query 37 in stream 0 using template query81.tpl and seed 824917583
 with customer_total_return as
  (select cr_returning_customer_sk as ctr_customer_sk

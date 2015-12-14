@@ -1,3 +1,4 @@
+:EXPLAIN_ANALYZE
 -- start query 18 in stream 0 using template query45.tpl and seed 1900912199
 select  ca_zip, ca_state, sum(ws_sales_price)
  from web_sales, customer, customer_address, date_dim, item

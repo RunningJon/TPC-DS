@@ -1,3 +1,4 @@
+:EXPLAIN_ANALYZE
 -- start query 88 in stream 0 using template query53.tpl and seed 2095337586
 select  * from 
 (select i_manufact_id,

@@ -1,3 +1,4 @@
+:EXPLAIN_ANALYZE
 -- start query 72 in stream 0 using template query71.tpl and seed 823663619
 select i_brand_id brand_id, i_brand brand,t_hour,t_minute,
  	sum(ext_price) ext_price

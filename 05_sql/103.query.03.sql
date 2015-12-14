@@ -1,3 +1,4 @@
+:EXPLAIN_ANALYZE
 -- start query 45 in stream 0 using template query3.tpl and seed 2072976586
 select  dt.d_year 
        ,item.i_brand_id brand_id 

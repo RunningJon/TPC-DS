@@ -1,3 +1,4 @@
+:EXPLAIN_ANALYZE
 -- start query 81 in stream 0 using template query54.tpl and seed 1118876553
 with my_customers as (
  select distinct c_customer_sk

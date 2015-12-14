@@ -1,3 +1,4 @@
+:EXPLAIN_ANALYZE
 -- start query 49 in stream 0 using template query9.tpl and seed 1892812401
 select case when (select count(*) 
                   from store_sales 

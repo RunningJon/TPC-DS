@@ -1,3 +1,4 @@
+:EXPLAIN_ANALYZE
 -- start query 31 in stream 0 using template query37.tpl and seed 1430032013
 select  i_item_id
        ,i_item_desc

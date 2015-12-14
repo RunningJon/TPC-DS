@@ -1,3 +1,4 @@
+:EXPLAIN_ANALYZE
 -- start query 53 in stream 0 using template query29.tpl and seed 1481136640
 select   
      i_item_id

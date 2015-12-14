@@ -1,3 +1,4 @@
+:EXPLAIN_ANALYZE
 -- start query 48 in stream 0 using template query49.tpl and seed 278194547
 select  
  'web' as channel

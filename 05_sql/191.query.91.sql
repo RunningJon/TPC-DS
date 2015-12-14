@@ -1,3 +1,4 @@
+:EXPLAIN_ANALYZE
 -- start query 13 in stream 0 using template query91.tpl and seed 405543917
 select  
         cc_call_center_id Call_Center,

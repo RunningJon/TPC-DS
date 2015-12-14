@@ -1,3 +1,4 @@
+:EXPLAIN_ANALYZE
 -- start query 28 in stream 0 using template query69.tpl and seed 1374483282
 select  
   cd_gender,

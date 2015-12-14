@@ -1,3 +1,4 @@
+:EXPLAIN_ANALYZE
 -- start query 3 in stream 0 using template query75.tpl and seed 364692393
 WITH all_sales AS (
  SELECT d_year

@@ -1,3 +1,4 @@
+:EXPLAIN_ANALYZE
 -- start query 29 in stream 0 using template query60.tpl and seed 1322582670
 with ss as (
  select

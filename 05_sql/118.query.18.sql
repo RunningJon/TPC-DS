@@ -1,3 +1,4 @@
+:EXPLAIN_ANALYZE
 -- start query 90 in stream 0 using template query18.tpl and seed 1303129748
 select  i_item_id,
         ca_country,

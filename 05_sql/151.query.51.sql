@@ -1,3 +1,4 @@
+:EXPLAIN_ANALYZE
 -- start query 46 in stream 0 using template query51.tpl and seed 2136772076
 WITH web_v1 as (
 select

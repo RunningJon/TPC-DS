@@ -1,3 +1,4 @@
+:EXPLAIN_ANALYZE
 -- start query 43 in stream 0 using template query95.tpl and seed 1583522449
 with ws_wh as
 (select ws1.ws_order_number,ws1.ws_warehouse_sk wh1,ws2.ws_warehouse_sk wh2

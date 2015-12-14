@@ -1,3 +1,4 @@
+:EXPLAIN_ANALYZE
 -- start query 56 in stream 0 using template query89.tpl and seed 978311789
 select  *
 from(

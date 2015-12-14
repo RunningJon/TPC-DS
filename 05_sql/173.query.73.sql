@@ -1,3 +1,4 @@
+:EXPLAIN_ANALYZE
 -- start query 79 in stream 0 using template query73.tpl and seed 235644982
 select c_last_name
        ,c_first_name

@@ -1,3 +1,4 @@
+:EXPLAIN_ANALYZE
 -- start query 52 in stream 0 using template query93.tpl and seed 1761505779
 select  ss_customer_sk
             ,sum(act_sales) sumsales

@@ -1,3 +1,4 @@
+:EXPLAIN_ANALYZE
 -- start query 97 in stream 0 using template query61.tpl and seed 395850937
 select  promotions,total,cast(promotions as decimal(15,4))/cast(total as decimal(15,4))*100
 from

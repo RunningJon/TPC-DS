@@ -1,3 +1,4 @@
+:EXPLAIN_ANALYZE
 -- start query 42 in stream 0 using template query47.tpl and seed 1024527991
 with v1 as(
  select i_category, i_brand,

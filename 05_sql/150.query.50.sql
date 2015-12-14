@@ -1,3 +1,4 @@
+:EXPLAIN_ANALYZE
 -- start query 60 in stream 0 using template query50.tpl and seed 1392479057
 select  
    s_store_name
