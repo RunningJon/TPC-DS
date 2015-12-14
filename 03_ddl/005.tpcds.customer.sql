@@ -19,5 +19,4 @@ CREATE TABLE tpcds.customer (
     c_last_review_date character(10)
 )
 WITH (:MEDIUM_STORAGE)
-:HAWQ_2 DISTRIBUTED BY (c_customer_sk)
-;
+:DISTRIBUTED_BY;

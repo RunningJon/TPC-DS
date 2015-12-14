@@ -20,5 +20,4 @@ CREATE TABLE tpcds.promotion (
     p_discount_active character(1)
 )
 WITH (:SMALL_STORAGE)
-:HAWQ_2 DISTRIBUTED BY (p_promo_sk)
-;
+:DISTRIBUTED_BY;

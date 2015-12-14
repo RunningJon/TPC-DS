@@ -5,7 +5,7 @@ CREATE TABLE tpcds.inventory (
     inv_quantity_on_hand integer
 )
 WITH (:LARGE_STORAGE)
-:HAWQ_2 DISTRIBUTED BY (inv_item_sk)
+:DISTRIBUTED_BY
 PARTITION BY RANGE (inv_date_sk)
 (
 PARTITION part_1998_01 START (2450815) END (2451180),

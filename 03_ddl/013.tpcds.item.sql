@@ -23,5 +23,4 @@ CREATE TABLE tpcds.item (
     i_product_name character(50)
 )
 WITH (:SMALL_STORAGE)
-:HAWQ_2 DISTRIBUTED BY (i_item_sk)
-;
+:DISTRIBUTED_BY;

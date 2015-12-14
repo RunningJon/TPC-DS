@@ -27,5 +27,4 @@ CREATE TABLE tpcds.web_site (
     web_tax_percentage numeric(5,2)
 )
 WITH (:SMALL_STORAGE)
-:HAWQ_2 DISTRIBUTED BY (web_site_sk)
-;
+:DISTRIBUTED_BY;

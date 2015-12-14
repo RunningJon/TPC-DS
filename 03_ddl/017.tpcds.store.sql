@@ -30,5 +30,4 @@ CREATE TABLE tpcds.store (
     s_tax_precentage numeric(5,2)
 )
 WITH (:SMALL_STORAGE)
-:HAWQ_2 DISTRIBUTED BY (s_store_sk)
-;
+:DISTRIBUTED_BY;

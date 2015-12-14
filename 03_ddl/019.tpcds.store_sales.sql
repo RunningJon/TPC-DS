@@ -24,7 +24,7 @@ CREATE TABLE tpcds.store_sales (
     ss_net_profit numeric(7,2)
 )
 WITH (:LARGE_STORAGE)
-:HAWQ_2 DISTRIBUTED BY (ss_item_sk)
+:DISTRIBUTED_BY
 PARTITION BY RANGE (ss_sold_date_sk)
 (
 PARTITION part_1998_01 START (2450815) END (2450846),

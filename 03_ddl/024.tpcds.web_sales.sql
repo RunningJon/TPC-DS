@@ -35,7 +35,7 @@ CREATE TABLE tpcds.web_sales (
     ws_net_profit numeric(7,2)
 )
 WITH (:LARGE_STORAGE)
-:HAWQ_2 DISTRIBUTED BY (ws_item_sk)
+:DISTRIBUTED_BY
 /*
 PARTITION BY RANGE (ws_sold_date_sk)
 (

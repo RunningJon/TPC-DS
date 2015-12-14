@@ -25,5 +25,4 @@ CREATE TABLE tpcds.web_returns (
     wr_net_loss numeric(7,2)
 )
 WITH (:SMALL_STORAGE)
-:HAWQ_2 DISTRIBUTED BY (wr_item_sk)
-;
+:DISTRIBUTED_BY;

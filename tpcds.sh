@@ -39,6 +39,10 @@ check_variables()
 	if [ "$count" -eq "0" ]; then
 		echo "INSTALL_DIR=\"/pivotalguru\"" >> $MYVAR
 	fi
+	local count=`grep "EXPLAIN_ANALYZE=" $MYVAR | wc -l`
+	if [ "$count" -eq "0" ]; then
+		echo "EXPLAIN_ANALYZE=\"/false\"" >> $MYVAR
+	fi
 
 	echo "############################################################################"
 	echo "Sourcing $MYVAR"
@@ -174,4 +178,4 @@ repo_init
 script_check
 check_sudo
 
-su --session-command="cd \"$INSTALL_DIR/$REPO\"; ./rollout.sh $GEN_DATA_SCALE $QUIET" $ADMIN_USER
+su --session-command="cd \"$INSTALL_DIR/$REPO\"; ./rollout.sh $GEN_DATA_SCALE $EXPLAIN_ANALYZE $QUIET" $ADMIN_USER 

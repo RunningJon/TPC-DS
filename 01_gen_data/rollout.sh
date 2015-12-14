@@ -6,10 +6,11 @@ source $PWD/../functions.sh
 source_bashrc
 
 GEN_DATA_SCALE=$1
+EXPLAIN_ANALYZE=$2
 
-if [ "$GEN_DATA_SCALE" == "" ]; then
-	echo "You must provide the scale as a parameter in terms of Gigabytes." 
-	echo "Example: ./rollout.sh 100"
+if [[ "$GEN_DATA_SCALE" == "" || "$EXPLAIN_ANALYZE" == "" ]]; then
+	echo "You must provide the scale as a parameter in terms of Gigabytes and true/false on running queries with EXPLAIN ANALYZE." 
+	echo "Example: ./rollout.sh 100 false"
 	echo "This will create 100 GB of data for this test."
 	exit 1
 fi

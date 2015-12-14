@@ -29,5 +29,4 @@ CREATE TABLE tpcds.date_dim (
     d_current_year character(1)
 )
 WITH (:SMALL_STORAGE)
-:HAWQ_2 DISTRIBUTED BY (d_date_sk)
-;
+:DISTRIBUTED_BY;

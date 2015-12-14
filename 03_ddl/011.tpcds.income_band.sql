@@ -4,5 +4,4 @@ CREATE TABLE tpcds.income_band (
     ib_upper_bound integer
 )
 WITH (:SMALL_STORAGE)
-:HAWQ_2 DISTRIBUTED BY (ib_income_band_sk)
-;
+:DISTRIBUTED_BY;

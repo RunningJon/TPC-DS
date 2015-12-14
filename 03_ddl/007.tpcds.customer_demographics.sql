@@ -10,5 +10,4 @@ CREATE TABLE tpcds.customer_demographics (
     cd_dep_college_count integer
 )
 WITH (:MEDIUM_STORAGE)
-:HAWQ_2 DISTRIBUTED BY (cd_demo_sk)
-;
+:DISTRIBUTED_BY;

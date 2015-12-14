@@ -7,5 +7,4 @@ CREATE TABLE tpcds.ship_mode (
     sm_contract character(20)
 )
 WITH (:SMALL_STORAGE)
-:HAWQ_2 DISTRIBUTED BY (sm_ship_mode_sk)
-;
+:DISTRIBUTED_BY;

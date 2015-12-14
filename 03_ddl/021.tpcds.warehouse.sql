@@ -15,5 +15,4 @@ CREATE TABLE tpcds.warehouse (
     w_gmt_offset numeric(5,2)
 )
 WITH (:SMALL_STORAGE)
-:HAWQ_2 DISTRIBUTED BY (w_warehouse_sk)
-;
+:DISTRIBUTED_BY;

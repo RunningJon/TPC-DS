@@ -23,6 +23,7 @@ for i in $(ls $PWD/*.sql); do
 			CHILD=$(echo $x | awk -F '|' '{print $1}')
 			EXT_HOST=$(echo $x | awk -F '|' '{print $2}')
 			PORT=$(($GPFDIST_PORT + $CHILD))
+
 			if [ "$counter" -eq "0" ]; then
 				LOCATION="'"
 			else
@@ -34,7 +35,6 @@ for i in $(ls $PWD/*.sql); do
 		done
 	else
 		#HAWQ 2
-		HAWQ_2="--"
 		for x in $(cat $PWD/../segment_hosts.txt); do
 			EXT_HOST=$x
 			if [ "$counter" -eq "0" ]; then
@@ -50,8 +50,21 @@ for i in $(ls $PWD/*.sql); do
 
 	LOCATION+="'"
 
-	echo "psql -a -P pager=off -v ON_ERROR_STOP=1 -f $i -v LOCATION=\"$LOCATION\" -v SMALL_STORAGE=\"$SMALL_STORAGE\" -v MEDIUM_STORAGE=\"$MEDIUM_STORAGE\" -v LARGE_STORAGE=\"$LARGE_STORAGE\" -v HAWQ_2=\"$HAWQ_2\"" 
-	psql -a -P pager=off -v ON_ERROR_STOP=1 -f $i -v LOCATION="$LOCATION" -v SMALL_STORAGE="$SMALL_STORAGE" -v MEDIUM_STORAGE="$MEDIUM_STORAGE" -v LARGE_STORAGE="$LARGE_STORAGE" -v HAWQ_2="$HAWQ_2"
+	if [[ "$VERSION" == "gpdb" || "$VERSION" == "hawq_1" ]]; then
+		for z in $(cat $PWD/distribution.txt); do
+			table_name2=`echo $z | awk -F '|' '{print $2}'`	
+			if [ "$table_name2" == "$table_name" ]; then
+				distribution+=`echo $z | awk -F '|' '{print $3}'`
+			fi
+		done
+		DISTRIBUTED_BY="DISTRIBUTED BY (""$distribution"")"
+	else
+		#HAWQ 2
+		DISTRIBUTED_BY="DISTRIBUTED RANDOMLY"
+	fi
+
+	echo "psql -a -P pager=off -v ON_ERROR_STOP=1 -f $i -v LOCATION=\"$LOCATION\" -v SMALL_STORAGE=\"$SMALL_STORAGE\" -v MEDIUM_STORAGE=\"$MEDIUM_STORAGE\" -v LARGE_STORAGE=\"$LARGE_STORAGE\" -v DISTRIBUTED_BY=\"$DISTRIBUTED_BY\""
+	psql -a -P pager=off -v ON_ERROR_STOP=1 -f $i -v LOCATION="$LOCATION" -v SMALL_STORAGE="$SMALL_STORAGE" -v MEDIUM_STORAGE="$MEDIUM_STORAGE" -v LARGE_STORAGE="$LARGE_STORAGE" -v DISTRIBUTED_BY="$DISTRIBUTED_BY"
 
 	log
 done

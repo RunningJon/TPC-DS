@@ -6,15 +6,16 @@ source $PWD/functions.sh
 source_bashrc
 
 GEN_DATA_SCALE=$1
+EXPLAIN_ANALYZE=$2
 
-if [ "$GEN_DATA_SCALE" == "" ]; then
-	echo "You must provide the scale as a parameter in terms of Gigabytes."
-	echo "Example: ./rollout.sh 100"
-	echo "This will create 100 GB of data for this test."
+if [[ "$GEN_DATA_SCALE" == "" || "$EXPLAIN_ANALYZE" == "" ]]; then
+	echo "You must provide the scale as a parameter in terms of Gigabytes and true/false to run queries with EXPLAIN ANALYZE option."
+	echo "Example: ./rollout.sh 100 false"
+	echo "This will create 100 GB of data for this test and not run EXPLAIN ANALYZE."
 	exit 1
 fi
 
-QUIET=$2
+QUIET=$3
 
 create_directories()
 {
@@ -85,5 +86,5 @@ fi
 
 for i in $(ls -d $PWD/0*); do
 	echo "$i/rollout.sh"
-	$i/rollout.sh $GEN_DATA_SCALE
+	$i/rollout.sh $GEN_DATA_SCALE $EXPLAIN_ANALYZE
 done
