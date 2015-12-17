@@ -98,14 +98,14 @@ repo_init()
 	echo "Install the github repository."
 	echo "############################################################################"
 	echo ""
-	ping_loss=$(ping -q -c 1 github.com 2>&1 | grep "loss" | awk -F ' ' '{print $6}' | awk -F '%' '{print $1}')
 
-	if [ "$ping_loss" == "" ]; then
-		ping_loss="100"
-	fi
+	internet_down="0"
+	for j in $(curl google.com 2>&1 | grep "Could not resolve host"); do
+		internet_down="1"
+	done
 
 	if [ ! -d $INSTALL_DIR ]; then
-		if [ "$ping_loss" -ne "0" ]; then
+		if [ "$internet_down" -eq "1" ]; then
 			echo "Unable to continue because repo hasn't been downloaded and Internet is not available."
 			exit 1
 		else
@@ -118,7 +118,7 @@ repo_init()
 	fi
 
 	if [ ! -d $INSTALL_DIR/$REPO ]; then
-		if [ "$ping_loss" -ne "0" ]; then
+		if [ "$internet_down" -eq "1" ]; then
 			echo "Unable to continue because repo hasn't been downloaded and Internet is not available."
 			exit 1
 		else
@@ -127,13 +127,13 @@ repo_init()
 			echo "-------------------------------------------------------------------------"
 			mkdir $INSTALL_DIR/$REPO
 			chown $ADMIN_USER $INSTALL_DIR/$REPO
-			su -c "cd $INSTALL_DIR; git clone --depth=1 $REPO_URL" $ADMIN_USER
+			su -c "cd $INSTALL_DIR; GIT_SSL_NO_VERIFY=true; git clone --depth=1 $REPO_URL" $ADMIN_USER
 		fi
 	else
-		if [ "$ping_loss" -eq "0" ]; then
+		if [ "$internet_down" -eq "0" ]; then
 			git config --global user.email "$ADMIN_USER@$HOSTNAME"
 			git config --global user.name "$ADMIN_USER"
-			su -c "cd $INSTALL_DIR/$REPO; git fetch --all; git reset --hard origin/master" $ADMIN_USER
+			su -c "cd $INSTALL_DIR/$REPO; GIT_SSL_NO_VERIFY=true; git fetch --all; git reset --hard origin/master" $ADMIN_USER
 		fi
 	fi
 }

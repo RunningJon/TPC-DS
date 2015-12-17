@@ -6,9 +6,18 @@ OSVERSION=`uname`
 ADMIN_USER=`whoami`
 ADMIN_HOME=$(eval echo ~$ADMIN_USER)
 GPFDIST_PORT=9000
+MASTER_HOST=$(hostname | awk -F '.' '{print $1}')
 
 source_bashrc()
 {
+	for g in $(grep "greenplum_path.sh" ~/.bashrc | grep -v "\#"); do
+		GREENPLUM_PATH=$g
+	done
+	if [ "$GREENPLUM_PATH" == "" ]; then
+		echo ".bashrc file does not contain greenplum_path.sh"
+		echo "Please update your .bashrc file for $ADMIN_USER and try again."
+		exit 1
+	fi
 	echo "source .bashrc"
 	source ~/.bashrc
 	echo ""
@@ -17,7 +26,7 @@ source_bashrc()
 get_version()
 {
 	#need to call source_bashrc first
-	VERSION=$(psql -v ON_ERROR_STOP=1 -t -A -c "SELECT CASE WHEN POSITION ('HAWQ 2' in version) > 0 AND POSITION ('Greenplum' IN version) > 0 THEN 'hawq_2' WHEN POSITION ('HAWQ 1' in version) > 0 AND POSITION ('Greenplum' IN version) > 0 THEN 'hawq_1' WHEN POSITION ('HAWQ' in version) = 0 AND POSITION ('Greenplum' IN version) > 0 THEN 'gpdb' ELSE 'OTHER' END FROM version();")
+	VERSION=$(psql -v ON_ERROR_STOP=1 -t -A -c "SELECT CASE WHEN POSITION ('HAWQ 2' in version) > 0 AND POSITION ('Greenplum' IN version) > 0 THEN 'hawq_2' WHEN POSITION ('HAWQ 1' in version) > 0 AND POSITION ('Greenplum' IN version) > 0 THEN 'hawq_1' WHEN POSITION ('HAWQ' in version) = 0 AND POSITION ('Greenplum' IN version) > 0 AND POSITION ('4.2' IN version) > 0 THEN 'gpdb_4_2' WHEN POSITION ('HAWQ' in version) = 0 AND POSITION ('Greenplum' IN version) > 0 AND POSITION ('4.3' IN version) > 0 THEN 'gpdb_4_3' ELSE 'OTHER' END FROM version();")
 
 	if [[ "$VERSION" == *"hawq"* ]]; then
 		SMALL_STORAGE="appendonly=true, orientation=parquet"
@@ -28,7 +37,6 @@ get_version()
 		MEDIUM_STORAGE="appendonly=true, orientation=column"
 		LARGE_STORAGE="appendonly=true, orientation=column"
 	fi
-
 }
 
 init_log()
@@ -79,7 +87,6 @@ log()
 	fi
 
 	printf "$id|$schema_name.$table_name|$tuples|%02d:%02d:%02d.%03d\n" "$((S/3600%24))" "$((S/60%60))" "$((S%60))" "${M}" >> $LOCAL_PWD/log/$logfile
-
 }
 
 end_step()
@@ -92,7 +99,7 @@ create_hosts_file()
 {
 	get_version
 
-	if [[ "$VERSION" == "gpdb" || "$VERSION" == "hawq_1" ]]; then
+	if [[ "$VERSION" == "gpdb_4_2" || "$VERSION" == "gpdb_4_3" || "$VERSION" == "hawq_1" ]]; then
 		psql -t -A -v ON_ERROR_STOP=1 -c "SELECT DISTINCT hostname FROM gp_segment_configuration WHERE role = 'p' AND content >= 0" -o $LOCAL_PWD/segment_hosts.txt
 	else
 		#must be HAWQ 2 which doesn't have content column

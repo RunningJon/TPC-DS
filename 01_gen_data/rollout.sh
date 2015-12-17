@@ -29,7 +29,7 @@ create_table_data_dir()
 {
 	# this table shows the path to each segment's data directory
 	get_version
-	if [[ "$VERSION" == "gpdb" || "$VERSION" == "hawq_1" ]]; then
+	if [[ "$VERSION" == "gpdb_4_2" || "$VERSION" == "gpdb_4_3" || "$VERSION" == "hawq_1" ]]; then
 		SEGMENTS="all"
 	else
 		#must be HAWQ 2
