@@ -17,7 +17,6 @@ fi
 
 get_count_generate_data()
 {
-	#count=$(ps -ef | grep generate_data.sh | grep -v grep | wc -l)
 	count="0"
 	for i in $(cat $PWD/../segment_hosts.txt); do
 		next_count=$(ssh -n -f $i "bash -c 'ps -ef | grep generate_data.sh | grep -v grep | wc -l'")
@@ -60,7 +59,7 @@ copy_generate_data()
 gen_data()
 {
 	get_version
-	if [[ "$VERSION" == "gpdb" || "$VERSION" == "hawq_1" ]]; then
+	if [[ "$VERSION" == "gpdb_4_2" || "$VERSION" == "gpdb_4_3" || "$VERSION" == "hawq_1" ]]; then
 		PARALLEL=$(gpstate | grep "Total primary segments" | awk -F '=' '{print $2}')
 		echo "parallel: $PARALLEL"
 		for i in $(psql -A -t -c "SELECT row_number() over(), trim(hostname), trim(path) FROM public.data_dir"); do

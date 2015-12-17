@@ -18,7 +18,7 @@ for i in $(ls $PWD/*.sql); do
 
 	counter=0
 
-	if [[ "$VERSION" == "gpdb" || "$VERSION" == "hawq_1" ]]; then
+	if [[ "$VERSION" == "gpdb_4_2" || "$VERSION" == "gpdb_4_3" || "$VERSION" == "hawq_1" ]]; then
 		for x in $(psql -A -t -c "select rank() over (partition by hostname order by path), trim(hostname) from data_dir order by hostname"); do
 			CHILD=$(echo $x | awk -F '|' '{print $1}')
 			EXT_HOST=$(echo $x | awk -F '|' '{print $2}')
@@ -50,7 +50,7 @@ for i in $(ls $PWD/*.sql); do
 
 	LOCATION+="'"
 
-	if [[ "$VERSION" == "gpdb" || "$VERSION" == "hawq_1" ]]; then
+	if [[ "$VERSION" == "gpdb_4_2" || "$VERSION" == "gpdb_4_3" || "$VERSION" == "hawq_1" ]]; then
 		for z in $(cat $PWD/distribution.txt); do
 			table_name2=`echo $z | awk -F '|' '{print $2}'`	
 			if [ "$table_name2" == "$table_name" ]; then
