@@ -163,7 +163,7 @@ script_check()
 		echo ""
 		cp $INSTALL_DIR/$REPO/$MYCMD $PWD/$MYCMD
 		echo "After this script completes, restart the $MYCMD with this command:"
-		echo "./$MYCMD"
+		echo "./$MYCMD $GEN_DATA_SCALE $QUIET"
 		exit 1
 	fi
 
