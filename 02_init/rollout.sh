@@ -13,7 +13,7 @@ table_name="init"
 
 set_segment_bashrc()
 {
-	echo "$GREENPLUM_PATH" > $PWD/segment_bashrc
+	echo "source $GREENPLUM_PATH" > $PWD/segment_bashrc
 	chmod 755 $PWD/segment_bashrc
 
 	#copy generate_data.sh to ~/
