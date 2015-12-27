@@ -56,8 +56,8 @@ for i in $(ls $sql_dir/*.sql); do
 	schema_name=$session_id
 	table_name=$(basename $i | awk -F '.' '{print $3}')
 
-	echo "psql -A -q -t -P pager=off -v ON_ERROR_STOP=1 -f $i | wc -l"
-	tuples=$(psql -A -q -t -P pager=off -v ON_ERROR_STOP=1 -f $i | wc -l)
+	echo "psql -A -q -t -P pager=off -v ON_ERROR_STOP=ON -f $i | wc -l"
+	tuples=$(psql -A -q -t -P pager=off -v ON_ERROR_STOP=ON -f $i | wc -l)
 	#remove the extra line that \timing adds
 	tuples=$(($tuples-1))
 	log $tuples

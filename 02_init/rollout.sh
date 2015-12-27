@@ -31,27 +31,51 @@ check_gucs()
 	update_config="0"
 
 	get_version
-	if [ "$VERSION" != "gpdb_4_2" ]; then
+	if [[ "$VERSION" == "gpdb_4_3" || "$VERSION" == "hawq_1" ]]; then
 		echo "check optimizer"
-		counter=$(psql -v ON_ERROR_STOP=1 -t -A -c "show optimizer" | grep on | wc -l)
+		counter=$(psql -v ON_ERROR_STOP=ON -t -A -c "show optimizer" | grep -i "on" | wc -l)
 		if [ "$counter" -eq "0" ]; then
 			echo "enabling optimizer"
-			gpconfig -c optimizer -v on --masteronly
+			if [ "$VERSION" == "hawq_2" ]; then
+				hawq config -c optimizer -v on
+			else
+				gpconfig -c optimizer -v on --masteronly
+			fi
 			update_config="1"
 		fi
 
 		echo "check analyze_root_partition"
-		counter=$(psql -v ON_ERROR_STOP=1 -t -A -c "show optimizer_analyze_root_partition" | grep on | wc -l)
+		counter=$(psql -v ON_ERROR_STOP=ON -t -A -c "show optimizer_analyze_root_partition" | grep -i "on" | wc -l)
 		if [ "$counter" -eq "0" ]; then
 			echo "enabling analyze_root_partition"
-			gpconfig -c optimizer_analyze_root_partition -v on --masteronly
+			if [ "$VERSION" == "hawq_2" ]; then
+				hawq config -c analyze_root_partition -v on
+			else
+				gpconfig -c optimizer_analyze_root_partition -v on --masteronly
+			fi
 			update_config="1"
 		fi
 	fi
 
+	echo "check gp_autostats_mode"
+	counter=$(psql -v ON_ERROR_STOP=ON -t -A -c "show gp_autostats_mode" | grep -i "none" | wc -l)
+	if [ "$counter" -eq "0" ]; then
+		echo "changing gp_autostats_mode to none"
+		if [ "$VERSION" == "hawq_2" ]; then
+			hawq config -c gp_autostats_mode -v NONE
+		else
+			gpconfig -c gp_autostats_mode -v none --masteronly
+		fi
+		update_config="1"
+	fi
+
 	if [ "$update_config" -eq "1" ]; then
 		echo "update cluster because of config changes"
-		gpstop -u
+		if [ "$VERSION" == "hawq_2" ]; then
+			hawq stop cluster -u -a
+		else
+			gpstop -u
+		fi
 	fi
 }
 
@@ -61,7 +85,7 @@ copy_config()
 	cp $MASTER_DATA_DIRECTORY/pg_hba.conf $PWD/../log/
 	cp $MASTER_DATA_DIRECTORY/postgresql.conf $PWD/../log/
 	#gp_segment_configuration
-	psql -q -A -t -v ON_ERROR_STOP=1 -c "SELECT * FROM gp_segment_configuration" -o $PWD/../log/gp_segment_configuration.txt
+	psql -q -A -t -v ON_ERROR_STOP=ON -c "SELECT * FROM gp_segment_configuration" -o $PWD/../log/gp_segment_configuration.txt
 }
 
 set_psqlrc()
