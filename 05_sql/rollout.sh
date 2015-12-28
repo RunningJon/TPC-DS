@@ -23,7 +23,7 @@ init_log $step
 if [ "$E9" == "true" ]; then
         filter="e9"
 else
-        filter="tpcds"
+        filter="query"
 fi
 
 for i in $(ls $PWD/*.$filter.*.sql); do
