@@ -32,7 +32,7 @@ get_version()
 		MEDIUM_STORAGE="appendonly=true, orientation=parquet"
 		LARGE_STORAGE="appendonly=true, orientation=parquet"
 		E9_MEDIUM_STORAGE="APPENDONLY=TRUE, COMPRESSTYPE=QUICKLZ"
-		E9_LARGE_STORAGE="APPENDONLY=TRUE, ORIENTATION=parquet, COMPRESSTYPE=QUICKLZ"
+		E9_LARGE_STORAGE="APPENDONLY=TRUE, ORIENTATION=parquet, COMPRESSTYPE=snappy"
 	else
 		SMALL_STORAGE="appendonly=true, orientation=column"
 		MEDIUM_STORAGE="appendonly=true, orientation=column"
