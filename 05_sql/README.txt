@@ -100,3 +100,10 @@ select
  limit 100;
 
 This was done on queries: 36 and 70.
+
+3. Query templates were modified to exclude columns not found in the query.  In these cases, the common
+table expression used aliased columns but the dynamic filters included both the alias name as well as the
+original name.  Referencing the original column name instead of the alias causes the query parser to not
+find the column.
+
+This was done on queries: 4 and 11.

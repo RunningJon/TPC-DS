@@ -43,6 +43,10 @@ check_variables()
 	if [ "$count" -eq "0" ]; then
 		echo "EXPLAIN_ANALYZE=\"false\"" >> $MYVAR
 	fi
+	local count=`grep "E9=" $MYVAR | wc -l`
+	if [ "$count" -eq "0" ]; then
+		echo "E9=\"false\"" >> $MYVAR
+	fi
 
 	echo "############################################################################"
 	echo "Sourcing $MYVAR"
@@ -186,4 +190,4 @@ repo_init
 script_check
 check_sudo
 
-su --session-command="cd \"$INSTALL_DIR/$REPO\"; ./rollout.sh $GEN_DATA_SCALE $EXPLAIN_ANALYZE $QUIET" $ADMIN_USER 
+su --session-command="cd \"$INSTALL_DIR/$REPO\"; ./rollout.sh $GEN_DATA_SCALE $EXPLAIN_ANALYZE $E9 $QUIET" $ADMIN_USER 

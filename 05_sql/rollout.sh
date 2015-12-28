@@ -7,10 +7,12 @@ source_bashrc
 
 GEN_DATA_SCALE=$1
 EXPLAIN_ANALYZE=$2
+E9=$3
 
-if [[ "$GEN_DATA_SCALE" == "" || "$EXPLAIN_ANALYZE" == "" ]]; then
-	echo "You must provide the scale as a parameter in terms of Gigabytes and true/false on running queries with EXPLAIN ANALYZE."
-	echo "Example: ./rollout.sh 100 false"
+if [[ "$GEN_DATA_SCALE" == "" || "$EXPLAIN_ANALYZE" == "" || "$E9" == "" ]]; then
+	echo "You must provide the scale as a parameter in terms of Gigabytes, true/false on running queries with EXPLAIN ANALYZE, "
+	echo "and E9 true or false to run that version of TPC-DS."
+	echo "Example: ./rollout.sh 100 false false"
 	echo "This will create 100 GB of data for this test."
 	exit 1
 fi
@@ -18,17 +20,21 @@ fi
 step=sql
 init_log $step
 
-for i in $(ls $PWD/*.sql); do
+if [ "$E9" == "true" ]; then
+        filter="e9"
+else
+        filter="tpcds"
+fi
 
+for i in $(ls $PWD/*.$filter.*.sql); do
 	id=`echo $i | awk -F '.' '{print $1}'`
 	schema_name=`echo $i | awk -F '.' '{print $2}'`
 	table_name=`echo $i | awk -F '.' '{print $3}'`
-
 	start_log
+
 	if [ "$EXPLAIN_ANALYZE" == "false" ]; then
 		echo "psql -A -q -t -P pager=off -v ON_ERROR_STOP=ON -v EXPLAIN_ANALYZE=\"\" -f $i | wc -l"
 		tuples=$(psql -A -q -t -P pager=off -v ON_ERROR_STOP=ON -v EXPLAIN_ANALYZE="" -f $i | wc -l; exit ${PIPESTATUS[0]})
-
 		#remove the extra line that \timing adds
 		tuples=$(($tuples-1))
 	else

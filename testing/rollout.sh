@@ -15,9 +15,14 @@ PWD=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
 source $PWD/../functions.sh
 source_bashrc
 
+get_psql_count()
+{
+	psql_count=$(ps -ef | grep psql | grep testing | grep -v grep | wc -l)
+}
+
 get_file_count()
 {
-	count=$(ls $PWD/../log/end_testing* 2> /dev/null | wc -l)
+	file_count=$(ls $PWD/../log/end_testing* 2> /dev/null | wc -l)
 }
 
 rm -f $PWD/../log/*testing*.log
@@ -57,14 +62,25 @@ for x in $(seq 1 $number_sessions); do
 	$PWD/test.sh $GEN_DATA_SCALE $x > $session_log 2>&1 < $session_log &
 done
 
-get_file_count
+sleep 2
+
+get_psql_count
 echo "Now executing queries. This make take a while."
 echo -ne "Executing queries."
-while [ "$count" -lt "$number_sessions" ]; do
+while [ "$psql_count" -gt "0" ]; do
 	echo -ne "."
 	sleep 5
-	get_file_count
+	get_psql_count
 done
 echo "queries complete"
 echo ""
+
+get_file_count
+
+if [ "$file_count" -ne "$number_sessions" ]; then
+	echo "The number of successfully completed sessions is less than expected!"
+	echo "Please review the log files to determine which queries failed."
+	exit 1
+fi
+
 $PWD/report.sh
