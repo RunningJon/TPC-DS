@@ -1,4 +1,4 @@
-!/bin/bash
+#!/bin/bash
 
 set -e
 
@@ -57,7 +57,7 @@ for i in $(ls $sql_dir/*.sql); do
 	table_name=$(basename $i | awk -F '.' '{print $3}')
 
 	echo "psql -A -q -t -P pager=off -v ON_ERROR_STOP=ON -f $i | wc -l"
-	tuples=$(psql -A -q -t -P pager=off -v ON_ERROR_STOP=ON -f $i | wc -l)
+	tuples=$(psql -A -q -t -P pager=off -v ON_ERROR_STOP=ON -f $i | wc -l; exit ${PIPESTATUS[0]})
 	#remove the extra line that \timing adds
 	tuples=$(($tuples-1))
 	log $tuples

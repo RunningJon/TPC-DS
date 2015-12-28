@@ -70,7 +70,7 @@ for i in $(ls $PWD/*.sql); do
 	table_name=`echo $i | awk -F '.' '{print $3}'`
 
 	echo "psql -v ON_ERROR_STOP=ON -f $i | grep INSERT | awk -F ' ' '{print \$3}'"
-	tuples=$(psql -v ON_ERROR_STOP=ON -f $i | grep INSERT | awk -F ' ' '{print $3}')
+	tuples=$(psql -v ON_ERROR_STOP=ON -f $i | grep INSERT | awk -F ' ' '{print $3}'; exit ${PIPESTATUS[0]})
 
 	log $tuples
 done
