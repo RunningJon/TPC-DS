@@ -21,4 +21,7 @@ CREATE TABLE tpcds.store_returns (
     sr_net_loss numeric(7,2)
 )
 WITH (:MEDIUM_STORAGE)
-:DISTRIBUTED_BY;
+:DISTRIBUTED_BY
+partition by range(sr_returned_date_sk)
+(start(2450815) INCLUSIVE end(2453005) INCLUSIVE every (28),
+default partition others);  

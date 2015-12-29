@@ -25,4 +25,7 @@ CREATE TABLE tpcds.web_returns (
     wr_net_loss numeric(7,2)
 )
 WITH (:SMALL_STORAGE)
-:DISTRIBUTED_BY;
+:DISTRIBUTED_BY
+partition by range(wr_returned_date_sk)
+(start(2450815) INCLUSIVE end(2453005) INCLUSIVE every (28),
+default partition others);
