@@ -36,7 +36,9 @@ for i in $(ls $PWD/*.$filter.*.sql); do
 
 	counter=0
 
-	if [[ "$VERSION" == "gpdb_4_2" || "$VERSION" == "gpdb_4_3" || "$VERSION" == "hawq_1" ]]; then
+	#if [[ "$VERSION" == "gpdb_4_2" || "$VERSION" == "gpdb_4_3" || "$VERSION" == "hawq_1" ]]; then
+	#temporary for testing
+	if [[ "$VERSION" == "gpdb_4_2" || "$VERSION" == "gpdb_4_3" ]]; then
 		for z in $(cat $PWD/distribution.txt); do
 			table_name2=`echo $z | awk -F '|' '{print $2}'`	
 			if [ "$table_name2" == "$table_name" ]; then
