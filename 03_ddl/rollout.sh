@@ -8,14 +8,14 @@ source_bashrc
 GEN_DATA_SCALE=$1
 EXPLAIN_ANALYZE=$2
 E9=$3
+RANDOM_DISTRIBUTION=$4
 
-if [[ "$GEN_DATA_SCALE" == "" || "$EXPLAIN_ANALYZE" == "" || "$E9" == "" ]]; then
-	echo "You must provide the scale as a parameter in terms of Gigabytes, true/false on running queries with EXPLAIN ANALYZE, "
-	echo "and E9 true or false to run that version of TPC-DS."
-	echo "Example: ./rollout.sh 100 false false"
-	echo "This will create 100 GB of data for this test."
+if [[ "$GEN_DATA_SCALE" == "" || "$EXPLAIN_ANALYZE" == "" || "$E9" == "" || "$RANDOM_DISTRIBUTION" == "" ]]; then
+	echo "You must provide the scale as a parameter in terms of Gigabytes, true/false to run queries with EXPLAIN ANALYZE option, E9 true or false to use their version of TPC-DS, and true/false to use random distrbution."
+	echo "Example: ./rollout.sh 100 false false false"
+	echo "This will create 100 GB of data for this test, not run EXPLAIN ANALYZE, use standard TPC-DS, and not use random distribution."
 	exit 1
-fi 
+fi
 
 step=ddl
 init_log $step
@@ -36,9 +36,9 @@ for i in $(ls $PWD/*.$filter.*.sql); do
 
 	counter=0
 
-	#if [[ "$VERSION" == "gpdb_4_2" || "$VERSION" == "gpdb_4_3" || "$VERSION" == "hawq_1" ]]; then
-	#temporary for testing
-	if [[ "$VERSION" == "gpdb_4_2" || "$VERSION" == "gpdb_4_3" ]]; then
+	if [ "$RANDOM_DISTRIBUTION" == "true" ]; then
+		DISTRIBUTED_BY="DISTRIBUTED RANDOMLY"
+	else
 		for z in $(cat $PWD/distribution.txt); do
 			table_name2=`echo $z | awk -F '|' '{print $2}'`	
 			if [ "$table_name2" == "$table_name" ]; then
@@ -46,9 +46,6 @@ for i in $(ls $PWD/*.$filter.*.sql); do
 			fi
 		done
 		DISTRIBUTED_BY="DISTRIBUTED BY (""$distribution"")"
-	else
-		#HAWQ 2
-		DISTRIBUTED_BY="DISTRIBUTED RANDOMLY"
 	fi
 
 	if [ "$E9" == "true" ]; then

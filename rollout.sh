@@ -8,16 +8,16 @@ source_bashrc
 GEN_DATA_SCALE=$1
 EXPLAIN_ANALYZE=$2
 E9=$3
+RANDOM_DISTRIBUTION=$4
 
-if [[ "$GEN_DATA_SCALE" == "" || "$EXPLAIN_ANALYZE" == "" || "$E9" == "" ]]; then
-	echo "You must provide the scale as a parameter in terms of Gigabytes, true/false to run queries with EXPLAIN ANALYZE option, "
-	echo "and E9 true or false to use their version of TPC-DS."
-	echo "Example: ./rollout.sh 100 false false"
-	echo "This will create 100 GB of data for this test, not run EXPLAIN ANALYZE, and use standard TPC-DS."
+if [[ "$GEN_DATA_SCALE" == "" || "$EXPLAIN_ANALYZE" == "" || "$E9" == "" || "$RANDOM_DISTRIBUTION" == "" ]]; then
+	echo "You must provide the scale as a parameter in terms of Gigabytes, true/false to run queries with EXPLAIN ANALYZE option, E9 true or false to use their version of TPC-DS, and true/false to use random distrbution."
+	echo "Example: ./rollout.sh 100 false false false"
+	echo "This will create 100 GB of data for this test, not run EXPLAIN ANALYZE, use standard TPC-DS, and not use random distribution."
 	exit 1
 fi
 
-QUIET=$4
+QUIET=$5
 
 create_directories()
 {
@@ -88,5 +88,5 @@ fi
 
 for i in $(ls -d $PWD/0*); do
 	echo "$i/rollout.sh"
-	$i/rollout.sh $GEN_DATA_SCALE $EXPLAIN_ANALYZE $E9
+	$i/rollout.sh $GEN_DATA_SCALE $EXPLAIN_ANALYZE $E9 $RANDOM_DISTRIBUTION
 done
