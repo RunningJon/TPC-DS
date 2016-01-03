@@ -26,9 +26,6 @@ CREATE TABLE tpcds.web_returns (
 )
 WITH (:SMALL_STORAGE)
 :DISTRIBUTED_BY
-/*
 partition by range(wr_returned_date_sk)
-(start(2450815) INCLUSIVE end(2453005) INCLUSIVE every (28),
-default partition others)
-*/
-;
+(start(2450815) INCLUSIVE end(2453005) INCLUSIVE every (400),
+default partition others);
