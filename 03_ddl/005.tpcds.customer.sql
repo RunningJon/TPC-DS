@@ -18,5 +18,5 @@ CREATE TABLE tpcds.customer (
     c_email_address character(50),
     c_last_review_date character(10)
 )
-WITH (:MEDIUM_STORAGE)
+WITH (:SMALL_STORAGE)
 :DISTRIBUTED_BY;

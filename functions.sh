@@ -29,14 +29,14 @@ get_version()
 	VERSION=$(psql -v ON_ERROR_STOP=1 -t -A -c "SELECT CASE WHEN POSITION ('HAWQ 2' in version) > 0 THEN 'hawq_2' WHEN POSITION ('HAWQ 1' in version) > 0 THEN 'hawq_1' WHEN POSITION ('HAWQ' in version) = 0 AND POSITION ('Greenplum Database 4.2' IN version) > 0 THEN 'gpdb_4_2' WHEN POSITION ('HAWQ' in version) = 0 AND POSITION ('Greenplum Database 4.3' IN version) > 0 THEN 'gpdb_4_3' ELSE 'OTHER' END FROM version();")
 	if [[ "$VERSION" == *"hawq"* ]]; then
 		SMALL_STORAGE="appendonly=true, orientation=parquet"
-		MEDIUM_STORAGE="appendonly=true, orientation=parquet"
-		LARGE_STORAGE="appendonly=true, orientation=parquet"
+		MEDIUM_STORAGE="appendonly=true, orientation=parquet, compresstype=snappy"
+		LARGE_STORAGE="appendonly=true, orientation=parquet, compresstype=snappy"
 		E9_MEDIUM_STORAGE="APPENDONLY=TRUE, COMPRESSTYPE=QUICKLZ"
 		E9_LARGE_STORAGE="APPENDONLY=TRUE, ORIENTATION=parquet, COMPRESSTYPE=snappy"
 	else
 		SMALL_STORAGE="appendonly=true, orientation=column"
-		MEDIUM_STORAGE="appendonly=true, orientation=column"
-		LARGE_STORAGE="appendonly=true, orientation=column"
+		MEDIUM_STORAGE="appendonly=true, orientation=column, compresstype=quicklz"
+		LARGE_STORAGE="appendonly=true, orientation=column, compresstype=quicklz"
 		E9_MEDIUM_STORAGE="APPENDONLY=TRUE, COMPRESSTYPE=QUICKLZ"
 		E9_LARGE_STORAGE="APPENDONLY=TRUE, ORIENTATION=column, COMPRESSTYPE=QUICKLZ"
 	fi
