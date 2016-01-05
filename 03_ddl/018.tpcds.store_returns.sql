@@ -23,5 +23,5 @@ CREATE TABLE tpcds.store_returns (
 WITH (:MEDIUM_STORAGE)
 :DISTRIBUTED_BY
 partition by range(sr_returned_date_sk)
-(start(2450815) INCLUSIVE end(2453005) INCLUSIVE every (100),
+(start(2450820) INCLUSIVE end(2452822) INCLUSIVE every (100),
 default partition others);

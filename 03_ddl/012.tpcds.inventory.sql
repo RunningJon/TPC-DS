@@ -7,5 +7,5 @@ CREATE TABLE tpcds.inventory (
 WITH (:LARGE_STORAGE)
 :DISTRIBUTED_BY
 partition by range(inv_date_sk)
-(start(2450815) INCLUSIVE end(2453005) INCLUSIVE every (100),
+(start(2450815) INCLUSIVE end(2452635) INCLUSIVE every (100),
 default partition others);
