@@ -4,7 +4,7 @@ CREATE TABLE tpcds.inventory (
     inv_warehouse_sk integer NOT NULL,
     inv_quantity_on_hand integer
 )
-WITH (:E9_LARGE_STORAGE)
+WITH (:E9_MEDIUM_STORAGE)
 :DISTRIBUTED_BY
 partition by range(inv_date_sk)
 (start(2450815) INCLUSIVE end(2453005) INCLUSIVE every (28),

@@ -34,7 +34,7 @@ CREATE TABLE tpcds.catalog_sales (
     cs_net_paid_inc_ship_tax numeric(7,2),
     cs_net_profit numeric(7,2)
 )
-WITH (:E9_MEDIUM_STORAGE)
+WITH (:E9_LARGE_STORAGE)
 :DISTRIBUTED_BY
 partition by range(cs_sold_date_sk)
 (start(2450815) INCLUSIVE end(2453005) INCLUSIVE every (28),
