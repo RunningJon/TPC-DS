@@ -8,6 +8,8 @@ TPC-DS Information
 Versions 1.4 and 2.1 are included and defaults to 1.4.  You can switch between the 
 versions by changing the TPCDS_VERSION variable in the tpcds_variables.sh file.
 
+Version 2.1 is still being tested.  Do not use yet.
+
 ########################################################################################
 Prerequisites
 ########################################################################################
@@ -75,7 +77,7 @@ and (cast('2000-02-28' as date) + 30 days)
 New:
 and (cast('2000-02-28' as date) + '30 days'::interval)
 
-This was done on queries: 12, 16, 20, 21, 32, 37, 40, 77, 80, 82, 92, 94, 95, and 98.
+This was done on queries: 5, 12, 16, 20, 21, 32, 37, 40, 77, 80, 82, 92, 94, 95, and 98.
 
 2.  Change to queries with ORDER BY on column alias to use sub-select.
 
@@ -163,3 +165,6 @@ original name.  Referencing the original column name instead of the alias causes
 find the column. 
 
 This was done on queries: 4 and 11 only on version 1.4.  
+
+4.  Added table aliases.
+This was done on queries: 2, 14
