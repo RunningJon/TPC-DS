@@ -59,9 +59,9 @@ check_variables()
 	if [ "$count" -eq "0" ]; then
 		echo "MULTI_USER_COUNT=\"5\"" >> $MYVAR
 	fi
-	local count=`grep "VERSION" $MYVAR | wc -l`
+	local count=`grep "TPCDS_VERSION" $MYVAR | wc -l`
 	if [ "$count" -eq "0" ]; then
-		echo "VERSION=\"1.4\"" >> $MYVAR
+		echo "TPCDS_VERSION=\"1.4\"" >> $MYVAR
 	fi
 
 	echo "############################################################################"
@@ -206,9 +206,9 @@ repo_init
 script_check
 check_sudo
 
-echo "Executing version: $VERSION"
+echo "Executing version: $TPCDS_VERSION"
 echo ""
-su --session-command="cd \"$INSTALL_DIR/$REPO\"; ./rollout.sh $GEN_DATA_SCALE $EXPLAIN_ANALYZE $E9 $RANDOM_DISTRIBUTION $VERSION $QUIET" $ADMIN_USER
+su --session-command="cd \"$INSTALL_DIR/$REPO\"; ./rollout.sh $GEN_DATA_SCALE $EXPLAIN_ANALYZE $E9 $RANDOM_DISTRIBUTION $TPCDS_VERSION $QUIET" $ADMIN_USER
 
 if [ "$MULTI_USER_TEST" == "true" ]; then
 	su --session-command="cd \"$INSTALL_DIR/$REPO/testing\"; ./rollout.sh $GEN_DATA_SCALE $MULTI_USER_COUNT $E9" $ADMIN_USER 
