@@ -35,7 +35,7 @@ get_file_count()
 }
 
 get_file_count
-if [ "$file_count" -ne "number_sessions" ]; then
+if [ "$file_count" -ne "$number_sessions" ]; then
 
 	rm -f $PWD/../log/end_testing_*.log
 	rm -f $PWD/../log/testing*.log
