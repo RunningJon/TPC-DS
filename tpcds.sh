@@ -51,6 +51,14 @@ check_variables()
 	if [ "$count" -eq "0" ]; then
 		echo "RANDOM_DISTRIBUTION=\"false\"" >> $MYVAR
 	fi
+	local count=`grep "MULTI_USER_TEST" $MYVAR | wc -l`
+	if [ "$count" -eq "0" ]; then
+		echo "MULTI_USER_TEST=\"true\"" >> $MYVAR
+	fi
+	local count=`grep "MULTI_USER_COUNT" $MYVAR | wc -l`
+	if [ "$count" -eq "0" ]; then
+		echo "MULTI_USER_COUNT=\"5\"" >> $MYVAR
+	fi
 
 	echo "############################################################################"
 	echo "Sourcing $MYVAR"
@@ -195,3 +203,7 @@ script_check
 check_sudo
 
 su --session-command="cd \"$INSTALL_DIR/$REPO\"; ./rollout.sh $GEN_DATA_SCALE $EXPLAIN_ANALYZE $E9 $RANDOM_DISTRIBUTION $QUIET" $ADMIN_USER 
+
+if [ "$MULTI_USER_TEST" == "true" ]; then
+	su --session-command="cd \"$INSTALL_DIR/$REPO/testing\"; ./rollout.sh $GEN_DATA_SCALE $MULTI_USER_COUNT $E9" $ADMIN_USER            
+fi

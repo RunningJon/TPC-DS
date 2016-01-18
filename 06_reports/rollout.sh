@@ -14,9 +14,24 @@ for i in $(ls $PWD/*.sql | grep -v report.sql); do
 	echo ""
 done
 
-psql -q -t -A -v ON_ERROR_STOP=ON -P pager=off -f $PWD/detailed_report.sql -o $PWD/../log/detailed_report.csv
+echo "********************************************************************************"
+echo "Generate Data"
+echo "********************************************************************************"
+psql -F $'\t' -A -v ON_ERROR_STOP=ON -P pager=off -f $PWD/gen_data_report.sql
 echo ""
-psql -q -t -A -v ON_ERROR_STOP=ON -P pager=off -f $PWD/summary_report.sql -o $PWD/../log/summary_report.csv
-
-echo "Detailed report located in $PWD/../log/detailed_report.csv"
-echo "Summary report located in $PWD/../log/summary_report.csv"
+echo "********************************************************************************"
+echo "Data Loads"
+echo "********************************************************************************"
+psql -F $'\t' -A -v ON_ERROR_STOP=ON -P pager=off -f $PWD/loads_report.sql
+echo ""
+echo "********************************************************************************"
+echo "Analyze"
+echo "********************************************************************************"
+psql -F $'\t' -A -v ON_ERROR_STOP=ON -P pager=off -f $PWD/analyze_report.sql
+echo ""
+echo ""
+echo "********************************************************************************"
+echo "Queries"
+echo "********************************************************************************"
+psql -F $'\t' -A -v ON_ERROR_STOP=ON -P pager=off -f $PWD/queries_report.sql
+echo ""

@@ -13,6 +13,5 @@ for i in $(ls $PWD/*.sql | grep -v report.sql); do
         echo ""
 done
 
-psql -v ON_ERROR_STOP=ON -P pager=off -f $PWD/detailed_report.sql
+psql -F $'\t' -A -v ON_ERROR_STOP=ON -P pager=off -f $PWD/detailed_report.sql
 echo ""
-psql -v ON_ERROR_STOP=ON -P pager=off -f $PWD/summary_report.sql
