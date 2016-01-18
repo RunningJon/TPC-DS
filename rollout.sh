@@ -80,6 +80,7 @@ if [ "$start_level" -eq 1 ]; then
 	rm -f $PWD/log/end_ddl.log
 	rm -f $PWD/log/end_load.log
 	rm -f $PWD/log/end_sql.log
+	rm -f $PWD/log/end_testing_*.log
 fi
 
 if [ "$start_level" -eq 2 ]; then
