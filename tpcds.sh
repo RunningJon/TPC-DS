@@ -206,8 +206,6 @@ repo_init
 script_check
 check_sudo
 
-echo "Executing TPC-DS Version: $TPCDS_VERSION"
-echo ""
 su --session-command="cd \"$INSTALL_DIR/$REPO\"; ./rollout.sh $GEN_DATA_SCALE $EXPLAIN_ANALYZE $E9 $RANDOM_DISTRIBUTION $TPCDS_VERSION $QUIET" $ADMIN_USER
 
 if [ "$MULTI_USER_TEST" == "true" ]; then

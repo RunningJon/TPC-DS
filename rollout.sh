@@ -34,8 +34,9 @@ clear
 
 echo "TPC-DS Script for Pivotal Greenplum Database and Pivotal HAWQ."
 echo ""
-echo "If you need to change any variables, exit this script, update functions.sh,"
-echo "and restart tpcds.sh."
+echo "Using TPC-DS Version: $TPCDS_VERSION"
+echo ""
+echo "If you need to change any variables, exit this script, update tpcds_variables.sh, and restart tpcds.sh."
 echo ""
 echo "Skip-Completed: The script will execute each step in order.  If the script fails and is restarted,"
 echo "the script will skip completed steps."
