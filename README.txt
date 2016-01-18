@@ -3,6 +3,12 @@ TPC-DS benchmark scripts for HAWQ and Greenplum database.
 ########################################################################################
 
 ########################################################################################
+TPC-DS Information
+########################################################################################
+Versions 1.4 and 2.1 are included and defaults to 1.4.  You can switch between the 
+versions by changing the TPCDS_VERSION variable in the tpcds_variables.sh file.
+
+########################################################################################
 Prerequisites
 ########################################################################################
 1. Greenplum Database or Apache HAWQ installed and running
@@ -156,4 +162,4 @@ table expression used aliased columns but the dynamic filters included both the 
 original name.  Referencing the original column name instead of the alias causes the query parser to not
 find the column. 
 
-This was done on queries: 4 and 11.
+This was done on queries: 4 and 11 only on version 1.4.  
