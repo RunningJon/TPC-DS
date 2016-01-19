@@ -37,5 +37,5 @@ CREATE TABLE tpcds.web_sales (
 WITH (:LARGE_STORAGE)
 :DISTRIBUTED_BY
 partition by range(ws_sold_date_sk)
-(start(2450816) INCLUSIVE end(2452642) INCLUSIVE every (40),
+(start(2450815) INCLUSIVE end(2453005) INCLUSIVE every (40),
 default partition others);

@@ -30,6 +30,6 @@ CREATE TABLE tpcds.catalog_returns (
 WITH (:MEDIUM_STORAGE)
 :DISTRIBUTED_BY
 partition by range(cr_returned_date_sk)
-(start(2450821) INCLUSIVE end(2452924) INCLUSIVE every (200),
+(start(2450815) INCLUSIVE end(2453005) INCLUSIVE every (200),
 default partition others)
 ;
