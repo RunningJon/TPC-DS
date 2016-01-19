@@ -54,7 +54,6 @@ copy_queries()
 	cp -R query_templates $PWD/../testing/
 }
 
-check_version
 make_tpc
 create_hosts_file
 copy_tpc
