@@ -9,21 +9,15 @@ GEN_DATA_SCALE=$1
 EXPLAIN_ANALYZE=$2
 E9=$3
 RANDOM_DISTRIBUTION=$4
-TPCDS_VERSION=$5
 
-if [[ "$GEN_DATA_SCALE" == "" || "$EXPLAIN_ANALYZE" == "" || "$E9" == "" || "$RANDOM_DISTRIBUTION" == "" || "$TPCDS_VERSION" == "" ]]; then
+if [[ "$GEN_DATA_SCALE" == "" || "$EXPLAIN_ANALYZE" == "" || "$E9" == "" || "$RANDOM_DISTRIBUTION" == "" ]]; then
 	echo "You must provide the scale as a parameter in terms of Gigabytes, true/false to run queries with EXPLAIN ANALYZE option, E9 true or false to use their version of TPC-DS, and true/false to use random distrbution."
-	echo "Example: ./rollout.sh 100 false false false 1.4"
-	echo "This will create 100 GB of data for this test, not run EXPLAIN ANALYZE, use standard TPC-DS, not use random distribution, and use version 1.4 of the TPC-DS benchmark."
+	echo "Example: ./rollout.sh 100 false false false"
+	echo "This will create 100 GB of data for this test, not run EXPLAIN ANALYZE, use standard TPC-DS, and not use random distribution."
 	exit 1
 fi
 
-QUIET=$6
-
-if [[ "$E9" == "true" && "$TPCDS_VERSION" != "1.4" ]]; then
-	echo "E9 scripts are only compatible with TPC-DS Version 1.4"
-	exit 1
-fi
+QUIET=$5
 
 create_directories()
 {
@@ -39,7 +33,15 @@ clear
 
 echo "TPC-DS Script for Pivotal Greenplum Database and Pivotal HAWQ."
 echo ""
-echo "Using TPC-DS Version: $TPCDS_VERSION"
+echo "Repo: $REPO"
+echo "Repo URL: $REPO_URL"
+echo "Admin User: $ADMIN_USER"
+echo "Install Dir: $INSTALL_DIR"
+echo "EXPLAIN_ANALYZE: $EXPLAIN_ANALYZE"
+echo "E9: $E9"
+echo "RANDOM_DISTRIBUTION: $RANDOM_DISTRIBUTION"
+echo "MULTI_USER_TEST: $MULTI_USER_TEST"
+echo "MULTI_USER_COUNT: $MULTI_USER_COUNT"
 echo ""
 echo "If you need to change any variables, exit this script, update tpcds_variables.sh, and restart tpcds.sh."
 echo ""
@@ -96,5 +98,5 @@ fi
 
 for i in $(ls -d $PWD/0*); do
 	echo "$i/rollout.sh"
-	$i/rollout.sh $GEN_DATA_SCALE $EXPLAIN_ANALYZE $E9 $RANDOM_DISTRIBUTION $TPCDS_VERSION
+	$i/rollout.sh $GEN_DATA_SCALE $EXPLAIN_ANALYZE $E9 $RANDOM_DISTRIBUTION 
 done

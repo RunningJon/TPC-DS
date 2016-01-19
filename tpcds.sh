@@ -59,10 +59,6 @@ check_variables()
 	if [ "$count" -eq "0" ]; then
 		echo "MULTI_USER_COUNT=\"5\"" >> $MYVAR
 	fi
-	local count=`grep "TPCDS_VERSION" $MYVAR | wc -l`
-	if [ "$count" -eq "0" ]; then
-		echo "TPCDS_VERSION=\"1.4\"" >> $MYVAR
-	fi
 
 	echo "############################################################################"
 	echo "Sourcing $MYVAR"
@@ -206,12 +202,7 @@ repo_init
 script_check
 check_sudo
 
-if [[ "$E9" == "true" && "$TPCDS_VERSION" != "1.4" ]]; then
-        echo "E9 scripts are only compatible with TPC-DS Version 1.4"
-        exit 1
-fi
-
-su --session-command="cd \"$INSTALL_DIR/$REPO\"; ./rollout.sh $GEN_DATA_SCALE $EXPLAIN_ANALYZE $E9 $RANDOM_DISTRIBUTION $TPCDS_VERSION $QUIET" $ADMIN_USER
+su --session-command="cd \"$INSTALL_DIR/$REPO\"; ./rollout.sh $GEN_DATA_SCALE $EXPLAIN_ANALYZE $E9 $RANDOM_DISTRIBUTION $QUIET" $ADMIN_USER
 
 if [ "$MULTI_USER_TEST" == "true" ]; then
 	su --session-command="cd \"$INSTALL_DIR/$REPO/testing\"; ./rollout.sh $GEN_DATA_SCALE $MULTI_USER_COUNT $E9" $ADMIN_USER 

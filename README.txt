@@ -164,7 +164,7 @@ table expression used aliased columns but the dynamic filters included both the 
 original name.  Referencing the original column name instead of the alias causes the query parser to not
 find the column. 
 
-This was done on queries: 4 and 11 only on version 1.4.  
+This was done on queries: 4 and 11 only with version 1.4 and query 86 with version 2.1.
 
 4.  Added table aliases.
-This was done on queries: 2, 14, 86
+This was done on queries: 2, 14, and 23.
