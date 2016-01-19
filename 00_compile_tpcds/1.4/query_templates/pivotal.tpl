@@ -1,4 +1,4 @@
- -- $Id: netezza.tpl,v 1.6 2008/06/19 16:51:52 jms Exp $
+ -- $Id: pivotal.tpl,v 2.1 2016/01/19 09:51:52 jgr Exp $
 define __LIMITA = "";
 define __LIMITB = "";
 define __LIMITC = "limit %d";
