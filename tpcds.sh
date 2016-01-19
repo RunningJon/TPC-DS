@@ -191,6 +191,16 @@ check_sudo()
 	$PWD/update_sudo.sh
 }
 
+echo_variables()
+{
+	echo "REPO: $REPO"
+	echo "REPO_URL: $REPO_URL"
+	echo "ADMIN_USER: $ADMIN_USER"
+	echo "INSTALL_DIR: $INSTALL_DIR"
+	echo "MULTI_USER_TEST: $MULTI_USER_TEST"
+	echo "MULTI_USER_COUNT: $MULTI_USER_COUNT"
+}
+
 ##################################################################################################################################################
 # Body
 ##################################################################################################################################################
@@ -201,6 +211,7 @@ yum_installs
 repo_init
 script_check
 check_sudo
+echo_variables
 
 su --session-command="cd \"$INSTALL_DIR/$REPO\"; ./rollout.sh $GEN_DATA_SCALE $EXPLAIN_ANALYZE $E9 $RANDOM_DISTRIBUTION $QUIET" $ADMIN_USER
 

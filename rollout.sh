@@ -29,8 +29,6 @@ create_directories()
 
 create_directories
 
-clear
-
 echo "TPC-DS Script for Pivotal Greenplum Database and Pivotal HAWQ."
 echo ""
 echo "GEN_DATA_SCALE: $GEN_DATA_SCALE"
