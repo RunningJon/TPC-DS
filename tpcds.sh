@@ -206,6 +206,11 @@ repo_init
 script_check
 check_sudo
 
+if [[ "$E9" == "true" && "$TPCDS_VERSION" != "1.4" ]]; then
+        echo "E9 scripts are only compatible with TPC-DS Version 1.4"
+        exit 1
+fi
+
 su --session-command="cd \"$INSTALL_DIR/$REPO\"; ./rollout.sh $GEN_DATA_SCALE $EXPLAIN_ANALYZE $E9 $RANDOM_DISTRIBUTION $TPCDS_VERSION $QUIET" $ADMIN_USER
 
 if [ "$MULTI_USER_TEST" == "true" ]; then

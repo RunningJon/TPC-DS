@@ -167,4 +167,4 @@ find the column.
 This was done on queries: 4 and 11 only on version 1.4.  
 
 4.  Added table aliases.
-This was done on queries: 2, 14
+This was done on queries: 2, 14, 86

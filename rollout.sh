@@ -20,6 +20,11 @@ fi
 
 QUIET=$6
 
+if [[ "$E9" == "true" && "$TPCDS_VERSION" != "1.4" ]]; then
+	echo "E9 scripts are only compatible with TPC-DS Version 1.4"
+	exit 1
+fi
+
 create_directories()
 {
 	if [ ! -d $LOCAL_PWD/log ]; then
