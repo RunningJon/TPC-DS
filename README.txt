@@ -5,10 +5,8 @@ TPC-DS benchmark scripts for HAWQ and Greenplum database.
 ########################################################################################
 TPC-DS Information
 ########################################################################################
-Versions 1.4 and 2.1 are included and defaults to 1.4.  You can switch between the 
-versions by changing the TPCDS_VERSION variable in the tpcds_variables.sh file.
-
-Version 2.1 is still being tested.  Do not use yet.
+Version 2.x now uses TPC-DS version 2.1 for the standard (E9=false) queries.  E9 version
+is based on version 1.4 with static and modified query 67.
 
 ########################################################################################
 Prerequisites
@@ -57,10 +55,8 @@ Example:
 Notes
 ########################################################################################
 - tpch_variables.sh file will be created with variables you can adjust
-- The default location for the repo is /pivotalguru/TPC-DS but can be changed in the 
-tpch_variables.sh file.
-- Additional storage options are in /pivotalguru/TPC-DS/functions.sh
-- Files for the benchmark will be created in /pivotalguru/TPC-DS/data[1-8]/
+- Files for the benchmark will be created in a sub-directory named pivotalguru located 
+in each segment directory on each segment host / data node.
 You can update these directories to be symbolic links to better utilize the disk 
 volumes you have available.
 - Example of running tpcds as root as a background process:
@@ -164,7 +160,9 @@ table expression used aliased columns but the dynamic filters included both the 
 original name.  Referencing the original column name instead of the alias causes the query parser to not
 find the column. 
 
-This was done on queries: 4 and 11 only with version 1.4 and query 86 with version 2.1.
+This was done on query 86.
 
 4.  Added table aliases.
 This was done on queries: 2, 14, and 23.
+
+5.  Using approved query variants for queries 14 and 67.

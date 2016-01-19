@@ -35,7 +35,7 @@
  define YEAR= random(1998, 2000, uniform);
  define DAY = random(1,28,uniform);
  define _LIMIT=100; 
- 
+
 with  cross_items as
  (select i_item_sk ss_item_sk
  from item,
@@ -47,7 +47,7 @@ with  cross_items as
      ,date_dim d1
  where ss_item_sk = iss.i_item_sk
    and ss_sold_date_sk = d1.d_date_sk
-   and d1.d_year between 1999 AND 1999 + 2
+   and d1.d_year between [YEAR] AND [YEAR] + 2
  intersect 
  select ics.i_brand_id
      ,ics.i_class_id
@@ -57,7 +57,7 @@ with  cross_items as
      ,date_dim d2
  where cs_item_sk = ics.i_item_sk
    and cs_sold_date_sk = d2.d_date_sk
-   and d2.d_year between 1999 AND 1999 + 2
+   and d2.d_year between [YEAR] AND [YEAR] + 2
  intersect
  select iws.i_brand_id
      ,iws.i_class_id
@@ -67,7 +67,7 @@ with  cross_items as
      ,date_dim d3
  where ws_item_sk = iws.i_item_sk
    and ws_sold_date_sk = d3.d_date_sk
-   and d3.d_year between 1999 AND 1999 + 2) x
+   and d3.d_year between [YEAR] AND [YEAR] + 2) x
  where i_brand_id = brand_id
       and i_class_id = class_id
       and i_category_id = category_id
@@ -79,7 +79,7 @@ with  cross_items as
        from store_sales
            ,date_dim
        where ss_sold_date_sk = d_date_sk
-         and d_year between 1999 and 2001 
+         and d_year between [YEAR] and [YEAR] + 2
        union all 
        select cs_quantity quantity 
              ,cs_list_price list_price
@@ -94,10 +94,8 @@ with  cross_items as
            ,date_dim
        where ws_sold_date_sk = d_date_sk
          and d_year between [YEAR] and [YEAR] + 2) x)
-,
-  results AS
-(select channel, i_brand_id, i_class_id, i_category_id, sum(sales) sum_sales, sum(number_sales) number_sales
- from (
+ [_LIMITA] select [_LIMITB] channel, i_brand_id,i_class_id,i_category_id,sum(sales), sum(number_sales)
+ from(
        select 'store' channel, i_brand_id,i_class_id
              ,i_category_id,sum(ss_quantity*ss_list_price) sales
              , count(*) number_sales
@@ -136,23 +134,8 @@ with  cross_items as
        group by i_brand_id,i_class_id,i_category_id
        having sum(ws_quantity*ws_list_price) > (select average_sales from avg_sales)
  ) y
- group by channel, i_brand_id,i_class_id,i_category_id)
-
-[_LIMITA] select [_LIMITB] channel, i_brand_id, i_class_id, i_category_id, sum_sales, number_sales
-from (
-      select channel, i_brand_id, i_class_id, i_category_id, sum_sales, number_sales from results
-      union
-      select channel, i_brand_id, i_class_id,  null as i_category_id, sum(sum_sales), sum(number_sales) from results
-      group by channel, i_brand_id, i_class_id
-      union
-      select channel, i_brand_id, null as i_class_id, null as i_category_id, sum(sum_sales), sum(number_sales) from results
-      group by channel, i_brand_id
-      union
-      select channel, null as i_brand_id, null as i_class_id, null as i_category_id, sum(sum_sales), sum(number_sales) from results
-      group by channel
-      union
-      select null as channel, null as i_brand_id, null as i_class_id, null as i_category_id, sum(sum_sales), sum(number_sales) from results) z
-order by channel, i_brand_id, i_class_id, i_category_id
+ group by rollup (channel, i_brand_id,i_class_id,i_category_id)
+ order by channel,i_brand_id,i_class_id,i_category_id
  [_LIMITC];
  
  with  cross_items as
@@ -166,7 +149,7 @@ order by channel, i_brand_id, i_class_id, i_category_id
      ,date_dim d1
  where ss_item_sk = iss.i_item_sk
    and ss_sold_date_sk = d1.d_date_sk
-   and d1.d_year between 1999 AND 1999 + 2
+   and d1.d_year between [YEAR] AND [YEAR] + 2
  intersect
  select ics.i_brand_id
      ,ics.i_class_id
@@ -176,7 +159,7 @@ order by channel, i_brand_id, i_class_id, i_category_id
      ,date_dim d2
  where cs_item_sk = ics.i_item_sk
    and cs_sold_date_sk = d2.d_date_sk
-   and d2.d_year between 1999 AND 1999 + 2
+   and d2.d_year between [YEAR] AND [YEAR] + 2
  intersect
  select iws.i_brand_id
      ,iws.i_class_id
@@ -186,7 +169,7 @@ order by channel, i_brand_id, i_class_id, i_category_id
      ,date_dim d3
  where ws_item_sk = iws.i_item_sk
    and ws_sold_date_sk = d3.d_date_sk
-   and d3.d_year between 1999 AND 1999 + 2) x
+   and d3.d_year between [YEAR] AND [YEAR] + 2) x
  where i_brand_id = brand_id
       and i_class_id = class_id
       and i_category_id = category_id
@@ -249,3 +232,4 @@ order by channel, i_brand_id, i_class_id, i_category_id
    and this_year.i_category_id = last_year.i_category_id
  order by this_year.channel, this_year.i_brand_id, this_year.i_class_id, this_year.i_category_id
  [_LIMITC];
+
