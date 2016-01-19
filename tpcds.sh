@@ -174,6 +174,7 @@ script_check()
 
 	if [ "$d" -eq "0" ]; then
 		echo "$MYCMD script is up to date so continuing to TPC-DS."
+		echo ""
 	else
 		echo "$MYCMD script is NOT up to date."
 		echo ""
@@ -193,12 +194,15 @@ check_sudo()
 
 echo_variables()
 {
+	echo "############################################################################"
 	echo "REPO: $REPO"
 	echo "REPO_URL: $REPO_URL"
 	echo "ADMIN_USER: $ADMIN_USER"
 	echo "INSTALL_DIR: $INSTALL_DIR"
 	echo "MULTI_USER_TEST: $MULTI_USER_TEST"
 	echo "MULTI_USER_COUNT: $MULTI_USER_COUNT"
+	echo "############################################################################"
+	echo ""
 }
 
 ##################################################################################################################################################
