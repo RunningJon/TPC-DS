@@ -87,8 +87,15 @@ if [ "$file_count" -ne "$number_sessions" ]; then
 	echo "Now executing queries. This make take a while."
 	echo -ne "Executing queries."
 	while [ "$psql_count" -gt "0" ]; do
-		echo -ne "."
-		sleep 5
+		now=$(date)
+		echo "$now"
+		if ls $PWD/../log/rollout_testing_* 1>/dev/null 2>&1; then
+			wc -l $PWD/../log/rollout_testing_*
+		else
+			echo "No queries complete yet."
+		fi
+
+		sleep 60
 		get_psql_count
 	done
 	echo "queries complete"
