@@ -164,5 +164,3 @@ This was done on query 86.
 
 4.  Added table aliases.
 This was done on queries: 2, 14, and 23.
-
-5.  Using approved query variant for query 67.
