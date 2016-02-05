@@ -46,15 +46,19 @@ start_gpfdist()
 		done
 	else
 		#HAWQ 2
-		for i in $(psql -A -t -c "SELECT trim(path) || '/pivotalguru' FROM public.data_dir"); do
-			GEN_DATA_PATH=$i
+		for i in $(psql -A -t -c "SELECT trim(path) FROM public.data_dir"); do
+			SEG_DATA_PATH=$i
 		done
 
 		for i in $(cat $PWD/../segment_hosts.txt); do
 			EXT_HOST=$i
-			echo "executing on $EXT_HOST ./start_gpfdist.sh $GPFDIST_PORT $GEN_DATA_PATH"
-			ssh -n -f $EXT_HOST "bash -c 'cd ~/; ./start_gpfdist.sh $GPFDIST_PORT $GEN_DATA_PATH'"
-			sleep 1
+			for x in $(seq 1 8); do
+				GEN_DATA_PATH="$SEG_DATA_PATH""/pivotalguru_""$x"
+				PORT=$(($GPFDIST_PORT + $x))
+				echo "executing on $EXT_HOST ./start_gpfdist.sh $PORT $GEN_DATA_PATH"
+				ssh -n -f $EXT_HOST "bash -c 'cd ~/; ./start_gpfdist.sh $PORT $GEN_DATA_PATH'"
+				sleep 1
+			done
 		done
 	fi
 }

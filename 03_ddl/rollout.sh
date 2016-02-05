@@ -86,16 +86,21 @@ for i in $(ls $PWD/*.ext_tpcds.*.sql); do
 		done
 	else
 		#HAWQ 2
+		segment_count=$(cat $PWD/../segment_hosts.txt | wc -l)
+		segment_count=$(($segment_count * 8))
 		for x in $(cat $PWD/../segment_hosts.txt); do
 			EXT_HOST=$x
-			if [ "$counter" -eq "0" ]; then
-				LOCATION="'"
-			else
-				LOCATION+="', '"
-			fi
-			LOCATION+="gpfdist://$EXT_HOST:$GPFDIST_PORT/"$table_name"_[0-9]*_[0-9]*.dat"
+			for y in $(seq 1 8); do
+				PORT=$(($GPFDIST_PORT + $y))
+				if [ "$counter" -eq "0" ]; then
+					LOCATION="'"
+				else
+					LOCATION+="', '"
+				fi
+				LOCATION+="gpfdist://$EXT_HOST:$PORT/"$table_name"_[0-9]*_[0-9]*.dat"
 
-			counter=$(($counter + 1))
+				counter=$(($counter + 1))
+			done
 		done
 	fi
 

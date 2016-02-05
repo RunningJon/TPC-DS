@@ -68,23 +68,28 @@ gen_data()
 			CHILD=$(echo $i | awk -F '|' '{print $1}')
 			EXT_HOST=$(echo $i | awk -F '|' '{print $2}')
 			GEN_DATA_PATH=$(echo $i | awk -F '|' '{print $3}')
+			GEN_DATA_PATH="$GEN_DATA_PATH""/pivotalguru"
 			ssh -n -f $EXT_HOST "bash -c 'cd ~/; ./generate_data.sh $GEN_DATA_SCALE $CHILD $PARALLEL $GEN_DATA_PATH > generate_data.$CHILD.log 2>&1 < generate_data.$CHILD.log &'"
 		done
 	else
 		#HAWQ 2
 		PARALLEL=$(hawq state | grep "Total segments count" | awk -F '=' '{print $2}')
+		PARALLEL=$(($PARALLEL * 8))
 		echo "parallel: $PARALLEL"
 
 		#get the PGDATA value which is the same on all hosts for HAWQ 2
 		for i in $(psql -A -t -c "SELECT trim(path) FROM public.data_dir"); do
-			GEN_DATA_PATH="$i"
+			SEG_DATA_PATH="$i"
 		done
 
 		CHILD="0"
 		for i in $(cat $PWD/../segment_hosts.txt); do
-			CHILD=$(($CHILD + 1))
 			EXT_HOST=$i
-			ssh -n -f $EXT_HOST "bash -c 'cd ~/; ./generate_data.sh $GEN_DATA_SCALE $CHILD $PARALLEL $GEN_DATA_PATH > generate_data.$CHILD.log 2>&1 < generate_data.$CHILD.log &'"
+			for x in $(seq 1 8); do
+				GEN_DATA_PATH="$SEG_DATA_PATH""/pivotalguru_""$x"
+				CHILD=$(($CHILD + 1))
+				ssh -n -f $EXT_HOST "bash -c 'cd ~/; ./generate_data.sh $GEN_DATA_SCALE $CHILD $PARALLEL $GEN_DATA_PATH > generate_data.$CHILD.log 2>&1 < generate_data.$CHILD.log &'"
+			done
 		done
 	fi
 
