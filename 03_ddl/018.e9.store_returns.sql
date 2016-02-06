@@ -8,7 +8,7 @@ CREATE TABLE tpcds.store_returns (
     sr_addr_sk integer,
     sr_store_sk integer,
     sr_reason_sk integer,
-    sr_ticket_number integer NOT NULL,
+    sr_ticket_number bigint NOT NULL,
     sr_return_quantity integer,
     sr_return_amt numeric(7,2),
     sr_return_tax numeric(7,2),
