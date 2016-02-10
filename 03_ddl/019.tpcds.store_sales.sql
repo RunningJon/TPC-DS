@@ -1,7 +1,7 @@
 CREATE TABLE tpcds.store_sales (
     ss_sold_date_sk integer,
     ss_sold_time_sk integer,
-    ss_item_sk bigint NOT NULL,
+    ss_item_sk int NOT NULL,
     ss_customer_sk integer,
     ss_cdemo_sk integer,
     ss_hdemo_sk integer,
