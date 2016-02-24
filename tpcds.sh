@@ -43,9 +43,9 @@ check_variables()
 	if [ "$count" -eq "0" ]; then
 		echo "EXPLAIN_ANALYZE=\"false\"" >> $MYVAR
 	fi
-	local count=`grep "E9=" $MYVAR | wc -l`
+	local count=`grep "SQL_VERSION=" $MYVAR | wc -l`
 	if [ "$count" -eq "0" ]; then
-		echo "E9=\"false\"" >> $MYVAR
+		echo "SQL_VERSION=\"tpcds\"" >> $MYVAR
 	fi
 	local count=`grep "RANDOM_DISTRIBUTION=" $MYVAR | wc -l`
 	if [ "$count" -eq "0" ]; then
@@ -217,8 +217,8 @@ script_check
 check_sudo
 echo_variables
 
-su --session-command="cd \"$INSTALL_DIR/$REPO\"; ./rollout.sh $GEN_DATA_SCALE $EXPLAIN_ANALYZE $E9 $RANDOM_DISTRIBUTION $QUIET" $ADMIN_USER
+su --session-command="cd \"$INSTALL_DIR/$REPO\"; ./rollout.sh $GEN_DATA_SCALE $EXPLAIN_ANALYZE $SQL_VERSION $RANDOM_DISTRIBUTION $QUIET" $ADMIN_USER
 
 if [ "$MULTI_USER_TEST" == "true" ]; then
-	su --session-command="cd \"$INSTALL_DIR/$REPO/testing\"; ./rollout.sh $GEN_DATA_SCALE $MULTI_USER_COUNT $E9" $ADMIN_USER 
+	su --session-command="cd \"$INSTALL_DIR/$REPO/testing\"; ./rollout.sh $GEN_DATA_SCALE $MULTI_USER_COUNT $SQL_VERSION" $ADMIN_USER 
 fi

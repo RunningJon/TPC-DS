@@ -7,11 +7,11 @@ source_bashrc
 
 GEN_DATA_SCALE=$1
 EXPLAIN_ANALYZE=$2
-E9=$3
+SQL_VERSION=$3
 RANDOM_DISTRIBUTION=$4
 
-if [[ "$GEN_DATA_SCALE" == "" || "$EXPLAIN_ANALYZE" == "" || "$E9" == "" || "$RANDOM_DISTRIBUTION" == "" ]]; then
-	echo "You must provide the scale as a parameter in terms of Gigabytes, true/false to run queries with EXPLAIN ANALYZE option, E9 true or false to use their version of TPC-DS, and true/false to use random distrbution."
+if [[ "$GEN_DATA_SCALE" == "" || "$EXPLAIN_ANALYZE" == "" || "$SQL_VERSION" == "" || "$RANDOM_DISTRIBUTION" == "" ]]; then
+	echo "You must provide the scale as a parameter in terms of Gigabytes, true/false to run queries with EXPLAIN ANALYZE option, the SQL_VERSION, and true/false to use random distrbution."
 	echo "Example: ./rollout.sh 100 false false false"
 	echo "This will create 100 GB of data for this test, not run EXPLAIN ANALYZE, use standard TPC-DS, and not use random distribution."
 	exit 1
@@ -21,14 +21,8 @@ step=ddl
 init_log $step
 get_version
 
-if [ "$E9" == "true" ]; then
-	filter="e9"
-else
-	filter="tpcds"
-fi
-
 #Create tables 
-for i in $(ls $PWD/*.$filter.*.sql); do
+for i in $(ls $PWD/*.$SQL_VERSION.*.sql); do
 	id=`echo $i | awk -F '.' '{print $1}'`
 	schema_name=`echo $i | awk -F '.' '{print $2}'`
 	table_name=`echo $i | awk -F '.' '{print $3}'`
@@ -48,7 +42,7 @@ for i in $(ls $PWD/*.$filter.*.sql); do
 		DISTRIBUTED_BY="DISTRIBUTED BY (""$distribution"")"
 	fi
 
-	if [ "$E9" == "true" ]; then
+	if [ "$SQL_VERSION" == "e9" ]; then
 		echo "psql -a -P pager=off -v ON_ERROR_STOP=ON -f $i -v E9_MEDIUM_STORAGE=\"$E9_MEDIUM_STORAGE\" -v E9_LARGE_STORAGE=\"$E9_LARGE_STORAGE\" -v DISTRIBUTED_BY=\"$DISTRIBUTED_BY\""
 		psql -a -P pager=off -v ON_ERROR_STOP=ON -f $i -v E9_MEDIUM_STORAGE="$E9_MEDIUM_STORAGE" -v E9_LARGE_STORAGE="$E9_LARGE_STORAGE" -v DISTRIBUTED_BY="$DISTRIBUTED_BY"
 	else
@@ -59,7 +53,7 @@ for i in $(ls $PWD/*.$filter.*.sql); do
 	log
 done
 
-#external tables are the same for both Standard and E9 
+#external tables are the same for all SQL_VERSION
 for i in $(ls $PWD/*.ext_tpcds.*.sql); do
 	start_log
 

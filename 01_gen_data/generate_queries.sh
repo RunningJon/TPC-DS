@@ -27,7 +27,7 @@ rm -f $PWD/../05_sql/*.query.*.sql
 
 for p in $(seq 1 99); do
 	q=$(printf %02d $query_id)
-	filename=$file_id.query.$q.sql
+	filename=$file_id.tpcds.$q.sql
 	template_filename=query$p.tpl
 	start_position=""
 	end_position=""
