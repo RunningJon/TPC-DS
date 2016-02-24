@@ -22,7 +22,13 @@ init_log $step
 get_version
 
 #Create tables 
-for i in $(ls $PWD/*.$SQL_VERSION.*.sql); do
+if [ "$SQL_VERSION="e9" ]; then
+	filter="e9"
+else
+	filter="tpcds"
+fi
+
+for i in $(ls $PWD/*.$filter.*.sql); do
 	id=`echo $i | awk -F '.' '{print $1}'`
 	schema_name=`echo $i | awk -F '.' '{print $2}'`
 	table_name=`echo $i | awk -F '.' '{print $3}'`
