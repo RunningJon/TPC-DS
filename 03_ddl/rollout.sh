@@ -22,7 +22,7 @@ init_log $step
 get_version
 
 #Create tables 
-if [ "$SQL_VERSION="e9" ]; then
+if [ "$SQL_VERSION" == "e9" ]; then
 	filter="e9"
 else
 	filter="tpcds"
