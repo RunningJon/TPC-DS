@@ -27,7 +27,7 @@
  where date_sk = d_date_sk
       and date_sk between 2452133 and 2452147
       and d_date between cast('2001-08-11' as timestamp)
-                  and (cast('2001-08-11' as timestamp) +  interval 14 days)
+                  and (cast('2001-08-11' as timestamp) +  '14 days'::interval)
        and store_sk = s_store_sk
  group by s_store_id)
  ,
@@ -59,7 +59,7 @@
  where date_sk = d_date_sk
       and date_sk between 2452133 and 2452147
       and d_date between cast('2001-08-11' as timestamp)
-                  and (cast('2001-08-11' as timestamp) +  interval 14 days)
+                  and (cast('2001-08-11' as timestamp) +  '14 days'::interval)
        and page_sk = cp_catalog_page_sk
  group by cp_catalog_page_id)
  ,
@@ -93,7 +93,7 @@
  where date_sk = d_date_sk
       and date_sk between 2452133 and 2452147
       and d_date between cast('2001-08-11' as timestamp)
-                  and (cast('2001-08-11' as timestamp) +  interval 14 days)
+                  and (cast('2001-08-11' as timestamp) +  '14 days'::interval)
        and wsr_web_site_sk = web_site_sk
  group by web_site_id)
  ,
@@ -105,21 +105,21 @@
         , sum(profit) as profit
  from 
  (select 'store channel' as channel
-        , concat('store' , s_store_id) as id
+        , 'store' || s_store_id as id
         , sales
         , sreturns
         , (profit - profit_loss) as profit
  from   ssr
  union all
  select 'catalog channel' as channel
-        , concat('catalog_page' , cp_catalog_page_id) as id
+        , 'catalog_page' || cp_catalog_page_id as id
         , sales
         , sreturns
         , (profit - profit_loss) as profit
  from  csr
  union all
  select 'web channel' as channel
-        , concat('web_site' , web_site_id) as id
+        , 'web_site' || web_site_id as id
         , sales
         , sreturns
         , (profit - profit_loss) as profit

@@ -21,7 +21,7 @@ left outer join [shuffle] catalog_returns on (cr_item_sk = cs_item_sk and cr_ord
 where d1.d_week_seq = d2.d_week_seq
   and cs_sold_date_sk between 2452276 and 2452640
   and inv_quantity_on_hand < cs_quantity
-  and cast(d3.d_date as timestamp) > cast(d1.d_date as timestamp) + interval 5 days
+  and cast(d3.d_date as timestamp) > cast(d1.d_date as timestamp) + '5 days'::interval
   and hd_buy_potential = '>10000'
   and d1.d_year = 2002
   and cd_marital_status = 'S'

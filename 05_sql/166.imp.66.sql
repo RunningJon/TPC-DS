@@ -52,7 +52,7 @@ select
         ,w_county
         ,w_state
         ,w_country
-        ,concat('DIAMOND'  , ',' , 'ZOUROS') as ship_carriers
+        ,'DIAMOND' || ',' || 'ZOUROS' as ship_carriers
        ,d_year as year
         ,sum(case when d_moy = 1
                 then ws_ext_sales_price* ws_quantity else 0 end) as jan_sales
@@ -134,8 +134,7 @@ select
         ,w_county
         ,w_state
         ,w_country
-        ,concat('DIAMOND'  , ',' , 'ZOUROS') as ship_carriers
-        -- ,'DIAMOND' || ',' || 'ZOUROS' as ship_carriers
+        ,'DIAMOND' || ',' || 'ZOUROS' as ship_carriers
        ,d_year as year
         ,sum(case when d_moy = 1
                 then cs_sales_price* cs_quantity else 0 end) as jan_sales

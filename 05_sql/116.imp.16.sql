@@ -10,7 +10,7 @@ from
   ,call_center
 where
     d_date between cast('2000-02-01' as timestamp) and
-           (cast('2000-02-01' as timestamp) + interval 60 days)
+           (cast('2000-02-01' as timestamp) + '60 days'::interval)
 and cs1.cs_ship_date_sk = d_date_sk
 and cs1.cs_ship_addr_sk = ca_address_sk
 and ca_state = 'TX'

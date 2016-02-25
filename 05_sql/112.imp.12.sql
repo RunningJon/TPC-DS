@@ -16,7 +16,7 @@ where
   	and ws_sold_date_sk = d_date_sk
   	and ws_sold_date_sk between 2451959 and 2451989
 	and d_date between cast('2001-02-18' as timestamp) 
-				and (cast('2001-02-18' as timestamp) + interval 30 days)
+				and (cast('2001-02-18' as timestamp) + '30 days'::interval)
 group by 
 	i_item_id
         ,i_item_desc 

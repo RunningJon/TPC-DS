@@ -8,7 +8,7 @@ where
 i_manufact_id = 577
 and i_item_sk = cs_item_sk 
 and d_date between '1998-03-18' and 
-        (cast('1998-03-18' as timestamp) + interval 90 days)
+        (cast('1998-03-18' as timestamp) + '90 days'::interval)
 and d_date_sk = cs_sold_date_sk 
 and cs_sold_date_sk  between 2450891 and 2450981
 and cs_ext_discount_amt  
@@ -21,7 +21,7 @@ and cs_ext_discount_amt
          where 
               cs_item_sk = i_item_sk 
           and d_date between '1998-03-18' and
-                             (cast('1998-03-18' as timestamp) + interval 90 days)
+                             (cast('1998-03-18' as timestamp) + '90 days'::interval)
           and d_date_sk = cs_sold_date_sk 
 	  and cs_sold_date_sk  between 2450891 and 2450981
       ) 

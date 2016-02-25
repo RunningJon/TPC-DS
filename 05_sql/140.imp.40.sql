@@ -19,8 +19,8 @@ select
  and cs_warehouse_sk    = w_warehouse_sk
  and cs_sold_date_sk    = d_date_sk
  and cs_sold_date_sk between 2451602 and 2451662
- and d_date between (cast ('2000-03-28' as timestamp) - interval 30 days)
-                and (cast ('2000-03-28' as timestamp) + interval 30 days)
+ and d_date between (cast ('2000-03-28' as timestamp) - '30 days'::interval)
+                and (cast ('2000-03-28' as timestamp) + '30 days'::interval)
  group by
     w_state,i_item_id
  order by w_state,i_item_id

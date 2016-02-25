@@ -14,7 +14,7 @@ from
   ,customer_address
   ,web_site
 where
-    d_date between cast('2000-02-01' as timestamp) and cast('2000-02-01' as timestamp) + interval 60 days
+    d_date between cast('2000-02-01' as timestamp) and cast('2000-02-01' as timestamp) + '60 days'::interval
 --and ws1.ws_sold_date_sk between 2451666 and 2451726
 and ws1.ws_ship_date_sk = d_date_sk
 and ws1.ws_ship_addr_sk = ca_address_sk
