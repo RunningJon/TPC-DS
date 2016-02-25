@@ -1,5 +1,5 @@
 -- start query 29 in stream 0 using template query29.tpl
-select straight_join * from (select
+select * from (select
      i_item_id
     ,i_item_desc
     ,s_store_id
@@ -9,7 +9,7 @@ select straight_join * from (select
     ,stddev_samp(cs_quantity)        as catalog_sales_quantity
  from
     store_sales
-    join [shuffle] store_returns on   (ss_customer_sk         = sr_customer_sk
+    join store_returns on   (ss_customer_sk         = sr_customer_sk
  and ss_item_sk             = sr_item_sk
  and ss_ticket_number       = sr_ticket_number and sr_returned_date_sk between 2450905 and 2451026)
    ,catalog_sales

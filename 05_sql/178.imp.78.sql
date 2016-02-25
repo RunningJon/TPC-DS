@@ -6,7 +6,7 @@ with ws as
     sum(ws_wholesale_cost) ws_wc,
     sum(ws_sales_price) ws_sp
    from web_sales
-   left join [shuffle] web_returns on wr_order_number=ws_order_number and ws_item_sk=wr_item_sk
+   left join web_returns on wr_order_number=ws_order_number and ws_item_sk=wr_item_sk
    join date_dim on ws_sold_date_sk = d_date_sk
    where ws_sold_date_sk between 2451911 and 2452275
    and wr_order_number is null
@@ -19,7 +19,7 @@ cs as
     sum(cs_wholesale_cost) cs_wc,
     sum(cs_sales_price) cs_sp
    from catalog_sales
-   left join [shuffle] catalog_returns on cr_order_number=cs_order_number and cs_item_sk=cr_item_sk
+   left join catalog_returns on cr_order_number=cs_order_number and cs_item_sk=cr_item_sk
    join date_dim on cs_sold_date_sk = d_date_sk
    where cs_sold_date_sk between 2451911 and 2452275
    and cr_order_number is null
@@ -32,7 +32,7 @@ ss as
     sum(ss_wholesale_cost) ss_wc,
     sum(ss_sales_price) ss_sp
    from store_sales
-   left join [shuffle] store_returns on sr_ticket_number=ss_ticket_number and ss_item_sk=sr_item_sk
+   left join store_returns on sr_ticket_number=ss_ticket_number and ss_item_sk=sr_item_sk
    join date_dim on ss_sold_date_sk = d_date_sk
    where ss_sold_date_sk between 2451911 and 2452275
    and sr_ticket_number is null
@@ -46,8 +46,8 @@ coalesce(ws_qty,0)+coalesce(cs_qty,0) other_chan_qty,
 coalesce(ws_wc,0)+coalesce(cs_wc,0) other_chan_wholesale_cost,
 coalesce(ws_sp,0)+coalesce(cs_sp,0) other_chan_sales_price
 from ss
-left join [shuffle] ws on (ws_sold_year=ss_sold_year and ws_item_sk=ss_item_sk and ws_customer_sk=ss_customer_sk)
-left join [shuffle] cs on (cs_sold_year=ss_sold_year and cs_item_sk=cs_item_sk and cs_customer_sk=ss_customer_sk)
+left join ws on (ws_sold_year=ss_sold_year and ws_item_sk=ss_item_sk and ws_customer_sk=ss_customer_sk)
+left join cs on (cs_sold_year=ss_sold_year and cs_item_sk=cs_item_sk and cs_customer_sk=ss_customer_sk)
 where coalesce(ws_qty,0)>0 and coalesce(cs_qty, 0)>0 and ss_sold_year=2001
 order by
   ss_customer_sk,

@@ -3,8 +3,7 @@ with inv as
 (select w_warehouse_name,w_warehouse_sk,i_item_sk,d_moy
        ,stdev,mean, case mean when 0 then null else stdev/mean end cov
  from(select w_warehouse_name,w_warehouse_sk,i_item_sk,d_moy
-            --,stddev_samp(inv_quantity_on_hand) stdev,avg(inv_quantity_on_hand) mean
-            ,stddev_samp(inv_quantity_on_hand) stdev,avg(cast(inv_quantity_on_hand as double)) mean
+            ,stddev_samp(inv_quantity_on_hand) stdev,avg(inv_quantity_on_hand) mean
       from inventory
           ,item
           ,warehouse

@@ -1,9 +1,9 @@
 -- start query 95 in stream 0 using template query95.tpl
 with ws_wh as
-(select ws1.ws_order_number --,ws1.ws_warehouse_sk wh1,ws2.ws_warehouse_sk wh2
- from web_sales ws1 left semi join web_sales ws2
- on ws1.ws_order_number = ws2.ws_order_number
- and ws1.ws_warehouse_sk <> ws2.ws_warehouse_sk)
+(select ws1.ws_order_number--,ws1.ws_warehouse_sk wh1,ws2.ws_warehouse_sk wh2
+ from web_sales ws1,web_sales ws2
+ where ws1.ws_order_number = ws2.ws_order_number
+   and ws1.ws_warehouse_sk <> ws2.ws_warehouse_sk)
 select
    count(distinct ws_order_number) as order_count
   ,sum(ws_ext_ship_cost) as total_shipping_cost

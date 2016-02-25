@@ -26,8 +26,8 @@ impala_queries_license.txt
 
 Lastly, the Impala queries were changed for syntax only.  Impala doesn't support the 
 concatenation with || so they changed the SQL to use their concat() function.  This 
-was changed back.  Also, intervals were changed from "interval 30 days" to 
-"'30 days'::interval".
+was changed back.  Intervals were changed from "interval 30 days" to 
+"'30 days'::interval".  Query hints were removed.
 
 These options are set in tpcds_variables like so:
 SQL_VERSION="tpcds"

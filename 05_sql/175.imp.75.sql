@@ -7,7 +7,7 @@ WITH all_sales AS (
        ,i_manufact_id
        ,SUM(sales_cnt) AS sales_cnt
        ,SUM(sales_amt) AS sales_amt
- FROM (SELECT STRAIGHT_JOIN d_year
+ FROM (SELECT d_year
              ,i_brand_id
              ,i_class_id
              ,i_category_id
@@ -16,12 +16,12 @@ WITH all_sales AS (
              ,cs_ext_sales_price - COALESCE(cr_return_amount,0.0) AS sales_amt
        FROM catalog_sales JOIN item ON i_item_sk=cs_item_sk
                           JOIN date_dim ON d_date_sk=cs_sold_date_sk
-                          LEFT JOIN [ SHUFFLE ] catalog_returns ON (cs_order_number=cr_order_number
+                          LEFT JOIN catalog_returns ON (cs_order_number=cr_order_number
                                                     AND cs_item_sk=cr_item_sk) 
        WHERE i_category='Shoes'
 	and cs_sold_date_sk between 2451180        and 2451910 
        UNION
-       SELECT STRAIGHT_JOIN d_year
+       SELECT d_year
              ,i_brand_id
              ,i_class_id
              ,i_category_id
@@ -30,12 +30,12 @@ WITH all_sales AS (
              ,ss_ext_sales_price - COALESCE(sr_return_amt,0.0) AS sales_amt
        FROM store_sales JOIN item ON i_item_sk=ss_item_sk
                         JOIN date_dim ON d_date_sk=ss_sold_date_sk
-                        LEFT JOIN [ SHUFFLE ] store_returns ON (ss_ticket_number=sr_ticket_number
+                        LEFT JOIN store_returns ON (ss_ticket_number=sr_ticket_number
                                                 AND ss_item_sk=sr_item_sk) 
        WHERE i_category='Shoes'
 	and ss_sold_date_sk between 2451180        and 2451910 
        UNION
-       SELECT STRAIGHT_JOIN d_year
+       SELECT d_year
              ,i_brand_id
              ,i_class_id
              ,i_category_id
@@ -44,7 +44,7 @@ WITH all_sales AS (
              ,ws_ext_sales_price - COALESCE(wr_return_amt,0.0) AS sales_amt
        FROM web_sales JOIN item ON i_item_sk=ws_item_sk
                       JOIN date_dim ON d_date_sk=ws_sold_date_sk
-                      LEFT JOIN [ SHUFFLE ] web_returns ON (ws_order_number=wr_order_number
+                      LEFT JOIN web_returns ON (ws_order_number=wr_order_number
                                             AND ws_item_sk=wr_item_sk )
        WHERE i_category='Shoes' 
 	and ws_sold_date_sk between 2451180        and 2451910 
