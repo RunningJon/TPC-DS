@@ -7,13 +7,13 @@ source $PWD/../functions.sh
 
 GEN_DATA_SCALE=$1
 session_id=$2
-E9=$3
+SQL_VERSION=$3
 
-if [[ "$GEN_DATA_SCALE" == "" || "$session_id" == "" || "$E9" == "" ]]; then
-	echo "Error: you must provide the scale, the session id, and E9 true or false as parameters."
-	echo "Example: ./rollout.sh 3000 2 false"
+if [[ "$GEN_DATA_SCALE" == "" || "$session_id" == "" || "$SQL_VERSION" == "" ]]; then
+	echo "Error: you must provide the scale, the session id, and SQL_VERSION as parameters."
+	echo "Example: ./rollout.sh 3000 2 tpcds"
 	echo "This will execute the TPC-DS queries for 3TB of data for session 2 that are dynamically."
-	echo "created with dsqgen.  The E9 option will use the static queries and is only valid for 5 sessions."
+	echo "created with dsqgen."
 	exit 1
 fi
 
@@ -23,8 +23,8 @@ step=testing_$session_id
 
 init_log $step
 
-if [ "$E9" == "true" ]; then
-	sql_dir=$PWD/e9/$session_id
+if [ "$SQL_VERSION" != "tpcds" ]; then
+	sql_dir=$PWD/$SQL_VERSION/$session_id
 else
 	sql_dir=$PWD/$session_id
 	#going from 1 base to 0 base

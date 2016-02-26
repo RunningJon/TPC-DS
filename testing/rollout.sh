@@ -9,14 +9,13 @@ if [[ "$GEN_DATA_SCALE" == "" || "$number_sessions" == "" || "$SQL_VERSION" == "
 	echo "Error: you must provide the scale, the number of sessions, and SQL_VERSION as parameters."
 	echo "Example: ./rollout.sh 3000 5 tpcds"
 	echo "This will execute the TPC-DS queries for 3TB of data and 5 concurrent sessions that are dynamically"
-	echo "created with dsqgen.  The E9 option will use the static queries and static order that is only valid for 5 sessions."
-	echo "The imp option for Impala, will use the static queries but random order."
+	echo "created with dsqgen.  The e9 and imp options will use the static queries and static order that is only valid for 5 sessions."
 	exit 1
 fi
 
-if [ "$SQL_VERSION" == "e9" ]; then 
+if [[ "$SQL_VERSION" == "e9" || "$SQL_VERSION" == "imp" ]]; then 
 	if [ "$number_sessions" -ne "5" ]; then
-		echo "E9 testing only supports 5 concurrent sessions."
+		echo "e9 and imp tests only supports 5 concurrent sessions."
 		exit 1
 	fi
 fi
@@ -41,8 +40,8 @@ if [ "$file_count" -ne "$number_sessions" ]; then
 	rm -f $PWD/../log/end_testing_*.log
 	rm -f $PWD/../log/testing*.log
 
-	if [ "$E9" == "true" ]; then
-		echo "Using static E9 queries"
+	if [[ "$SQL_VERSION" == "e9" || "$SQL_VERSION" == "imp" ]]; then
+		echo "Using static $SQL_VERSION queries"
 	else
 		rm -f $PWD/query_*.sql
 
@@ -78,8 +77,8 @@ if [ "$file_count" -ne "$number_sessions" ]; then
 
 	for x in $(seq 1 $number_sessions); do
 		session_log=$PWD/../log/testing_session_$x.log
-		echo "$PWD/test.sh $GEN_DATA_SCALE $x $E9"
-		$PWD/test.sh $GEN_DATA_SCALE $x $E9 > $session_log 2>&1 < $session_log &
+		echo "$PWD/test.sh $GEN_DATA_SCALE $x $SQL_VERSION"
+		$PWD/test.sh $GEN_DATA_SCALE $x $SQL_VERSION > $session_log 2>&1 < $session_log &
 	done
 
 	sleep 2
