@@ -3,15 +3,6 @@ set -e
 
 PWD=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
 
-GEN_DATA_SCALE=$1
-if [ "$GEN_DATA_SCALE" == "" ]; then
-	echo "You must provide the scale as a parameter in terms of Gigabytes."
-	echo "Example: ./tpcds.sh 100"
-	echo "This will create 100 GB of data for this test."
-	exit 1
-fi
-QUIET=$2
-
 MYCMD="tpcds.sh"
 MYVAR="tpcds_variables.sh"
 ##################################################################################################################################################
@@ -19,47 +10,104 @@ MYVAR="tpcds_variables.sh"
 ##################################################################################################################################################
 check_variables()
 {
+	new_variable="0"
+
 	### Make sure variables file is available
 	if [ ! -f "$PWD/$MYVAR" ]; then
 		touch $PWD/$MYVAR
+		let new_variable += 1
 	fi
-	local count=`grep "REPO=" $MYVAR | wc -l`
+	local count=$(grep "REPO=" $MYVAR | wc -l)
 	if [ "$count" -eq "0" ]; then
 		echo "REPO=\"TPC-DS\"" >> $MYVAR
+		let new_variable += 1
 	fi
-	local count=`grep "REPO_URL=" $MYVAR | wc -l`
+	local count=$(grep "REPO_URL=" $MYVAR | wc -l)
 	if [ "$count" -eq "0" ]; then
 		echo "REPO_URL=\"https://github.com/pivotalguru/TPC-DS\"" >> $MYVAR
+		let new_variable += 1
 	fi
-	local count=`grep "ADMIN_USER=" $MYVAR | wc -l`
+	local count=$(grep "ADMIN_USER=" $MYVAR | wc -l)
 	if [ "$count" -eq "0" ]; then
 		echo "ADMIN_USER=\"gpadmin\"" >> $MYVAR
+		let new_variable += 1
 	fi
-	local count=`grep "INSTALL_DIR=" $MYVAR | wc -l`
+	local count=$(grep "INSTALL_DIR=" $MYVAR | wc -l)
 	if [ "$count" -eq "0" ]; then
 		echo "INSTALL_DIR=\"/pivotalguru\"" >> $MYVAR
+		let new_variable += 1
 	fi
-	local count=`grep "EXPLAIN_ANALYZE=" $MYVAR | wc -l`
+	local count=$(grep "EXPLAIN_ANALYZE=" $MYVAR | wc -l)
 	if [ "$count" -eq "0" ]; then
 		echo "EXPLAIN_ANALYZE=\"false\"" >> $MYVAR
+		let new_variable += 1
 	fi
-	local count=`grep "SQL_VERSION=" $MYVAR | wc -l`
+	local count=$(grep "SQL_VERSION=" $MYVAR | wc -l)
 	if [ "$count" -eq "0" ]; then
 		echo "SQL_VERSION=\"tpcds\"" >> $MYVAR
+		let new_variable += 1
 	fi
-	local count=`grep "RANDOM_DISTRIBUTION=" $MYVAR | wc -l`
+	local count=$(grep "RANDOM_DISTRIBUTION=" $MYVAR | wc -l)
 	if [ "$count" -eq "0" ]; then
 		echo "RANDOM_DISTRIBUTION=\"false\"" >> $MYVAR
+		let new_variable += 1
 	fi
-	local count=`grep "MULTI_USER_TEST" $MYVAR | wc -l`
+	local count=$(grep "MULTI_USER_TEST" $MYVAR | wc -l)
 	if [ "$count" -eq "0" ]; then
 		echo "MULTI_USER_TEST=\"true\"" >> $MYVAR
+		let new_variable += 1
 	fi
-	local count=`grep "MULTI_USER_COUNT" $MYVAR | wc -l`
+	local count=$(grep "MULTI_USER_COUNT" $MYVAR | wc -l)
 	if [ "$count" -eq "0" ]; then
 		echo "MULTI_USER_COUNT=\"5\"" >> $MYVAR
+		let new_variable += 1
+	fi
+	local count=$(grep "GEN_DATA_SCALE" $MYVAR | wc -l)
+	if [ "$count" -eq "0" ]; then
+		echo "GEN_DATA_SCALE=\"3000\"" >> $MYVAR
+		let new_variable += 1
+	fi
+	#00
+	local count=$(grep "RUN_COMPILE_TPCDS" $MYVAR | wc -l)
+	if [ "$count" -eq "0" ]; then
+		echo "RUN_COMPILE_TPCDS=\"false\"" >> $MYVAR
+		let new_variable += 1
+	fi
+	#01
+	local count=$(grep "RUN_GEN_DATA" $MYVAR | wc -l)
+	if [ "$count" -eq "0" ]; then
+		echo "RUN_GEN_DATA=\"false\"" >> $MYVAR
+		let new_variable += 1
+	fi
+	#02
+	local count=$(grep "RUN_INIT" $MYVAR | wc -l)
+	if [ "$count" -eq "0" ]; then
+		echo "RUN_INIT=\"false\"" >> $MYVAR
+		let new_variable += 1
+	fi
+	#03
+	local count=$(grep "RUN_DDL" $MYVAR | wc -l)
+	if [ "$count" -eq "0" ]; then
+		echo "RUN_DDL=\"true\"" >> $MYVAR
+		let new_variable += 1
+	fi
+	#04
+	local count=$(grep "RUN_LOAD" $MYVAR | wc -l)
+	if [ "$count" -eq "0" ]; then
+		echo "RUN_LOAD=\"true\"" >> $MYVAR
+		let new_variable += 1
+	fi
+	#05
+	local count=$(grep "RUN_SQL" $MYVAR | wc -l)
+	if [ "$count" -eq "0" ]; then
+		echo "RUN_SQL=\"true\"" >> $MYVAR
+		let new_variable += 1
 	fi
 
+	if [ "$new_variable" -gt "0" ]; then
+		echo "There are new variables in the tpcds_variables.sh file.  Please review to ensure the values are correct and then re-run this script."
+		exit 1
+	fi
 	echo "############################################################################"
 	echo "Sourcing $MYVAR"
 	echo "############################################################################"
@@ -180,7 +228,7 @@ script_check()
 		echo ""
 		cp $INSTALL_DIR/$REPO/$MYCMD $PWD/$MYCMD
 		echo "After this script completes, restart the $MYCMD with this command:"
-		echo "./$MYCMD $GEN_DATA_SCALE $QUIET"
+		echo "./$MYCMD 
 		exit 1
 	fi
 
@@ -217,7 +265,7 @@ script_check
 check_sudo
 echo_variables
 
-su --session-command="cd \"$INSTALL_DIR/$REPO\"; ./rollout.sh $GEN_DATA_SCALE $EXPLAIN_ANALYZE $SQL_VERSION $RANDOM_DISTRIBUTION $QUIET" $ADMIN_USER
+su --session-command="cd \"$INSTALL_DIR/$REPO\"; ./rollout.sh $GEN_DATA_SCALE $EXPLAIN_ANALYZE $SQL_VERSION $RANDOM_DISTRIBUTION $RUN_COMPILE_TPCDS $RUN_GEN_DATA $RUN_INIT $RUN_DDL $RUN_LOAD $RUN_SQL" $ADMIN_USER
 
 if [ "$MULTI_USER_TEST" == "true" ]; then
 	su --session-command="cd \"$INSTALL_DIR/$REPO/testing\"; ./rollout.sh $GEN_DATA_SCALE $MULTI_USER_COUNT $SQL_VERSION" $ADMIN_USER 
