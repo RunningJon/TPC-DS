@@ -3,17 +3,18 @@
 set -e
 GEN_DATA_SCALE=$1
 number_sessions=$2
-E9=$3
+SQL_VERSION=$3
 
-if [[ "$GEN_DATA_SCALE" == "" || "$number_sessions" == "" || "$E9" == "" ]]; then
-	echo "Error: you must provide the scale, the number of sessions, and E9 true or false as parameters."
-	echo "Example: ./rollout.sh 3000 5 false"
-	echo "This will execute the TPC-DS queries for 3TB of data and 5 concurrent sessions that are dynamically."
-	echo "created with dsqgen.  The E9 option will use the static queries and is only valid for 5 sessions."
+if [[ "$GEN_DATA_SCALE" == "" || "$number_sessions" == "" || "$SQL_VERSION" == "" ]]; then
+	echo "Error: you must provide the scale, the number of sessions, and SQL_VERSION as parameters."
+	echo "Example: ./rollout.sh 3000 5 tpcds"
+	echo "This will execute the TPC-DS queries for 3TB of data and 5 concurrent sessions that are dynamically"
+	echo "created with dsqgen.  The E9 option will use the static queries and static order that is only valid for 5 sessions."
+	echo "The imp option for Impala, will use the static queries but random order."
 	exit 1
 fi
 
-if [ "$E9" == "true" ]; then 
+if [ "$SQL_VERSION" == "e9" ]; then 
 	if [ "$number_sessions" -ne "5" ]; then
 		echo "E9 testing only supports 5 concurrent sessions."
 		exit 1

@@ -33,7 +33,7 @@ group by c_last_name
 ,s_store_name
 ,ca_state
 ,s_state
-,i_color
+,item.i_color
 ,i_current_price
 ,i_manager_id
 ,i_units
