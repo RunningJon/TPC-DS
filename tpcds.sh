@@ -228,7 +228,7 @@ script_check()
 		echo ""
 		cp $INSTALL_DIR/$REPO/$MYCMD $PWD/$MYCMD
 		echo "After this script completes, restart the $MYCMD with this command:"
-		echo "./$MYCMD 
+		echo "./$MYCMD"
 		exit 1
 	fi
 
