@@ -1,4 +1,4 @@
--- start query 4 in stream 0 using template query4.tpl
+-- start query 93 in stream 0 using template query4.tpl and seed 720533148
 with year_total as (
  select c_customer_id customer_id
        ,c_first_name customer_first_name
@@ -15,7 +15,6 @@ with year_total as (
      ,date_dim
  where c_customer_sk = ss_customer_sk
    and ss_sold_date_sk = d_date_sk
-   and ss_sold_date_sk between 2451180 and 2451910
  group by c_customer_id
          ,c_first_name
          ,c_last_name
@@ -29,7 +28,7 @@ with year_total as (
        ,c_first_name customer_first_name
        ,c_last_name customer_last_name
        ,c_preferred_cust_flag customer_preferred_cust_flag
-      ,c_birth_country customer_birth_country
+       ,c_birth_country customer_birth_country
        ,c_login customer_login
        ,c_email_address customer_email_address
        ,d_year dyear
@@ -40,7 +39,6 @@ with year_total as (
      ,date_dim
  where c_customer_sk = cs_bill_customer_sk
    and cs_sold_date_sk = d_date_sk
-   and cs_sold_date_sk between 2451180 and 2451910
  group by c_customer_id
          ,c_first_name
          ,c_last_name
@@ -65,7 +63,6 @@ union all
      ,date_dim
  where c_customer_sk = ws_bill_customer_sk
    and ws_sold_date_sk = d_date_sk
-   and ws_sold_date_sk between 2451180 and 2451910
  group by c_customer_id
          ,c_first_name
          ,c_last_name
@@ -75,9 +72,11 @@ union all
          ,c_email_address
          ,d_year
          )
---original line - select * from (  select  t_s_secyear.customer_login
--- select * from (  select  t_s_secyear.customer_login, t_s_secyear.year_total
-select t_s_secyear.customer_last_name
+  select  
+                  t_s_secyear.customer_id
+                 ,t_s_secyear.customer_first_name
+                 ,t_s_secyear.customer_last_name
+                 ,t_s_secyear.customer_email_address
  from year_total t_s_firstyear
      ,year_total t_s_secyear
      ,year_total t_c_firstyear
@@ -95,12 +94,12 @@ select t_s_secyear.customer_last_name
    and t_s_secyear.sale_type = 's'
    and t_c_secyear.sale_type = 'c'
    and t_w_secyear.sale_type = 'w'
-   and t_s_firstyear.dyear =  1999
-   and t_s_secyear.dyear = 1999+1
-   and t_c_firstyear.dyear =  1999
-   and t_c_secyear.dyear =  1999+1
-   and t_w_firstyear.dyear = 1999
-   and t_w_secyear.dyear = 1999+1
+   and t_s_firstyear.dyear =  1998
+   and t_s_secyear.dyear = 1998+1
+   and t_c_firstyear.dyear =  1998
+   and t_c_secyear.dyear =  1998+1
+   and t_w_firstyear.dyear = 1998
+   and t_w_secyear.dyear = 1998+1
    and t_s_firstyear.year_total > 0
    and t_c_firstyear.year_total > 0
    and t_w_firstyear.year_total > 0
@@ -108,5 +107,8 @@ select t_s_secyear.customer_last_name
            > case when t_s_firstyear.year_total > 0 then t_s_secyear.year_total / t_s_firstyear.year_total else null end
    and case when t_c_firstyear.year_total > 0 then t_c_secyear.year_total / t_c_firstyear.year_total else null end
            > case when t_w_firstyear.year_total > 0 then t_w_secyear.year_total / t_w_firstyear.year_total else null end
- order by t_s_secyear.customer_last_name
-limit 100 ; 
+ order by t_s_secyear.customer_id
+         ,t_s_secyear.customer_first_name
+         ,t_s_secyear.customer_last_name
+         ,t_s_secyear.customer_email_address
+limit 100;
