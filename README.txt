@@ -29,7 +29,8 @@ concatenation with || so they changed the SQL to use their concat() function.  T
 was changed back.  Intervals were changed from "interval 30 days" to 
 "'30 days'::interval".  Query hints were removed.
 
-Query 24 was heavily modified by Cloudera so reverting to the original.
+Queries 4, 24, 35, and 51 were heavily modified by Cloudera so reverting to the original 
+TPC-DS version.
 
 These options are set in tpcds_variables like so:
 SQL_VERSION="tpcds"
@@ -81,16 +82,8 @@ enough space.
 ########################################################################################
 Execution
 ########################################################################################
-1. Execute tpcds.sh and specify the scale in Gigabtes 
-./tpcds.sh 100 
-
-This example will create a 100 GB TPC-DS dataset and run all of the queries.
-
-A quiet mode with no user prompts is available when an optional second parameter is 
-provided with any value.
-
-Example:
-./tpcds.sh 100 shhh
+1. Execute tpcds.sh
+./tpcds.sh
 
 ########################################################################################
 Notes
@@ -101,7 +94,7 @@ in each segment directory on each segment host / data node.
 You can update these directories to be symbolic links to better utilize the disk 
 volumes you have available.
 - Example of running tpcds as root as a background process:
-nohup ./tpcds.sh 3000 shh > tpcds.log 2>&1 < tpcds.log &
+nohup ./tpcds.sh > tpcds.log 2>&1 < tpcds.log &
 
 ########################################################################################
 TPC-DS Minor Modifications
