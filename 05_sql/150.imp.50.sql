@@ -27,7 +27,8 @@ from
 where
 -- ss_sold_date_sk between 2451576 and 2451604
 -- and 
-sr_returned_date_sk between 2452184 and 2452214
+--removed Cloudera cheat
+--sr_returned_date_sk between 2452184 and 2452214
 and d2.d_year = 2001
 and d2.d_moy  = 10
 and ss_ticket_number = sr_ticket_number

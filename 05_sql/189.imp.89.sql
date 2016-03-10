@@ -25,7 +25,8 @@ from
         and i_class in ('wallpaper', 'parenting', 'musical'))
       or (i_category in ('Shoes', 'Jewelry', 'Men')
         and i_class in ('womens', 'birdal', 'pants')))
-    and ss_sold_date_sk between 2451545 and 2451910  -- partition key filter
+    --removed Cloudera cheat
+    --and ss_sold_date_sk between 2451545 and 2451910  -- partition key filter
   group by
     i_category,
     i_class,

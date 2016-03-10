@@ -24,13 +24,12 @@ https://github.com/cloudera/impala-tpcds-kit
 The license file for these queries is also included:
 impala_queries_license.txt
 
-Lastly, the Impala queries were changed for syntax only.  Impala doesn't support the 
-concatenation with || so they changed the SQL to use their concat() function.  This 
-was changed back.  Intervals were changed from "interval 30 days" to 
-"'30 days'::interval".  Query hints were removed.
-
-Queries 3, 4, 7, 9, 14, 24, 35, 46, and 51 were heavily modified by Cloudera so 
-reverting to the original TPC-DS version.
+The Impala queries were changed for syntax and to remove partition cheating.  Impala 
+doesn't support the concatenation with || so they changed the SQL to use their concat() 
+function.  This was changed back.  Intervals were changed from "interval 30 days" to 
+"'30 days'::interval".  Query hints were removed.  There are 117 removals of explicit 
+partition pruning in 63 unique queries.  Queries 3, 4, 7, 9, 14, 24, 35, 46, and 51 were 
+heavily modified by Cloudera so reverting to the original TPC-DS version.
 
 These options are set in tpcds_variables like so:
 SQL_VERSION="tpcds"

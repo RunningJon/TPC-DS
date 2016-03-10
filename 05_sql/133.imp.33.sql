@@ -15,7 +15,8 @@ from
 where i_category in ('Books'))
  and     ss_item_sk              = i_item_sk
  and     ss_sold_date_sk         = d_date_sk
- and ss_sold_date_sk between 2450874 and 2450904
+ --removed Cloudera cheat
+ --and ss_sold_date_sk between 2450874 and 2450904
  and     d_year                  = 1998
  and     d_moy                   = 3
  and     ss_addr_sk              = ca_address_sk
@@ -37,7 +38,8 @@ from
 where i_category in ('Books'))
  and     cs_item_sk              = i_item_sk
  and     cs_sold_date_sk         = d_date_sk
- and cs_sold_date_sk between 2450874 and 2450904
+ --removed Cloudera cheat
+ --and cs_sold_date_sk between 2450874 and 2450904
  and     d_year                  = 1998
  and     d_moy                   = 3
  and     cs_bill_addr_sk         = ca_address_sk
@@ -59,7 +61,8 @@ from
 where i_category in ('Books'))
  and     ws_item_sk              = i_item_sk
  and     ws_sold_date_sk         = d_date_sk
- and ws_sold_date_sk between 2450874 and 2450904
+ --removed Cloudera cheat
+ --and ws_sold_date_sk between 2450874 and 2450904
  and     d_year                  = 1998
  and     d_moy                   = 3
  and     ws_bill_addr_sk         = ca_address_sk

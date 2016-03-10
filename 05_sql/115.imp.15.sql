@@ -6,7 +6,8 @@ select  ca_zip
      ,customer_address
      ,date_dim
  where
-        cs_sold_date_sk between 2450905 and 2450997
+        --removed Cloudera cheat
+        --cs_sold_date_sk between 2450905 and 2450997
         and cs_bill_customer_sk = c_customer_sk
         and c_current_addr_sk = ca_address_sk
         and ( substr(ca_zip,1,5) in ('85669', '86197','88274','83405','86475',
@@ -14,7 +15,8 @@ select  ca_zip
               or ca_state in ('CA','WA','GA')
               or cs_sales_price > 500)
         and cs_sold_date_sk = d_date_sk
-        and cs_sold_date_sk between 2450906 and 2450996
+        --removed Cloudera cheat
+        --and cs_sold_date_sk between 2450906 and 2450996
         and d_qoy = 2 and d_year = 1998
  group by ca_zip
  order by ca_zip

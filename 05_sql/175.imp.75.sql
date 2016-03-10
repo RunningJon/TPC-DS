@@ -19,7 +19,8 @@ WITH all_sales AS (
                           LEFT JOIN catalog_returns ON (cs_order_number=cr_order_number
                                                     AND cs_item_sk=cr_item_sk) 
        WHERE i_category='Shoes'
-	and cs_sold_date_sk between 2451180        and 2451910 
+        --removed Cloudera cheat
+	--and cs_sold_date_sk between 2451180        and 2451910 
        UNION
        SELECT d_year
              ,i_brand_id
@@ -33,7 +34,8 @@ WITH all_sales AS (
                         LEFT JOIN store_returns ON (ss_ticket_number=sr_ticket_number
                                                 AND ss_item_sk=sr_item_sk) 
        WHERE i_category='Shoes'
-	and ss_sold_date_sk between 2451180        and 2451910 
+        --removed Cloudera cheat
+	--and ss_sold_date_sk between 2451180        and 2451910 
        UNION
        SELECT d_year
              ,i_brand_id
@@ -47,7 +49,8 @@ WITH all_sales AS (
                       LEFT JOIN web_returns ON (ws_order_number=wr_order_number
                                             AND ws_item_sk=wr_item_sk )
        WHERE i_category='Shoes' 
-	and ws_sold_date_sk between 2451180        and 2451910 
+        --removed Cloudera cheat
+	--and ws_sold_date_sk between 2451180        and 2451910 
 	) sales_detail
  GROUP BY d_year, i_brand_id, i_class_id, i_category_id, i_manufact_id) 
 SELECT  prev_yr.d_year AS prev_year

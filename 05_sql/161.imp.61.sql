@@ -10,7 +10,8 @@ from
         ,customer_address 
         ,item
    where ss_sold_date_sk = d_date_sk
-   and   ss_sold_date_sk between 2452580 and 2452609
+   --removed Cloudera cheat
+   --and   ss_sold_date_sk between 2452580 and 2452609
    and   ss_store_sk = s_store_sk
    and   ss_promo_sk = p_promo_sk
    and   ss_customer_sk= c_customer_sk
@@ -30,7 +31,8 @@ from
         ,customer_address
         ,item
    where ss_sold_date_sk = d_date_sk
-   and   ss_sold_date_sk between 2452580 and 2452609
+   --removed Cloudera cheat
+   --and   ss_sold_date_sk between 2452580 and 2452609
    and   ss_store_sk = s_store_sk
    and   ss_customer_sk= c_customer_sk
    and   ca_address_sk = c_current_addr_sk
