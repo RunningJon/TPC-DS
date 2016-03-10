@@ -29,8 +29,8 @@ concatenation with || so they changed the SQL to use their concat() function.  T
 was changed back.  Intervals were changed from "interval 30 days" to 
 "'30 days'::interval".  Query hints were removed.
 
-Queries 4, 14, 24, 35, and 51 were heavily modified by Cloudera so reverting to the 
-original TPC-DS version.
+Queries 3, 4, 7, 9, 14, 24, 35, 46, and 51 were heavily modified by Cloudera so 
+reverting to the original TPC-DS version.
 
 These options are set in tpcds_variables like so:
 SQL_VERSION="tpcds"
