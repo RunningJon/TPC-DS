@@ -9,7 +9,8 @@ from (select i_manager_id
           ,store
       where ss_item_sk = i_item_sk
         and ss_sold_date_sk = d_date_sk
-	and ss_sold_date_sk between 2452123 and	2452487
+        --removed Cloudera cheat
+	--and ss_sold_date_sk between 2452123 and	2452487
         and ss_store_sk = s_store_sk
         and d_month_seq in (1219,1219+1,1219+2,1219+3,1219+4,1219+5,1219+6,1219+7,1219+8,1219+9,1219+10,1219+11)
         and ((    i_category in ('Books','Children','Electronics')

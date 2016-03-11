@@ -11,7 +11,8 @@
      item,
      promotion
  where ss_sold_date_sk = d_date_sk
-       and ss_sold_date_sk between 2451767 and 2451797
+       --removed Cloudera cheat
+       --and ss_sold_date_sk between 2451767 and 2451797
        and d_date between cast('2000-08-10' as timestamp)
                   and (cast('2000-08-10' as timestamp) +  '30 days'::interval)
        and ss_store_sk = s_store_sk
@@ -33,7 +34,8 @@
      item,
      promotion
  where cs_sold_date_sk = d_date_sk
-       and cs_sold_date_sk between 2451767 and 2451797
+       --removed Cloudera cheat
+       --and cs_sold_date_sk between 2451767 and 2451797
        and d_date between cast('2000-08-10' as timestamp)
                   and (cast('2000-08-10' as timestamp) + '30 days'::interval)
         and cs_catalog_page_sk = cp_catalog_page_sk
@@ -55,7 +57,8 @@ group by cp_catalog_page_id)
      item,
      promotion
  where ws_sold_date_sk = d_date_sk
-       and ws_sold_date_sk between 2451767 and 2451797
+       --removed Cloudera cheat
+       --and ws_sold_date_sk between 2451767 and 2451797
        and d_date between cast('2000-08-10' as timestamp)
                   and (cast('2000-08-10' as timestamp) +  '30 days'::interval)
         and ws_web_site_sk = web_site_sk

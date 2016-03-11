@@ -8,7 +8,8 @@ select i_brand_id brand_id, i_brand brand,t_hour,t_minute,
                         ws_sold_time_sk as time_sk
                  from web_sales,date_dim
                  where    d_date_sk = ws_sold_date_sk
-                   and ws_sold_date_sk between 2452610 and 2452640 
+                   --removed Cloudera cheat
+                   --and ws_sold_date_sk between 2452610 and 2452640 
                    and d_moy=12
                    and d_year=2002
                  union all
@@ -18,7 +19,8 @@ select i_brand_id brand_id, i_brand brand,t_hour,t_minute,
                         cs_sold_time_sk as time_sk
                  from catalog_sales,date_dim
                  where   d_date_sk = cs_sold_date_sk
-                   and cs_sold_date_sk between 2452610 and 2452640 
+                   --removed Cloudera cheat
+                   --and cs_sold_date_sk between 2452610 and 2452640 
                    and d_moy=12
                    and d_year=2002
                  union all
@@ -28,7 +30,8 @@ select i_brand_id brand_id, i_brand brand,t_hour,t_minute,
                         ss_sold_time_sk as time_sk
                  from store_sales,date_dim
                  where  d_date_sk = ss_sold_date_sk
-                   and ss_sold_date_sk between 2452610 and 2452640 
+                   --removed Cloudera cheat
+                   --and ss_sold_date_sk between 2452610 and 2452640 
                    and d_moy=12
                    and d_year=2002
                  ) as tmp,time_dim

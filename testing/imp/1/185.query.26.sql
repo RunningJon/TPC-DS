@@ -13,8 +13,9 @@ select  i_item_id,
        cd_marital_status = 'D' and
        cd_education_status = 'College' and
        (p_channel_email = 'N' or p_channel_event = 'N') and
-       d_year = 2001 and 
-       cs_sold_date_sk between 2451910 and 2452276
+       d_year = 2001 --and 
+       --removed Cloudera cheat
+       --cs_sold_date_sk between 2451910 and 2452276
  group by i_item_id
  order by i_item_id
  limit 100;

@@ -11,7 +11,8 @@ select avg(ss_quantity)
      ,date_dim
  where s_store_sk = ss_store_sk
  and  ss_sold_date_sk = d_date_sk and d_year = 2001
- and  ss_sold_date_sk between 2451911 and 2452275
+ --removed Cloudera cheat
+ --and  ss_sold_date_sk between 2451911 and 2452275
  and cd_demo_sk = ss_cdemo_sk
  and ss_hdemo_sk=hd_demo_sk
  and ss_addr_sk = ca_address_sk

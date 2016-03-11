@@ -28,7 +28,8 @@ from
     and (case when household_demographics.hd_vehicle_count > 0 then household_demographics.hd_dep_count / household_demographics.hd_vehicle_count else null end) > 1.2
     and date_dim.d_year in (1998, 1998 + 1, 1998 + 2)
     and store.s_county in ('Saginaw County', 'Sumner County', 'Appanoose County', 'Daviess County', 'Fairfield County', 'Raleigh County', 'Ziebach County', 'Williamson County')
-    and ss_sold_date_sk between 2450816 and 2451910 -- partition key filter
+    --removed Cloudera cheat
+    --and ss_sold_date_sk between 2450816 and 2451910 -- partition key filter
   group by
     ss_ticket_number,
     ss_customer_sk

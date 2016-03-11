@@ -10,7 +10,8 @@
    -- d1.d_year = [YEAR]
  d1.d_month_seq between 1209 and 1209+11
  and d1.d_date_sk = ss_sold_date_sk
- and ss_sold_date_sk between 2451819 and 2452183
+ --removed Cloudera cheat
+ --and ss_sold_date_sk between 2451819 and 2452183
  and s_store_sk  = ss_store_sk
  and s_state in
              ( select s_state
@@ -20,7 +21,8 @@
                       where  d_month_seq between 1209 and 1209+11
 				-- d_year =[YEAR] 
  			    and d_date_sk = ss_sold_date_sk
- 			    and ss_sold_date_sk between 2451819 and 2452183
+                            --removed Cloudera cheat
+ 			    --and ss_sold_date_sk between 2451819 and 2452183
  			    and s_store_sk  = ss_store_sk
                       group by s_state
                      ) tmp1 

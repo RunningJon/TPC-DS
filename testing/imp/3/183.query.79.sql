@@ -27,7 +27,8 @@ from
     and date_dim.d_dow = 1
      and date_dim.d_year in (1998, 1998 + 1, 1998 + 2)
     and store.s_number_employees between 200 and 295
-    and ss_sold_date_sk between 2450819 and 2451904
+    --removed Cloudera cheat
+    --and ss_sold_date_sk between 2450819 and 2451904
     -- partition key filter
     --and ss_sold_date_sk in (2450819, 2450826, 2450833, 2450840, 2450847, 2450854, 2450861, 2450868, 2450875, 2450882, 2450889,
     -- 2450896, 2450903, 2450910, 2450917, 2450924, 2450931, 2450938, 2450945, 2450952, 2450959, 2450966, 2450973, 2450980, 2450987,

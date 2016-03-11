@@ -19,7 +19,8 @@ join date_dim d3 on (cs_ship_date_sk = d3.d_date_sk)
 left outer join promotion on (cs_promo_sk=p_promo_sk)
 left outer join catalog_returns on (cr_item_sk = cs_item_sk and cr_order_number = cs_order_number)
 where d1.d_week_seq = d2.d_week_seq
-  and cs_sold_date_sk between 2452276 and 2452640
+  --removed Cloudera cheat
+  --and cs_sold_date_sk between 2452276 and 2452640
   and inv_quantity_on_hand < cs_quantity
   and cast(d3.d_date as timestamp) > cast(d1.d_date as timestamp) + '5 days'::interval
   and hd_buy_potential = '>10000'

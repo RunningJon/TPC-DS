@@ -13,7 +13,8 @@
         --avg(ss_sales_price) agg4
  from store_sales, customer_demographics, date_dim, store, item
  where ss_sold_date_sk = d_date_sk and
-       ss_sold_date_sk between 2451545 and 2451910 and
+       --removed Cloudera cheat
+       --ss_sold_date_sk between 2451545 and 2451910 and
        ss_item_sk = i_item_sk and
        ss_store_sk = s_store_sk and
        ss_cdemo_sk = cd_demo_sk and

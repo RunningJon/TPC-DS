@@ -22,7 +22,8 @@ from
     or (i_category in ('Women', 'Music', 'Men')
       and i_class in ('accessories', 'classical', 'fragrances', 'pants')
       and i_brand in ('amalgimporto #1', 'edu packscholar #1', 'exportiimporto #1', 'importoamalg #1')))
-    and ss_sold_date_sk between 2451911 and 2452275 -- partition key filter
+    --removed Cloudera cheat
+    --and ss_sold_date_sk between 2451911 and 2452275 -- partition key filter
   group by
     i_manufact_id,
     d_qoy

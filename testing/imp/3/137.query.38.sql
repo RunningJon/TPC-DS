@@ -22,8 +22,9 @@ count(*)
                               where
                                 (d_month_seq between 1215 and 1226) and
                                 (ss_customer_sk = c_customer_sk) and
-                                (ss_sold_date_sk = d_date_sk) and
-                    			(ss_sold_date_sk between 2452001 and 2452365)
+                                (ss_sold_date_sk = d_date_sk) --and
+                                        --removed Cloudera cheat
+                    			--(ss_sold_date_sk between 2452001 and 2452365)
                               union all
                               select c_last_name,c_first_name,d_date,-1 as c3
                               from
@@ -31,8 +32,9 @@ count(*)
                               where
                                 (d_month_seq between 1215 and 1226) and
                                 (cs_bill_customer_sk = c_customer_sk) and
-                                (cs_sold_date_sk = d_date_sk) and
-                    			(cs_sold_date_sk between 2452001 and 2452365)
+                                (cs_sold_date_sk = d_date_sk) --and
+                                        --removed Cloudera cheat
+                    			--(cs_sold_date_sk between 2452001 and 2452365)
                              ) as q13
                            group by
                              c_last_name,
@@ -50,8 +52,9 @@ count(*)
                   	where
 	                    (d_month_seq between 1215 and 1226) and
 	                    (ws_bill_customer_sk = c_customer_sk) and
-	                    (ws_sold_date_sk = d_date_sk) and
-	                    (ws_sold_date_sk between 2452001 and 2452365)
+	                    (ws_sold_date_sk = d_date_sk) --and
+                            --removed Cloudera cheat
+	                    --(ws_sold_date_sk between 2452001 and 2452365)
                     ) as q18
                group by
                  c_last_name,

@@ -25,7 +25,8 @@
      date_dim,
      store
  where date_sk = d_date_sk
-      and date_sk between 2452133 and 2452147
+      --removed Cloudera cheat
+      --and date_sk between 2452133 and 2452147
       and d_date between cast('2001-08-11' as timestamp)
                   and (cast('2001-08-11' as timestamp) +  '14 days'::interval)
        and store_sk = s_store_sk
@@ -57,7 +58,8 @@
      date_dim,
      catalog_page
  where date_sk = d_date_sk
-      and date_sk between 2452133 and 2452147
+      --removed Cloudera cheat
+      --and date_sk between 2452133 and 2452147
       and d_date between cast('2001-08-11' as timestamp)
                   and (cast('2001-08-11' as timestamp) +  '14 days'::interval)
        and page_sk = cp_catalog_page_sk
@@ -91,7 +93,8 @@
      date_dim,
      web_site
  where date_sk = d_date_sk
-      and date_sk between 2452133 and 2452147
+      --removed Cloudera cheat
+      --and date_sk between 2452133 and 2452147
       and d_date between cast('2001-08-11' as timestamp)
                   and (cast('2001-08-11' as timestamp) +  '14 days'::interval)
        and wsr_web_site_sk = web_site_sk

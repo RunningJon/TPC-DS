@@ -9,7 +9,8 @@
         a.ca_address_sk = c.c_current_addr_sk
         and c.c_customer_sk = s.ss_customer_sk
         and s.ss_sold_date_sk = d.d_date_sk
-	and s.ss_sold_date_sk between 2451180 and 2451210
+        --removed Cloudera cheat
+	--and s.ss_sold_date_sk between 2451180 and 2451210
         and s.ss_item_sk = i.i_item_sk
         -- and d.d_month_seq =
         and d.d_month_seq in

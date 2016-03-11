@@ -10,7 +10,8 @@
        and d_date between cast('2000-08-02' as timestamp)
                   and (cast('2000-08-02' as timestamp) + '30 days'::interval)
        and ss_store_sk = s_store_sk
-       and ss_sold_date_sk between 2451759 and 2451789
+       --removed Cloudera cheat
+       --and ss_sold_date_sk between 2451759 and 2451789
  group by s_store_sk)
  ,
  sr as
@@ -24,7 +25,8 @@
        and d_date between cast('2000-08-02' as timestamp)
                   and (cast('2000-08-02' as timestamp) + '30 days'::interval)
        and sr_store_sk = s_store_sk
-       and sr_returned_date_sk between 2451759 and 2451789
+       --removed Cloudera cheat
+       --and sr_returned_date_sk between 2451759 and 2451789
  group by s_store_sk), 
  cs as
  (select cs_call_center_sk,
@@ -35,7 +37,8 @@
  where cs_sold_date_sk = d_date_sk
        and d_date between cast('2000-08-02' as timestamp)
                   and (cast('2000-08-02' as timestamp) + '30 days'::interval)
-       and cs_sold_date_sk between 2451759 and 2451789
+       --removed Cloudera cheat
+       --and cs_sold_date_sk between 2451759 and 2451789
  group by cs_call_center_sk 
  ), 
  cr as
@@ -47,7 +50,8 @@
  where cr_returned_date_sk = d_date_sk
        and d_date between cast('2000-08-02' as timestamp)
                   and (cast('2000-08-02' as timestamp) + '30 days'::interval)
-       and cr_returned_date_sk between 2451759 and 2451789
+       --removed Cloudera cheat
+       --and cr_returned_date_sk between 2451759 and 2451789
  ), 
  ws as
  ( select wp_web_page_sk,
@@ -60,7 +64,8 @@
        and d_date between cast('2000-08-02' as timestamp)
                   and (cast('2000-08-02' as timestamp) + '30 days'::interval)
        and ws_web_page_sk = wp_web_page_sk
-       and ws_sold_date_sk between 2451759 and 2451789
+       --removed Cloudera cheat
+       --and ws_sold_date_sk between 2451759 and 2451789
  group by wp_web_page_sk), 
  wr as
  (select wp_web_page_sk,
@@ -73,7 +78,8 @@
        and d_date between cast('2000-08-02' as timestamp)
                   and (cast('2000-08-02' as timestamp) + '30 days'::interval)
        and wr_web_page_sk = wp_web_page_sk
-       and wr_returned_date_sk between 2451759 and 2451789
+       --removed Cloudera cheat
+       --and wr_returned_date_sk between 2451759 and 2451789
  group by wp_web_page_sk),
  results as
  (select channel

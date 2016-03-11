@@ -11,7 +11,8 @@ with year_total as (
      ,store_sales
      ,date_dim
  where c_customer_sk = ss_customer_sk
-   and ss_sold_date_sk between 2451545 and 2452275
+   --removed Cloudera cheat
+   --and ss_sold_date_sk between 2451545 and 2452275
    and ss_sold_date_sk = d_date_sk
    and d_year in (2000,2000+1)
  group by c_customer_id

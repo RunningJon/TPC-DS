@@ -12,7 +12,8 @@ from item
 where i_color in ('plum','peach','sandy'))
  and     ss_item_sk              = i_item_sk
  and     ss_sold_date_sk         = d_date_sk
- and     ss_sold_date_sk between 2451331 and 2451360
+ --removed Cloudera cheat
+ --and     ss_sold_date_sk between 2451331 and 2451360
  and     d_year                  = 1999
  and     d_moy                   = 6
  and     ss_addr_sk              = ca_address_sk
@@ -32,7 +33,8 @@ from item
 where i_color in ('plum','peach','sandy'))
  and     cs_item_sk              = i_item_sk
  and     cs_sold_date_sk         = d_date_sk
- and     cs_sold_date_sk between 2451331 and 2451360
+ --removed Cloudera cheat
+ --and     cs_sold_date_sk between 2451331 and 2451360
  and     d_year                  = 1999
  and     d_moy                   = 6
  and     cs_bill_addr_sk         = ca_address_sk
@@ -52,7 +54,8 @@ from item
 where i_color in ('plum','peach','sandy'))
  and     ws_item_sk              = i_item_sk
  and     ws_sold_date_sk         = d_date_sk
- and     ws_sold_date_sk between 2451331 and 2451360
+ --removed Cloudera cheat
+ --and     ws_sold_date_sk between 2451331 and 2451360
  and     d_year                  = 1999
  and     d_moy                   = 6
  and     ws_bill_addr_sk         = ca_address_sk

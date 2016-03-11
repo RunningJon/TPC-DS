@@ -6,7 +6,8 @@ from store_returns
   ,date_dim
 where sr_returned_date_sk = d_date_sk
 and d_year =2002
-and sr_returned_date_sk between 2452276 and 2452640
+--removed Cloudera cheat
+--and sr_returned_date_sk between 2452276 and 2452640
 group by sr_customer_sk
 ,sr_store_sk)
 select  c_customer_id

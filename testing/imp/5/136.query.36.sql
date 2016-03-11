@@ -14,7 +14,8 @@
  where
     d1.d_year = 2001
     and d1.d_date_sk = ss_sold_date_sk
-    and ss_sold_date_sk between 2451911	and 2452275
+    --removed Cloudera cheat
+    --and ss_sold_date_sk between 2451911	and 2452275
     and i_item_sk  = ss_item_sk 
     and s_store_sk  = ss_store_sk
     and s_state in ('AL','SD','TN','SD',

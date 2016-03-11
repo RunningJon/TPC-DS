@@ -9,7 +9,8 @@ select  substr(r_reason_desc,1,20)
    and ws_item_sk = wr_item_sk
    and ws_order_number = wr_order_number
    and ws_sold_date_sk = d_date_sk and d_year = 2002
-   and ws_sold_date_sk between 2452276 and 2452640
+   --removed Cloudera cheat
+   --and ws_sold_date_sk between 2452276 and 2452640
    and cd1.cd_demo_sk = wr_refunded_cdemo_sk
    and cd2.cd_demo_sk = wr_returning_cdemo_sk
    and ca_address_sk = wr_refunded_addr_sk

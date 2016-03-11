@@ -12,7 +12,8 @@ with ss_items as
                                       from date_dim
                                       where d_date = '2001-06-13' limit 1))
    and ss_sold_date_sk   = d_date_sk
-   and ss_sold_date_sk between 2452073 and 2452079
+   --removed Cloudera cheat
+   --and ss_sold_date_sk between 2452073 and 2452079
  group by i_item_id),
  cs_items as
  (select i_item_id item_id
@@ -27,7 +28,8 @@ with ss_items as
                                       from date_dim
                                       where d_date = '2001-06-13' limit 1))
   and  cs_sold_date_sk = d_date_sk
-  and  cs_sold_date_sk between 2452073 and 2452079
+  --removed Cloudera cheat
+  --and  cs_sold_date_sk between 2452073 and 2452079
  group by i_item_id),
  ws_items as
  (select i_item_id item_id

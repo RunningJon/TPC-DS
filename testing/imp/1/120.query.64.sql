@@ -52,7 +52,8 @@ cross_sales as
   WHERE  
 	 ss_store_sk = s_store_sk AND
          ss_sold_date_sk = d1.d_date_sk AND
-         ss_sold_date_sk between 2451180 and 2451910 AND
+         --removed Cloudera cheat
+         --ss_sold_date_sk between 2451180 and 2451910 AND
          ss_customer_sk = c_customer_sk AND
          ss_cdemo_sk= cd1.cd_demo_sk AND
          ss_hdemo_sk = hd1.hd_demo_sk AND

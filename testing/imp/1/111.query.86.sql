@@ -8,7 +8,8 @@
  where
  d1.d_month_seq between 1215 and 1215+11
  and d1.d_date_sk = ws_sold_date_sk
- and ws_sold_date_sk between 2452001 and 2452365
+ --removed Cloudera cheat
+ --and ws_sold_date_sk between 2452001 and 2452365
  and i_item_sk  = ws_item_sk
  group by i_category,i_class
  ) ,

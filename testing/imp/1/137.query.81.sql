@@ -7,7 +7,8 @@ with customer_total_return as
      ,date_dim
      ,customer_address
  where cr_returned_date_sk = d_date_sk 
-   and cr_returned_date_sk between 2452276 and 2452640
+   --removed Cloudera cheat
+   --and cr_returned_date_sk between 2452276 and 2452640
    and d_year =2002
    and cr_returning_addr_sk = ca_address_sk 
  group by cr_returning_customer_sk

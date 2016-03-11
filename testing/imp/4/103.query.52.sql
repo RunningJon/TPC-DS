@@ -14,7 +14,8 @@ where
   and item.i_manager_id = 1
   and dt.d_moy = 12
   and dt.d_year = 1998
-  and ss_sold_date_sk between 2451149 and 2451179 -- added for partition pruning
+  --removed Cloudera cheat
+  --and ss_sold_date_sk between 2451149 and 2451179 -- added for partition pruning
 group by
   dt.d_year,
   item.i_brand,

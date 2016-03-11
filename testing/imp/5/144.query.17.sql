@@ -13,10 +13,10 @@ select  i_item_id
        ,count(cs_quantity) as catalog_sales_quantitycount ,avg(cs_quantity) as catalog_sales_quantityave
        ,stddev_samp(cs_quantity)/avg(cs_quantity) as catalog_sales_quantitystdev
        ,stddev_samp(cs_quantity)/avg(cs_quantity) as catalog_sales_quantitycov
- from (select * from store_sales,item, store where ss_sold_date_sk between 2450815 and 2450905 and i_item_sk = ss_item_sk
+ from (select * from store_sales,item, store where /* --removed Cloudera cheat ss_sold_date_sk between 2450815 and 2450905 and */ i_item_sk = ss_item_sk
    and s_store_sk = ss_store_sk) v1
-     ,(select * from store_returns where sr_returned_date_sk between 2450815 and 2451088 ) v2
-     ,(select * from catalog_sales where cs_sold_date_sk between 2450815 and 2451088) v3
+     ,(select * from store_returns /* --removed Cloudera cheat sr_returned_date_sk between 2450815 and 2451088 */) v2
+     ,(select * from catalog_sales /* --removed Cloudera cheat where cs_sold_date_sk between 2450815 and 2451088 */) v3
      ,date_dim d1
      ,date_dim d2
      ,date_dim d3

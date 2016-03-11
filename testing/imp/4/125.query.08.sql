@@ -50,7 +50,8 @@ select  s_store_name
       on (a01.ca_zip = b11.ca_zip )) A2
  where ss_store_sk = s_store_sk
   and ss_sold_date_sk = d_date_sk
-  and ss_sold_date_sk between 2451271 and 2451361 
+  --removed Cloudera cheat
+  --and ss_sold_date_sk between 2451271 and 2451361 
   and d_qoy = 2 and d_year = 1999
   and (substr(s_zip,1,2) = substr(a2.ca_zip,1,2))
  group by s_store_name

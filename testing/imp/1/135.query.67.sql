@@ -7,7 +7,8 @@ with results as
           and ss_item_sk=i_item_sk
           and ss_store_sk = s_store_sk
 	and d_month_seq between 1217 and 1217+11
-	and ss_sold_date_sk between 2452062 and 2452426
+        --removed Cloudera cheat
+	--and ss_sold_date_sk between 2452062 and 2452426
        group by i_category, i_class, i_brand, i_product_name, d_year, d_qoy, d_moy,s_store_id)
  ,
  results_rollup as

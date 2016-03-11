@@ -19,18 +19,21 @@ select
  where
  d1.d_moy = 4
  and d1.d_year = 2001
- and ss_sold_date_sk between 2452001 and 2452030
+ --removed Cloudera cheat
+ --and ss_sold_date_sk between 2452001 and 2452030
  and d1.d_date_sk = ss_sold_date_sk
  and i_item_sk = ss_item_sk
  and s_store_sk = ss_store_sk
  and ss_customer_sk = sr_customer_sk
  and ss_item_sk = sr_item_sk
  and ss_ticket_number = sr_ticket_number
- and sr_returned_date_sk between 2452001 and 2452214
+ --removed Cloudera cheat
+ --and sr_returned_date_sk between 2452001 and 2452214
  and sr_returned_date_sk = d2.d_date_sk
  and d2.d_moy               between 4 and  10
  and d2.d_year              = 2001
- and cs_sold_date_sk between 2452001 and 2452214
+ --removed Cloudera cheat
+ --and cs_sold_date_sk between 2452001 and 2452214
  and sr_customer_sk = cs_bill_customer_sk
  and sr_item_sk = cs_item_sk
  and cs_sold_date_sk = d3.d_date_sk

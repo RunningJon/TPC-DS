@@ -14,7 +14,8 @@ with sr_items as
 		from date_dim
 	  where d_date in ('1998-02-10','1998-10-21','1998-11-09')))
  and   sr_returned_date_sk   = d_date_sk
- and   sr_returned_date_sk between 2450855 and 2451127
+ --removed Cloudera cheat
+ --and   sr_returned_date_sk between 2450855 and 2451127
  group by i_item_id),
  cr_items as
  (select i_item_id item_id,
@@ -31,7 +32,8 @@ with sr_items as
 		from date_dim
 	  where d_date in ('1998-02-10','1998-10-21','1998-11-09')))
  and   cr_returned_date_sk   = d_date_sk
- and   cr_returned_date_sk between 2450855 and 2451127
+ --removed Cloudera cheat
+ --and   cr_returned_date_sk between 2450855 and 2451127
  group by i_item_id),
  wr_items as
  (select i_item_id item_id,

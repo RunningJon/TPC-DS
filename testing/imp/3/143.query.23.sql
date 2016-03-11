@@ -5,7 +5,8 @@ with frequent_ss_items as
       ,date_dim
       ,item
   where ss_sold_date_sk = d_date_sk
-    and ss_sold_date_sk between 2451180 and 2452640
+    --removed Cloudera cheat
+    --and ss_sold_date_sk between 2451180 and 2452640
     and ss_item_sk = i_item_sk
     and d_year in (1999,1999 + 1,1999 + 2,1999 + 3)
   group by substr(i_item_desc,1,30),i_item_sk,d_date
@@ -18,7 +19,8 @@ with frequent_ss_items as
             ,date_dim 
         where ss_customer_sk = c_customer_sk
          and ss_sold_date_sk = d_date_sk
-	 and ss_sold_date_sk between 2451180 and 2452640
+         --removed Cloudera cheat
+	 --and ss_sold_date_sk between 2451180 and 2452640
          and d_year in (1999,1999+1,1999+2,1999+3)
         group by c_customer_sk) x),
  best_ss_customer as
@@ -47,7 +49,8 @@ where t1.ssales > t2.c1
         where d_year = 1999 
          and d_moy = 3 
          and cs_sold_date_sk = d_date_sk 
-         and cs_sold_date_sk between 2451239 and 2451269
+         --removed Cloudera cheat 
+         --and cs_sold_date_sk between 2451239 and 2451269
          and cs_item_sk in (select distinct item_sk from frequent_ss_items)
          and cs_bill_customer_sk in (select distinct c_customer_sk from best_ss_customer)
          and cs_bill_customer_sk = c_customer_sk 
@@ -60,7 +63,8 @@ where t1.ssales > t2.c1
        where d_year = 1999 
          and d_moy = 3 
          and ws_sold_date_sk = d_date_sk 
-         and ws_sold_date_sk between 2451239 and 2451269
+         --removed Cloudera cheat
+         --and ws_sold_date_sk between 2451239 and 2451269
          and ws_item_sk in (select distinct item_sk from frequent_ss_items)
          and ws_bill_customer_sk in (select distinct c_customer_sk from best_ss_customer)
          and ws_bill_customer_sk = c_customer_sk
@@ -73,7 +77,8 @@ with frequent_ss_items as
       ,date_dim 
       ,item
   where ss_sold_date_sk = d_date_sk
-    and ss_sold_date_sk between 2451180 and 2452640
+    --removed Cloudera cheat 
+    --and ss_sold_date_sk between 2451180 and 2452640
     and ss_item_sk = i_item_sk 
     and d_year in (1999,1999+1,1999+2,1999+3)
   group by substr(i_item_desc,1,30),i_item_sk,d_date
@@ -86,7 +91,8 @@ with frequent_ss_items as
             ,date_dim 
         where ss_customer_sk = c_customer_sk
          and ss_sold_date_sk = d_date_sk
-         and ss_sold_date_sk between 2451180 and 2452640
+         --removed Cloudera cheat
+         --and ss_sold_date_sk between 2451180 and 2452640
          and d_year in (1999,1999+1,1999+2,1999+3) 
         group by c_customer_sk) x),
  best_ss_customer as
@@ -115,7 +121,8 @@ where t1.ssales > t2.c1
        where d_year = 1999 
          and d_moy = 3 
          and cs_sold_date_sk = d_date_sk 
-         and cs_sold_date_sk between 2451239 and 2451269
+         --removed Cloudera cheat
+         --and cs_sold_date_sk between 2451239 and 2451269
          and cs_item_sk in (select item_sk from frequent_ss_items)
          and cs_bill_customer_sk in (select c_customer_sk from best_ss_customer))
       union all
@@ -125,7 +132,8 @@ where t1.ssales > t2.c1
        where d_year = 1999 
          and d_moy = 3 
          and ws_sold_date_sk = d_date_sk 
-         and ws_sold_date_sk between 2451239 and 2451269
+         --removed Cloudera cheat
+         --and ws_sold_date_sk between 2451239 and 2451269
          and ws_item_sk in (select item_sk from frequent_ss_items)
          and ws_bill_customer_sk in (select c_customer_sk from best_ss_customer))) y
  limit 100;

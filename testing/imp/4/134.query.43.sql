@@ -18,7 +18,8 @@ where
   and s_store_sk = ss_store_sk
   and s_gmt_offset = -5
   and d_year = 1998
-  and ss_sold_date_sk between 2450816 and 2451179  -- partition key filter
+  --removed Cloudera cheat
+  --and ss_sold_date_sk between 2450816 and 2451179  -- partition key filter
 group by
   s_store_name,
   s_store_id

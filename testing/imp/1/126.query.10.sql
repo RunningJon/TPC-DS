@@ -24,14 +24,16 @@ select
           from store_sales,date_dim
           where c.c_customer_sk = ss_customer_sk and
                 ss_sold_date_sk = d_date_sk and
-                ss_sold_date_sk between 2451970 and 2452091 and
+                --removed Cloudera cheat
+                --ss_sold_date_sk between 2451970 and 2452091 and
                 d_year = 2001 and
                 d_moy between 3 and 3+3) and
    exists ( select * from (select ws_bill_customer_sk c_sk
    -- exists ( select *
             from web_sales,date_dim
             where -- c.c_customer_sk = ws_bill_customer_sk and
-                  ws_sold_date_sk between 2451970 and 2452091 and
+                  --removed Cloudera cheat
+                  --ws_sold_date_sk between 2451970 and 2452091 and
                   ws_sold_date_sk = d_date_sk and -- or
 		  -- (c_customer_sk = cs_ship_customer_sk and
                   -- cs_sold_date_sk = d_date_sk and
@@ -44,7 +46,8 @@ select
             from catalog_sales,date_dim
   --          where c.c_customer_sk = cs_ship_customer_sk and
               where    cs_sold_date_sk = d_date_sk and
-                cs_sold_date_sk between 2451970 and 2452091 and
+                --removed Cloudera cheat
+                --cs_sold_date_sk between 2451970 and 2452091 and
                   d_year = 2001 and
                   d_moy between 3 and 3+3) tab1 where c_sk = c.c_customer_sk)
  group by cd_gender,

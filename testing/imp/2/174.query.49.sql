@@ -29,7 +29,8 @@ select
                          and ws.ws_net_paid > 0
                          and ws.ws_quantity > 0
                          and ws_sold_date_sk = d_date_sk
-                         and ws_sold_date_sk between 2452245 and 2452275
+                         --removed Cloudera cheat
+                         --and ws_sold_date_sk between 2452245 and 2452275
                          and d_year = 2001
                          and d_moy = 12
  		group by ws.ws_item_sk
@@ -73,7 +74,8 @@ select
                          and cs.cs_net_paid > 0
                          and cs.cs_quantity > 0
                          and cs_sold_date_sk = d_date_sk
-                         and cs_sold_date_sk between 2452245 and 2452275
+                         --removed Cloudera cheat
+                         --and cs_sold_date_sk between 2452245 and 2452275
                          and d_year = 2001
                          and d_moy = 12
                  group by cs.cs_item_sk
@@ -113,7 +115,8 @@ select
                          and sts.ss_net_paid > 0 
                          and sts.ss_quantity > 0
                          and ss_sold_date_sk = d_date_sk
-			 and ss_sold_date_sk between 2452245 and 2452275
+                         --removed Cloudera cheat
+			 --and ss_sold_date_sk between 2452245 and 2452275
                          and d_year = 2001
                          and d_moy = 12
  		group by sts.ss_item_sk
