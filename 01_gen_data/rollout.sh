@@ -9,10 +9,11 @@ GEN_DATA_SCALE=$1
 EXPLAIN_ANALYZE=$2
 SQL_VERSION=$3
 RANDOM_DISTRIBUTION=$4
+HAWQ2_NVSEG_PERSEG=$5
 
-if [[ "$GEN_DATA_SCALE" == "" || "$EXPLAIN_ANALYZE" == "" || "$SQL_VERSION" == "" || "$RANDOM_DISTRIBUTION" == "" ]]; then
+if [[ "$GEN_DATA_SCALE" == "" || "$EXPLAIN_ANALYZE" == "" || "$SQL_VERSION" == "" || "$RANDOM_DISTRIBUTION" == "" || "$HAWQ2_NVSEG_PERSEG" == "" ]]; then
 	echo "You must provide the scale as a parameter in terms of Gigabytes, true/false to run queries with EXPLAIN ANALYZE option, the SQL_VERSION, and true/false to use random distrbution."
-	echo "Example: ./rollout.sh 100 false tpcds false"
+	echo "Example: ./rollout.sh 100 false tpcds false 8"
 	echo "This will create 100 GB of data for this test, not run EXPLAIN ANALYZE, use standard TPC-DS, and not use random distribution."
 	exit 1
 fi
@@ -75,7 +76,7 @@ gen_data()
 	else
 		#HAWQ 2
 		PARALLEL=$(hawq state | grep "Total segments count" | awk -F '=' '{print $2}')
-		PARALLEL=$(($PARALLEL * 8))
+		PARALLEL=$(($PARALLEL * $HAWQ2_NVSEG_PERSEG))
 		echo "parallel: $PARALLEL"
 
 		#get the PGDATA value which is the same on all hosts for HAWQ 2
@@ -86,7 +87,7 @@ gen_data()
 		CHILD="0"
 		for i in $(cat $PWD/../segment_hosts.txt); do
 			EXT_HOST=$i
-			for x in $(seq 1 8); do
+			for x in $(seq 1 $HAWQ2_NVSEG_PERSEG); do
 				GEN_DATA_PATH="$SEG_DATA_PATH""/pivotalguru_""$x"
 				CHILD=$(($CHILD + 1))
 				ssh -n -f $EXT_HOST "bash -c 'cd ~/; ./generate_data.sh $GEN_DATA_SCALE $CHILD $PARALLEL $GEN_DATA_PATH > generate_data.$CHILD.log 2>&1 < generate_data.$CHILD.log &'"
