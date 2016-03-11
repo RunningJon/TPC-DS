@@ -52,7 +52,7 @@ count(*)
                   	where
 	                    (d_month_seq between 1215 and 1226) and
 	                    (ws_bill_customer_sk = c_customer_sk) and
-	                    (ws_sold_date_sk = d_date_sk) and
+	                    (ws_sold_date_sk = d_date_sk) --and
                             --removed Cloudera cheat
 	                    --(ws_sold_date_sk between 2452001 and 2452365)
                     ) as q18

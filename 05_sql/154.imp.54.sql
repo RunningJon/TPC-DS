@@ -36,8 +36,8 @@ with my_customers as (
         customer_address,
         store,
         date_dim
- where  /* --removed Cloudera cheat ss_sold_date_sk between 2451027 and 2451118 */
-        and c_current_addr_sk = ca_address_sk
+ where  /* --removed Cloudera cheat ss_sold_date_sk between 2451027 and 2451118 
+        and */ c_current_addr_sk = ca_address_sk
         and ca_county = s_county
         and ca_state = s_state
         and ss_sold_date_sk = d_date_sk

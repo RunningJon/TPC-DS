@@ -29,7 +29,8 @@ where
 -- and 
 --removed Cloudera cheat
 --sr_returned_date_sk between 2452184 and 2452214
-and d2.d_year = 2001
+--and 
+d2.d_year = 2001
 and d2.d_moy  = 10
 and ss_ticket_number = sr_ticket_number
 and ss_item_sk = sr_item_sk
