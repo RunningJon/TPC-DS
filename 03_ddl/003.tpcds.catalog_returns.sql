@@ -15,7 +15,7 @@ CREATE TABLE tpcds.catalog_returns (
     cr_ship_mode_sk integer,
     cr_warehouse_sk integer,
     cr_reason_sk integer,
-    cr_order_number integer NOT NULL,
+    cr_order_number bigint NOT NULL,
     cr_return_quantity integer,
     cr_return_amount numeric(7,2),
     cr_return_tax numeric(7,2),

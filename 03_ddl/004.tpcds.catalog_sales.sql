@@ -16,7 +16,7 @@ CREATE TABLE tpcds.catalog_sales (
     cs_warehouse_sk integer,
     cs_item_sk integer NOT NULL,
     cs_promo_sk integer,
-    cs_order_number integer NOT NULL,
+    cs_order_number bigint NOT NULL,
     cs_quantity integer,
     cs_wholesale_cost numeric(7,2),
     cs_list_price numeric(7,2),
