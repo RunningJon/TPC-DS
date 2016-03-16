@@ -8,6 +8,19 @@ source_bashrc
 step=load
 init_log $step
 
+GEN_DATA_SCALE=$1
+EXPLAIN_ANALYZE=$2
+SQL_VERSION=$3
+RANDOM_DISTRIBUTION=$4
+HAWQ2_NVSEG_PERSEG=$5
+
+if [[ "$GEN_DATA_SCALE" == "" || "$EXPLAIN_ANALYZE" == "" || "$SQL_VERSION" == "" || "$RANDOM_DISTRIBUTION" == "" || "$HAWQ2_NVSEG_PERSEG" == "" ]]; then
+	echo "You must provide the scale as a parameter in terms of Gigabytes, true/false to run queries with EXPLAIN ANALYZE option, the SQL_VERSION, and true/false to use random distrbution."
+	echo "Example: ./rollout.sh 100 false tpcds false 8"
+	echo "This will create 100 GB of data for this test, not run EXPLAIN ANALYZE, use standard TPC-DS, and not use random distribution."
+	exit 1
+fi
+
 ADMIN_HOME=$(eval echo ~$ADMIN_USER)
 
 copy_script()
@@ -52,7 +65,7 @@ start_gpfdist()
 
 		for i in $(cat $PWD/../segment_hosts.txt); do
 			EXT_HOST=$i
-			for x in $(seq 1 8); do
+			for x in $(seq 1 $HAWQ2_NVSEG_PERSEG); do
 				GEN_DATA_PATH="$SEG_DATA_PATH""/pivotalguru_""$x"
 				PORT=$(($GPFDIST_PORT + $x))
 				echo "executing on $EXT_HOST ./start_gpfdist.sh $PORT $GEN_DATA_PATH"
@@ -84,8 +97,7 @@ stop_gpfdist
 max_id=$(ls $PWD/*.sql | tail -1)
 max_id=$(basename $max_id | awk -F '.' '{print $1}')
 
-#might be able to remove this as Orca doesn't use the stats on partitions.  It only uses the root partition
-#only analyze tables that need to be analyzed
+#get stats on all non-partitioned tables and all partitions
 for i in $(psql -A -t -v ON_ERROR_STOP=ON -c "SELECT lpad(row_number() over() + $max_id, 3, '0') || '.' || n.nspname || '.' || c.relname FROM pg_class c JOIN pg_namespace n on c.relnamespace = n.oid WHERE n.nspname = 'tpcds' AND c.relname NOT IN (SELECT DISTINCT tablename FROM pg_partitions p WHERE schemaname = 'tpcds') AND c.reltuples::bigint = 0"); do
 	start_log
 
@@ -99,7 +111,7 @@ for i in $(psql -A -t -v ON_ERROR_STOP=ON -c "SELECT lpad(row_number() over() + 
 	log $tuples
 done
 
-#only analyze root partitions that need to be analyzed
+#analyze root partitions of partitioned tables
 for i in $(psql -A -t -v ON_ERROR_STOP=ON -c "SELECT lpad(row_number() over() + $max_id, 3, '0') || '.' || n.nspname || '.' || c.relname FROM pg_class c JOIN pg_namespace n on c.relnamespace = n.oid WHERE n.nspname = 'tpcds' AND c.relname IN (SELECT DISTINCT tablename FROM pg_partitions p WHERE schemaname = 'tpcds') AND c.reltuples::bigint = 0"); do
 	start_log
 
