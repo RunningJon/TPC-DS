@@ -43,4 +43,4 @@ order by
   c_first_name,
   c_salutation,
   c_preferred_cust_flag desc
-;
+limit 100;
