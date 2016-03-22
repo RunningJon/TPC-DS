@@ -79,7 +79,7 @@ in each Segment, you can create a symbolic link to a drive location that does ha
 enough space.
 
 For HAWQ 2.0, this directory is named PGDATA/pivotalguru_$i where $i is 1 to 
-$HAWQ2_NVSEG_PERSEG.  See notes below for more information. 
+the GUC hawq_rm_nvseg_perquery_perseg_limit.  See notes below for more information. 
 Example creating links with PGDATA = /data1/segment
 with gpssh as root:
 for i in $(seq 1 8); do mkdir /data$i/pivotalguru; done
@@ -105,13 +105,6 @@ You can update these directories to be symbolic links to better utilize the disk
 volumes you have available.
 - Example of running tpcds as root as a background process:
 nohup ./tpcds.sh > tpcds.log 2>&1 < tpcds.log &
-
-- For HAWQ 2.0 (Pivotal HDB), you can set the number of virtual segments with a new 
-GUC hawq_rm_nvseg_perquery_perseg_limit and is also set dynamically when the database
-is initialized.  Smaller clusters will default to 8 virtual segments per host while 
-larger ones will get 6 or even 4.  Set the environment variable HAWQ2_NVSEG_PERSEG
-to match this value.  Be aware that changing the HAWQ 2.0 GUC will require re-generating 
-the data.
 
 ########################################################################################
 TPC-DS Minor Modifications

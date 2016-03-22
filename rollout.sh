@@ -15,11 +15,10 @@ RUN_INIT="$7"
 RUN_DDL="$8"
 RUN_LOAD="$9"
 RUN_SQL=${10}
-HAWQ2_NVSEG_PERSEG=${11}
 
-if [[ "$GEN_DATA_SCALE" == "" || "$EXPLAIN_ANALYZE" == "" || "$SQL_VERSION" == "" || "$RANDOM_DISTRIBUTION" == "" || "$RUN_COMPILE_TPCDS" == "" || "$RUN_GEN_DATA" == "" || "$RUN_INIT" == "" || "$RUN_DDL" == "" || "$RUN_LOAD" == "" || "$RUN_SQL" == "" || "$HAWQ2_NVSEG_PERSEG" == "" ]]; then
+if [[ "$GEN_DATA_SCALE" == "" || "$EXPLAIN_ANALYZE" == "" || "$SQL_VERSION" == "" || "$RANDOM_DISTRIBUTION" == "" || "$RUN_COMPILE_TPCDS" == "" || "$RUN_GEN_DATA" == "" || "$RUN_INIT" == "" || "$RUN_DDL" == "" || "$RUN_LOAD" == "" || "$RUN_SQL" == "" ]]; then
 	echo "You must provide the scale as a parameter in terms of Gigabytes, true/false to run queries with EXPLAIN ANALYZE option, the SQL_VERSION, and true/false to use random distrbution."
-	echo "Example: ./rollout.sh 100 false tpcds false true true true true true true 8"
+	echo "Example: ./rollout.sh 100 false tpcds false true true true true true true"
 	echo "This will create 100 GB of data for this test, not run EXPLAIN ANALYZE, use standard TPC-DS, and not use random distribution."
 	echo "The last six run options indicate if you want to force the running of those steps even if the step has already completed."
 	exit 1
@@ -51,7 +50,6 @@ echo "RUN_INIT: $RUN_INIT"
 echo "RUN_DDL: $RUN_DDL"
 echo "RUN_LOAD: $RUN_LOAD"
 echo "RUN_SQL: $RUN_SQL"
-echo "HAWQ2_NVSEG_PERSEG: $HAWQ2_NVSEG_PERSEG"
 echo "############################################################################"
 echo ""
 if [ "$RUN_COMPILE_TPCDS" == "true" ]; then
@@ -76,5 +74,5 @@ fi
 
 for i in $(ls -d $PWD/0*); do
 	echo "$i/rollout.sh"
-	$i/rollout.sh $GEN_DATA_SCALE $EXPLAIN_ANALYZE $SQL_VERSION $RANDOM_DISTRIBUTION $HAWQ2_NVSEG_PERSEG
+	$i/rollout.sh $GEN_DATA_SCALE $EXPLAIN_ANALYZE $SQL_VERSION $RANDOM_DISTRIBUTION
 done

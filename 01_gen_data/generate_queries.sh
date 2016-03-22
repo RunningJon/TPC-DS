@@ -60,7 +60,7 @@ for z in "${arr[@]}"; do
 	pos=$(grep -n ";" $myfilename | awk -F ':' '{print $1}' | head -1)
 	pos=$(($pos+1))
 	echo "pos: $pos"
-	sed -iold ''$pos'i\'$'\n'':EXPLAIN_ANALYZE'$'\n' $myfilename
+	sed -i ''$pos'i\'$'\n'':EXPLAIN_ANALYZE'$'\n' $myfilename
 
 done
 

@@ -12,11 +12,10 @@ GEN_DATA_SCALE=$1
 EXPLAIN_ANALYZE=$2
 SQL_VERSION=$3
 RANDOM_DISTRIBUTION=$4
-HAWQ2_NVSEG_PERSEG=$5
 
-if [[ "$GEN_DATA_SCALE" == "" || "$EXPLAIN_ANALYZE" == "" || "$SQL_VERSION" == "" || "$RANDOM_DISTRIBUTION" == "" || "$HAWQ2_NVSEG_PERSEG" == "" ]]; then
+if [[ "$GEN_DATA_SCALE" == "" || "$EXPLAIN_ANALYZE" == "" || "$SQL_VERSION" == "" || "$RANDOM_DISTRIBUTION" == "" ]]; then
 	echo "You must provide the scale as a parameter in terms of Gigabytes, true/false to run queries with EXPLAIN ANALYZE option, the SQL_VERSION, and true/false to use random distrbution."
-	echo "Example: ./rollout.sh 100 false tpcds false 8"
+	echo "Example: ./rollout.sh 100 false tpcds false"
 	echo "This will create 100 GB of data for this test, not run EXPLAIN ANALYZE, use standard TPC-DS, and not use random distribution."
 	exit 1
 fi
@@ -59,13 +58,14 @@ start_gpfdist()
 		done
 	else
 		#HAWQ 2
+		get_nvseg_perseg
 		for i in $(psql -A -t -c "SELECT trim(path) FROM public.data_dir"); do
 			SEG_DATA_PATH=$i
 		done
 
 		for i in $(cat $PWD/../segment_hosts.txt); do
 			EXT_HOST=$i
-			for x in $(seq 1 $HAWQ2_NVSEG_PERSEG); do
+			for x in $(seq 1 $nvseg_perseg); do
 				GEN_DATA_PATH="$SEG_DATA_PATH""/pivotalguru_""$x"
 				PORT=$(($GPFDIST_PORT + $x))
 				echo "executing on $EXT_HOST ./start_gpfdist.sh $PORT $GEN_DATA_PATH"
