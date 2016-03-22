@@ -109,3 +109,8 @@ create_hosts_file()
 		psql -t -A -v ON_ERROR_STOP=1 -c "SELECT DISTINCT hostname FROM gp_segment_configuration WHERE role = 'p'" -o $LOCAL_PWD/segment_hosts.txt
 	fi
 }
+
+get_nvseg_perseg()
+{
+	nvseg_perseg=$(psql -t -A -c "show hawq_rm_nvseg_perquery_perseg_limit")
+}
