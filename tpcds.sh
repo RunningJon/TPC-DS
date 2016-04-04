@@ -52,11 +52,6 @@ check_variables()
 		echo "RANDOM_DISTRIBUTION=\"false\"" >> $MYVAR
 		new_variable=$(($new_variable + 1))
 	fi
-	local count=$(grep "MULTI_USER_TEST" $MYVAR | wc -l)
-	if [ "$count" -eq "0" ]; then
-		echo "MULTI_USER_TEST=\"true\"" >> $MYVAR
-		new_variable=$(($new_variable + 1))
-	fi
 	local count=$(grep "MULTI_USER_COUNT" $MYVAR | wc -l)
 	if [ "$count" -eq "0" ]; then
 		echo "MULTI_USER_COUNT=\"5\"" >> $MYVAR
@@ -101,6 +96,18 @@ check_variables()
 	local count=$(grep "RUN_SQL" $MYVAR | wc -l)
 	if [ "$count" -eq "0" ]; then
 		echo "RUN_SQL=\"true\"" >> $MYVAR
+		new_variable=$(($new_variable + 1))
+	fi
+	#06
+	local count=$(grep "RUN_SINGLE_USER_REPORT" $MYVAR | wc -l)
+	if [ "$count" -eq "0" ]; then
+		echo "RUN_SINGLE_USER_REPORT=\"true\"" >> $MYVAR
+		new_variable=$(($new_variable + 1))
+	fi
+	#07
+	local count=$(grep "RUN_MULTI_USER" $MYVAR | wc -l)
+	if [ "$count" -eq "0" ]; then
+		echo "RUN_MULTI_USER=\"true\"" >> $MYVAR
 		new_variable=$(($new_variable + 1))
 	fi
 
@@ -247,7 +254,6 @@ echo_variables()
 	echo "REPO_URL: $REPO_URL"
 	echo "ADMIN_USER: $ADMIN_USER"
 	echo "INSTALL_DIR: $INSTALL_DIR"
-	echo "MULTI_USER_TEST: $MULTI_USER_TEST"
 	echo "MULTI_USER_COUNT: $MULTI_USER_COUNT"
 	echo "############################################################################"
 	echo ""
@@ -265,8 +271,5 @@ script_check
 check_sudo
 echo_variables
 
-su --session-command="cd \"$INSTALL_DIR/$REPO\"; ./rollout.sh $GEN_DATA_SCALE $EXPLAIN_ANALYZE $SQL_VERSION $RANDOM_DISTRIBUTION $RUN_COMPILE_TPCDS $RUN_GEN_DATA $RUN_INIT $RUN_DDL $RUN_LOAD $RUN_SQL" $ADMIN_USER
+su --session-command="cd \"$INSTALL_DIR/$REPO\"; ./rollout.sh $GEN_DATA_SCALE $EXPLAIN_ANALYZE $SQL_VERSION $RANDOM_DISTRIBUTION $MULTI_USER_COUNT $RUN_COMPILE_TPCDS $RUN_GEN_DATA $RUN_INIT $RUN_DDL $RUN_LOAD $RUN_SQL $RUN_SINGLE_USER_REPORT $RUN_MULTI_USER" $ADMIN_USER
 
-if [ "$MULTI_USER_TEST" == "true" ]; then
-	su --session-command="cd \"$INSTALL_DIR/$REPO/testing\"; ./rollout.sh $GEN_DATA_SCALE $MULTI_USER_COUNT $SQL_VERSION" $ADMIN_USER 
-fi
