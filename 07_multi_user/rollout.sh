@@ -118,5 +118,3 @@ if [ "$file_count" -ne "$MULTI_USER_COUNT" ]; then
 		exit 1
 	fi
 fi
-
-$PWD/report.sh
