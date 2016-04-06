@@ -30,7 +30,8 @@ with year_total as (
      ,web_sales
      ,date_dim
  where c_customer_sk = ws_bill_customer_sk
-   and ws_sold_date_sk  between 2451545 and 2452275
+   --removed Cloudera cheat
+   --and ws_sold_date_sk between 2451545 and 2452275
    and ws_sold_date_sk = d_date_sk
    and d_year in (2000,2000+1)
  group by c_customer_id

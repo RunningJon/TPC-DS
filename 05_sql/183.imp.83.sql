@@ -50,7 +50,8 @@ with sr_items as
 		from date_dim
 		where d_date in ('1998-02-10','1998-10-21','1998-11-09')))
  and   wr_returned_date_sk   = d_date_sk
- and   wr_returned_date_sk  between 2450855 and 2451127
+ --removed Cloudera cheat
+ --and   wr_returned_date_sk  between 2450855 and 2451127
  group by i_item_id)
   select  sr_items.item_id
        ,sr_item_qty
