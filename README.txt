@@ -212,3 +212,4 @@ This was done on queries: 2, 14, and 23.
 5.  Added "limit 100" to very large result set queries.  For the larger tests (e.g. 15TB), a few of the 
 TPC-DS queries can output a very large number of rows which are just discarded.  
 This was done on queries: 64, 34, and 71.
+
