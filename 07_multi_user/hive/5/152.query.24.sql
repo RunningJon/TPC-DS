@@ -38,14 +38,12 @@ select c_last_name
       ,c_first_name
       ,s_store_name
       ,sum(netpaid) paid
-from ssales
+from ssales, (select 0.05*avg(netpaid) as avg_netpaid from ssales) as sub
 where i_color = 'orchid'
 group by c_last_name
         ,c_first_name
         ,s_store_name
-having sum(netpaid) > (select 0.05*avg(netpaid)
-                                 from ssales)
-;
+having sum(netpaid) > sum(sub.avg_netpaid);
 
 with ssales as
 (select c_last_name
@@ -87,11 +85,9 @@ select c_last_name
       ,c_first_name
       ,s_store_name
       ,sum(netpaid) paid
-from ssales
+from ssales, (select 0.05*avg(netpaid) as avg_netpaid from ssales) as sub
 where i_color = 'chiffon'
 group by c_last_name
         ,c_first_name
         ,s_store_name
-having sum(netpaid) > (select 0.05*avg(netpaid)
-                           from ssales)
-;
+having sum(netpaid) > sum(sub.avg_netpaid);
