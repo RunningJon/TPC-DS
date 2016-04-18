@@ -10,7 +10,8 @@ and i_item_sk = cs_item_sk
 and d_date between '1998-03-18' and 
         (cast('1998-03-18' as timestamp) + '90 days'::interval)
 and d_date_sk = cs_sold_date_sk 
-and cs_sold_date_sk  between 2450891 and 2450981
+--removed Cloudera cheat
+--and cs_sold_date_sk  between 2450891 and 2450981
 and cs_ext_discount_amt  
      > ( 
          select 
@@ -23,6 +24,7 @@ and cs_ext_discount_amt
           and d_date between '1998-03-18' and
                              (cast('1998-03-18' as timestamp) + '90 days'::interval)
           and d_date_sk = cs_sold_date_sk 
-	  and cs_sold_date_sk  between 2450891 and 2450981
+          --removed Cloudera cheat
+	  --and cs_sold_date_sk  between 2450891 and 2450981
       ) 
 limit 100;

@@ -44,7 +44,8 @@ with ss_items as
                                      from date_dim
                                      where d_date = '2001-06-13' limit 1))
   and ws_sold_date_sk   = d_date_sk
-  and ws_sold_date_sk   between 2452073 and 2452079
+  --removed Cloudera cheat
+  --and ws_sold_date_sk between 2452073 and 2452079
  group by i_item_id)
   select  ss_items.item_id
        ,ss_item_rev
