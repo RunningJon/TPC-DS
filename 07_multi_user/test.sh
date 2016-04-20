@@ -8,12 +8,13 @@ source $PWD/../functions.sh
 GEN_DATA_SCALE=$1
 session_id=$2
 SQL_VERSION=$3
+EXPLAIN_ANALYZE=$4
 
-if [[ "$GEN_DATA_SCALE" == "" || "$session_id" == "" || "$SQL_VERSION" == "" ]]; then
+if [[ "$GEN_DATA_SCALE" == "" || "$session_id" == "" || "$SQL_VERSION" == "" || "$EXPLAIN_ANALYZE" == "" ]]; then
 	echo "Error: you must provide the scale, the session id, and SQL_VERSION as parameters."
-	echo "Example: ./rollout.sh 3000 2 tpcds"
-	echo "This will execute the TPC-DS queries for 3TB of data for session 2 that are dynamically."
-	echo "created with dsqgen."
+	echo "Example: ./rollout.sh 3000 2 tpcds false"
+	echo "This will execute the TPC-DS queries for 3TB of data for 2 sesions that are dynamically "
+	echo "created with dsqgen and not use EXPLAIN ANALYZE."
 	exit 1
 fi
 
@@ -48,13 +49,34 @@ else
 		file_id=$(sed -n "$start_position","$start_position"p $sql_dir/$tpcds_query_name | awk -F ' ' '{print $4}')
 		file_id=$(($file_id+100))
 		filename=$file_id.query.$q.sql
-		sed -n "$start_position","$end_position"p $sql_dir/$tpcds_query_name > $sql_dir/$filename
+
+		#add explain analyze 
+		echo "echo \":EXPLAIN_ANALYZE\" > $sql_dir/$filename"
+		echo ":EXPLAIN_ANALYZE" > $sql_dir/$filename
+
+		echo "sed -n \"$start_position\",\"$end_position\"p $sql_dir/$tpcds_query_name >> $sql_dir/$filename"
+		sed -n "$start_position","$end_position"p $sql_dir/$tpcds_query_name >> $sql_dir/$filename
 		query_id=$(($query_id + 1))
 		echo "Completed: $sql_dir/$filename"
 	done
 	echo "rm -f $sql_dir/query_*.sql"
 	rm -f $sql_dir/$tpcds_query_name
 fi
+
+	echo ""
+	echo "queries 114, 123, 124, and 139 have 2 queries in each file.  Need to add :EXPLAIN_ANALYZE to second query in these files"
+	echo ""
+	arr=("114.tpcds.14.sql" "123.tpcds.23.sql" "124.tpcds.24.sql" "139.tpcds.39.sql")
+
+	for z in "${arr[@]}"; do
+		echo $z
+		myfilename=$sql_dir/$z
+		echo "myfilename: $myfilename"
+		pos=$(grep -n ";" $myfilename | awk -F ':' '{print $1}' | head -1)
+		pos=$(($pos+1))
+		echo "pos: $pos"
+		sed -i ''$pos'i\'$'\n'':EXPLAIN_ANALYZE'$'\n' $myfilename
+	done
 
 tuples="0"
 for i in $(ls $sql_dir/*.sql); do
@@ -64,10 +86,14 @@ for i in $(ls $sql_dir/*.sql); do
 	schema_name=$session_id
 	table_name=$(basename $i | awk -F '.' '{print $3}')
 
-	#echo "psql -A -q -t -P pager=off -v ON_ERROR_STOP=ON -v FETCH_COUNT=1000 -f $i | wc -l"
-	#tuples=$(psql -A -q -t -P pager=off -v ON_ERROR_STOP=ON -v FETCH_COUNT=1000 -f $i | wc -l; exit ${PIPESTATUS[0]})
-	echo "psql -A -q -t -P pager=off -v ON_ERROR_STOP=ON -f $i | wc -l"
-	tuples=$(psql -A -q -t -P pager=off -v ON_ERROR_STOP=ON -f $i | wc -l; exit ${PIPESTATUS[0]})
+	if [ "$EXPLAIN_ANALYZE" == "false" ]; then
+		echo "psql -A -q -t -P pager=off -v ON_ERROR_STOP=ON -v EXPLAIN_ANALYZE="" -f $i | wc -l"
+		tuples=$(psql -A -q -t -P pager=off -v ON_ERROR_STOP=ON -v EXPLAIN_ANALYZE="" -f $i | wc -l; exit ${PIPESTATUS[0]})
+	else
+		echo "psql -A -q -t -P pager=off -v ON_ERROR_STOP=ON -v EXPLAIN_ANALYZE="EXPLAIN ANALYZE" -f $i | wc -l"
+		tuples=$(psql -A -q -t -P pager=off -v ON_ERROR_STOP=ON -v EXPLAIN_ANALYZE="EXPLAIN ANALYZE" -f $i | wc -l; exit ${PIPESTATUS[0]})
+	fi
+		
 	#remove the extra line that \timing adds
 	tuples=$(($tuples-1))
 	log $tuples
