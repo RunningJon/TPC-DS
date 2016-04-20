@@ -21,6 +21,8 @@ fi
 step=sql
 init_log $step
 
+rm -f $PWD/../log/*single.explain_analyze.log
+
 for i in $(ls $PWD/*.$SQL_VERSION.*.sql); do
 	id=`echo $i | awk -F '.' '{print $1}'`
 	schema_name=`echo $i | awk -F '.' '{print $2}'`
@@ -28,15 +30,13 @@ for i in $(ls $PWD/*.$SQL_VERSION.*.sql); do
 	start_log
 
 	if [ "$EXPLAIN_ANALYZE" == "false" ]; then
-		#echo "psql -A -q -t -P pager=off -v ON_ERROR_STOP=ON -v EXPLAIN_ANALYZE=\"\" -v FETCH_COUNT=1000 -f $i | wc -l"
-		#tuples=$(psql -A -q -t -P pager=off -v ON_ERROR_STOP=ON -v EXPLAIN_ANALYZE="" -v FETCH_COUNT=1000 -f $i | wc -l; exit ${PIPESTATUS[0]})
 		echo "psql -A -q -t -P pager=off -v ON_ERROR_STOP=ON -v EXPLAIN_ANALYZE=\"\" -f $i | wc -l"
 		tuples=$(psql -A -q -t -P pager=off -v ON_ERROR_STOP=ON -v EXPLAIN_ANALYZE="" -f $i | wc -l; exit ${PIPESTATUS[0]})
 		#remove the extra line that \timing adds
 		tuples=$(($tuples-1))
 	else
-		myfilename=$(basename $i | awk -F '.' '{print $3".explain_analyze"}')
-		mylogfile=$PWD/../log/$myfilename.log
+		myfilename=$(basename $i)
+		mylogfile=$PWD/../log/$myfilename.single.explain_analyze.log
 		echo "psql -A -q -t -P pager=off -v ON_ERROR_STOP=ON -v EXPLAIN_ANALYZE=\"EXPLAIN ANALYZE\" -f $i > $mylogfile"
 		psql -A -q -t -P pager=off -v ON_ERROR_STOP=ON -v EXPLAIN_ANALYZE="EXPLAIN ANALYZE" -f $i > $mylogfile
 		tuples="0"
