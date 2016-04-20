@@ -64,9 +64,9 @@ else
 fi
 
 	echo ""
-	echo "queries 114, 123, 124, and 139 have 2 queries in each file.  Need to add :EXPLAIN_ANALYZE to second query in these files"
+	echo "queries 14, 23, 24, and 39 have 2 queries in each file.  Need to add :EXPLAIN_ANALYZE to second query in these files"
 	echo ""
-	arr=("114.tpcds.14.sql" "123.tpcds.23.sql" "124.tpcds.24.sql" "139.tpcds.39.sql")
+	arr=("*.query.14.sql" "*.query.23.sql" "*.query.24.sql" "*.query.39.sql")
 
 	for z in "${arr[@]}"; do
 		echo $z
