@@ -92,7 +92,7 @@ for i in $(ls $sql_dir/*.sql); do
 		tuples=$(($tuples-1))
 	else
 		myfilename=$(basename $i)
-		mylogfile=$PWD/../log/$myfilename."$session_id".multi.explain_analyze.log
+		mylogfile=$PWD/../log/"$session_id"".""$myfilename"".multi.explain_analyze.log"
 		echo "psql -A -q -t -P pager=off -v ON_ERROR_STOP=ON -v EXPLAIN_ANALYZE=\"EXPLAIN ANALYZE\" -f $i"
 		psql -A -q -t -P pager=off -v ON_ERROR_STOP=ON -v EXPLAIN_ANALYZE="EXPLAIN ANALYZE" -f $i > $mylogfile
 		tuples="0"
