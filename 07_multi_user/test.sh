@@ -89,13 +89,16 @@ for i in $(ls $sql_dir/*.sql); do
 	if [ "$EXPLAIN_ANALYZE" == "false" ]; then
 		echo "psql -A -q -t -P pager=off -v ON_ERROR_STOP=ON -v EXPLAIN_ANALYZE="" -f $i | wc -l"
 		tuples=$(psql -A -q -t -P pager=off -v ON_ERROR_STOP=ON -v EXPLAIN_ANALYZE="" -f $i | wc -l; exit ${PIPESTATUS[0]})
+		tuples=$(($tuples-1))
 	else
-		echo "psql -A -q -t -P pager=off -v ON_ERROR_STOP=ON -v EXPLAIN_ANALYZE="EXPLAIN ANALYZE" -f $i | wc -l"
-		tuples=$(psql -A -q -t -P pager=off -v ON_ERROR_STOP=ON -v EXPLAIN_ANALYZE="EXPLAIN ANALYZE" -f $i | wc -l; exit ${PIPESTATUS[0]})
+		myfilename=$(basename $i)
+		mylogfile=$PWD/../log/$myfilename.explain_analyze.log
+		echo "psql -A -q -t -P pager=off -v ON_ERROR_STOP=ON -v EXPLAIN_ANALYZE=\"EXPLAIN ANALYZE\" -f $i"
+		psql -A -q -t -P pager=off -v ON_ERROR_STOP=ON -v EXPLAIN_ANALYZE="EXPLAIN ANALYZE" -f $i > $mylogfile
+		tuples="0"
 	fi
 		
 	#remove the extra line that \timing adds
-	tuples=$(($tuples-1))
 	log $tuples
 done
 
