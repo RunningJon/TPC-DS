@@ -86,7 +86,8 @@ copy_config()
 	cp $MASTER_DATA_DIRECTORY/pg_hba.conf $PWD/../log/
 	cp $MASTER_DATA_DIRECTORY/postgresql.conf $PWD/../log/
 	#gp_segment_configuration
-	psql -q -A -t -v ON_ERROR_STOP=ON -c "SELECT * FROM gp_segment_configuration" -o $PWD/../log/gp_segment_configuration.txt
+	# psql -q -A -t -v ON_ERROR_STOP=ON -c "SELECT * FROM gp_segment_configuration" -o $PWD/../log/gp_segment_configuration.txt
+	echo "THIS IS BELOW THE LINE YOU COMMENTED YOU"
 }
 
 set_psqlrc()
