@@ -1,6 +1,7 @@
 #!/bin/bash
 set -e
 PWD=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
+source /usr/local/greenplum-db-4.3.7.1/greenplum_path.sh
 
 GPFDIST_PORT=$1
 GEN_DATA_PATH=$2
