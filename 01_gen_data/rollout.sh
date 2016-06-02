@@ -44,10 +44,13 @@ create_table_data_dir()
 }
 
 kill_orphaned_data_gen()
-{	
+{
 	for i in $(cat $PWD/../segment_hosts.txt); do
-		echo "kill any orphaned processes"
-		ssh -n -f $i "bash -c 'for x in $(ps -ef | grep dsdgen | grep -v grep | awk -F ' ' '{print $2}'); do echo "killing $x"; kill $x; done'"
+		echo "$i:kill any orphaned processes"
+		for k in $(ssh $i "ps -ef | grep dsdgen | grep -v grep" | awk -F ' ' '{print $2}'); do
+			echo killing $k
+			ssh $i "kill $k"
+		done
 	done
 }
 

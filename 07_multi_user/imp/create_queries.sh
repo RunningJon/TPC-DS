@@ -22,7 +22,7 @@ create_files()
 	done
 }
 
-for d in $(seq 1 5); do
+for d in $(seq 1 10); do
 	echo "rm -f $PWD/$d/*"
 	rm -f $PWD/$d/*
 done
