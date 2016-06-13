@@ -77,6 +77,36 @@ start_gpfdist()
 	fi
 }
 
+delete_files()
+{
+	get_version
+	if [[ "$VERSION" == "gpdb_4_2" || "$VERSION" == "gpdb_4_3" || "$VERSION" == "hawq_1" ]]; then
+		for i in $(psql -A -t -c "select rank() over (partition by hostname order by path), trim(hostname), trim(path) from data_dir order by hostname"); do
+			CHILD=$(echo $i | awk -F '|' '{print $1}')
+			EXT_HOST=$(echo $i | awk -F '|' '{print $2}')
+			GEN_DATA_PATH=$(echo $i | awk -F '|' '{print $3}')
+			GEN_DATA_PATH=$GEN_DATA_PATH/pivotalguru
+			echo "executing on $EXT_HOST rm -f $GEN_DATA_PATH/*"
+			ssh -n -f $EXT_HOST "bash -c 'rm -f $GEN_DATA_PATH/*'"
+		done
+	else
+		#HAWQ 2
+		get_nvseg_perseg
+		for i in $(psql -A -t -c "SELECT trim(path) FROM public.data_dir"); do
+			SEG_DATA_PATH=$i
+		done
+
+		for i in $(cat $PWD/../segment_hosts.txt); do
+			EXT_HOST=$i
+			for x in $(seq 1 $nvseg_perseg); do
+				GEN_DATA_PATH="$SEG_DATA_PATH""/pivotalguru_""$x"
+				echo "executing on $EXT_HOST rm -f $GEN_DATA_PATH/*"
+				ssh -n -f $EXT_HOST "bash -c 'rm -f $GEN_DATA_PATH/*'"
+			done
+		done
+	fi
+}
+
 copy_script
 start_gpfdist
 
@@ -119,4 +149,6 @@ analyzedb -d $dbname -s tpcds --full -a
 tuples="0"
 log $tuples
 
+#cleanup raw files that were loaded
+delete_files
 end_step $step

@@ -10,19 +10,20 @@ EXPLAIN_ANALYZE="$2"
 SQL_VERSION="$3"
 RANDOM_DISTRIBUTION="$4"
 MULTI_USER_COUNT="$5"
-RUN_COMPILE_TPCDS="$6"
-RUN_GEN_DATA="$7"
-RUN_INIT="$8"
-RUN_DDL="$9"
-RUN_LOAD="${10}"
-RUN_SQL="${11}"
-RUN_SINGLE_USER_REPORT="${12}"
-RUN_MULTI_USER="${13}"
-RUN_MULTI_USER_REPORT="${14}"
+HAWQ2_NVSEG="$6"
+RUN_COMPILE_TPCDS="$7"
+RUN_GEN_DATA="$8"
+RUN_INIT="$9"
+RUN_DDL="${10}"
+RUN_LOAD="${11}"
+RUN_SQL="${12}"
+RUN_SINGLE_USER_REPORT="${13}"
+RUN_MULTI_USER="${14}"
+RUN_MULTI_USER_REPORT="${15}"
 
-if [[ "$GEN_DATA_SCALE" == "" || "$EXPLAIN_ANALYZE" == "" || "$SQL_VERSION" == "" || "$RANDOM_DISTRIBUTION" == "" || "$MULTI_USER_COUNT" == "" || "$RUN_COMPILE_TPCDS" == "" || "$RUN_GEN_DATA" == "" || "$RUN_INIT" == "" || "$RUN_DDL" == "" || "$RUN_LOAD" == "" || "$RUN_SQL" == "" || "$RUN_SINGLE_USER_REPORT" == "" || "$RUN_MULTI_USER" == "" || "$RUN_MULTI_USER_REPORT" == "" ]]; then
+if [[ "$GEN_DATA_SCALE" == "" || "$EXPLAIN_ANALYZE" == "" || "$SQL_VERSION" == "" || "$RANDOM_DISTRIBUTION" == "" || "$MULTI_USER_COUNT" == "" || "$HAWQ2_NVSEG" == "" || "$RUN_COMPILE_TPCDS" == "" || "$RUN_GEN_DATA" == "" || "$RUN_INIT" == "" || "$RUN_DDL" == "" || "$RUN_LOAD" == "" || "$RUN_SQL" == "" || "$RUN_SINGLE_USER_REPORT" == "" || "$RUN_MULTI_USER" == "" || "$RUN_MULTI_USER_REPORT" == "" ]]; then
 	echo "You must provide the scale as a parameter in terms of Gigabytes, true/false to run queries with EXPLAIN ANALYZE option, the SQL_VERSION, and true/false to use random distrbution."
-	echo "Example: ./rollout.sh 100 false tpcds false 5 true true true true true true true true true"
+	echo "Example: ./rollout.sh 100 false tpcds false 5 8 true true true true true true true true true"
 	echo "This will create 100 GB of data for this test, not run EXPLAIN ANALYZE, use standard TPC-DS, and not use random distribution."
 	echo "The next nine run options indicate if you want to force the running of those steps even if the step has already completed."
 	exit 1
@@ -49,6 +50,7 @@ echo "EXPLAIN_ANALYZE: $EXPLAIN_ANALYZE"
 echo "SQL_VERSION: $SQL_VERSION"
 echo "RANDOM_DISTRIBUTION: $RANDOM_DISTRIBUTION"
 echo "MULTI_USER_COUNT: $MULTI_USER_COUNT"
+echo "HAWQ2_NVSEG: $HAWQ2_NVSEG"
 echo "RUN_COMPILE_TPCDS: $RUN_COMPILE_TPCDS"
 echo "RUN_GEN_DATA: $RUN_GEN_DATA"
 echo "RUN_INIT: $RUN_INIT"
@@ -90,5 +92,5 @@ fi
 
 for i in $(ls -d $PWD/0*); do
 	echo "$i/rollout.sh"
-	$i/rollout.sh $GEN_DATA_SCALE $EXPLAIN_ANALYZE $SQL_VERSION $RANDOM_DISTRIBUTION $MULTI_USER_COUNT
+	$i/rollout.sh $GEN_DATA_SCALE $EXPLAIN_ANALYZE $SQL_VERSION $RANDOM_DISTRIBUTION $MULTI_USER_COUNT $HAWQ2_NVSEG
 done
