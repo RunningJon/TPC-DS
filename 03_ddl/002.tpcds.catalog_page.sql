@@ -1,6 +1,6 @@
 CREATE TABLE tpcds.catalog_page (
     cp_catalog_page_sk integer NOT NULL,
-    cp_catalog_page_id character(16) NOT NULL,
+    cp_catalog_page_id character varying(16) NOT NULL,
     cp_start_date_sk integer,
     cp_end_date_sk integer,
     cp_department character varying(50),

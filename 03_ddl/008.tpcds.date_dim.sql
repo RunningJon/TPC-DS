@@ -1,6 +1,6 @@
 CREATE TABLE tpcds.date_dim (
     d_date_sk integer NOT NULL,
-    d_date_id character(16) NOT NULL,
+    d_date_id character varying(16) NOT NULL,
     d_date date,
     d_month_seq integer,
     d_week_seq integer,
@@ -13,8 +13,8 @@ CREATE TABLE tpcds.date_dim (
     d_fy_year integer,
     d_fy_quarter_seq integer,
     d_fy_week_seq integer,
-    d_day_name character(9),
-    d_quarter_name character(6),
+    d_day_name character varying(9),
+    d_quarter_name character varying(6),
     d_holiday character(1),
     d_weekend character(1),
     d_following_holiday character(1),

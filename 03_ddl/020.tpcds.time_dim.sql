@@ -1,6 +1,6 @@
 CREATE TABLE tpcds.time_dim (
     t_time_sk integer NOT NULL,
-    t_time_id character(16) NOT NULL,
+    t_time_id character varying(16) NOT NULL,
     t_time integer,
     t_hour integer,
     t_minute integer,
