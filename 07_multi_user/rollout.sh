@@ -20,9 +20,9 @@ if [ "$MULTI_USER_COUNT" -eq "0" ]; then
 	exit 0
 fi
 
-if [[ "$SQL_VERSION" == "e9" || "$SQL_VERSION" == "imp" ]]; then 
+if [[ "$SQL_VERSION" == "e9" || "$SQL_VERSION" == "imp" || "$SQL_VERSION" == "hive" ]]; then 
 	if [ "$MULTI_USER_COUNT" -gt "10" ]; then
-		echo "e9 and imp tests only supports 10 or less concurrent sessions."
+		echo "e9, imp and hive tests only supports 10 or less concurrent sessions."
 		exit 1
 	fi
 fi
@@ -49,7 +49,7 @@ if [ "$file_count" -ne "$MULTI_USER_COUNT" ]; then
 	rm -f $PWD/../log/rollout_testing_*.log
 	rm -f $PWD/../log/*multi.explain_analyze.log
 
-	if [[ "$SQL_VERSION" == "e9" || "$SQL_VERSION" == "imp" ]]; then
+	if [[ "$SQL_VERSION" == "e9" || "$SQL_VERSION" == "imp" || "$SQL_VERSION" == "hive" ]]; then
 		echo "Using static $SQL_VERSION queries"
 	else
 		rm -f $PWD/query_*.sql
