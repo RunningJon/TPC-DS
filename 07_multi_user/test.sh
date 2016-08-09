@@ -61,7 +61,6 @@ else
 	done
 	echo "rm -f $sql_dir/query_*.sql"
 	rm -f $sql_dir/$tpcds_query_name
-fi
 
 	echo ""
 	echo "queries 14, 23, 24, and 39 have 2 queries in each file.  Need to add :EXPLAIN_ANALYZE to second query in these files"
@@ -77,6 +76,7 @@ fi
 		echo "pos: $pos"
 		sed -i ''$pos'i\'$'\n'':EXPLAIN_ANALYZE'$'\n' $myfilename
 	done
+fi
 
 tuples="0"
 for i in $(ls $sql_dir/*.sql); do
