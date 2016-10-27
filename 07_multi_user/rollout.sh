@@ -92,7 +92,7 @@ if [ "$file_count" -ne "$MULTI_USER_COUNT" ]; then
 		$PWD/test.sh $GEN_DATA_SCALE $x $SQL_VERSION $EXPLAIN_ANALYZE > $session_log 2>&1 < $session_log &
 	done
 
-	sleep 2
+	sleep 60
 
 	get_psql_count
 	echo "Now executing queries. This make take a while."

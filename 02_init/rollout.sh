@@ -83,8 +83,10 @@ check_gucs()
 copy_config()
 {
 	echo "copy config files"
-	cp $MASTER_DATA_DIRECTORY/pg_hba.conf $PWD/../log/
-	cp $MASTER_DATA_DIRECTORY/postgresql.conf $PWD/../log/
+	if [ "$MASTER_DATA_DIRECTORY" != "" ]; then
+		cp $MASTER_DATA_DIRECTORY/pg_hba.conf $PWD/../log/
+		cp $MASTER_DATA_DIRECTORY/postgresql.conf $PWD/../log/
+	fi
 	#gp_segment_configuration
 	psql -q -A -t -v ON_ERROR_STOP=ON -c "SELECT * FROM gp_segment_configuration" -o $PWD/../log/gp_segment_configuration.txt
 }
