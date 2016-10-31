@@ -84,7 +84,7 @@ Example creating links with PGDATA = /data1/segment
 with gpssh as root:
 for i in $(seq 1 8); do mkdir /data$i/pivotalguru; done
 chown gpadmin:gpadmin /data*/pivotalguru
-for i in $(seq 1 8); do ln -s /data$i/pivotalguru /data1/segment/pivotalguru_$i; done
+for i in $(seq 1 8); do ln -s /data$i/pivotalguru /data/hawq/segment/pivotalguru_$i; done
 
 The above is only for HAWQ 2.0.  For GPDB and HAWQ 1.3, the segment directory structure
 is different.

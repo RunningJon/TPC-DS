@@ -13,13 +13,17 @@ table_name="init"
 
 set_segment_bashrc()
 {
-	echo "source $GREENPLUM_PATH" > $PWD/segment_bashrc
+	echo "if [ -f /etc/bashrc ]; then" > $PWD/segment_bashrc
+	echo "	. /etc/bashrc" >> $PWD/segment_bashrc
+	echo "fi" >> $PWD/segment_bashrc
+	echo "source $GREENPLUM_PATH" >> $PWD/segment_bashrc
 	chmod 755 $PWD/segment_bashrc
 
 	#copy generate_data.sh to ~/
-	for i in $(cat $PWD/../segment_hosts.txt | awk -F '.' '{print $1}'); do
+	for i in $(cat $PWD/../segment_hosts.txt); do
 		# don't overwrite the master.  Only needed on single node installs
-		if [ "$MASTER_HOST" != "$i" ]; then
+		shortname=$(echo $i | awk -F '.' '{print $1}')
+		if [ "$MASTER_HOST" != "$shortname" ]; then
 			echo "copy new .bashrc to $i:$ADMIN_HOME"
 			scp $PWD/segment_bashrc $i:$ADMIN_HOME/.bashrc
 		fi
