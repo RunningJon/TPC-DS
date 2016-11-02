@@ -43,7 +43,7 @@ copy_tpc()
 	#copy the compiled dsdgen program to the segment hosts
 	for i in $(cat $PWD/../segment_hosts.txt); do
 		echo "copy tpcds binaries to $i:$ADMIN_HOME"
-		scp tools/dsdgen tools/tpcds.idx $i:$ADMIN_HOME/
+		scp -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no tools/dsdgen tools/tpcds.idx $i:$ADMIN_HOME/
 	done
 }
 
