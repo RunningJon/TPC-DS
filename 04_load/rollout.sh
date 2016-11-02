@@ -28,7 +28,7 @@ copy_script()
 	echo "copy the start and stop scripts to the hosts in the cluster"
 	for i in $(cat $PWD/../segment_hosts.txt); do
 		echo "scp start_gpfdist.sh stop_gpfdist.sh $ADMIN_USER@$i:$ADMIN_HOME/"
-		scp $PWD/start_gpfdist.sh $PWD/stop_gpfdist.sh $ADMIN_USER@$i:$ADMIN_HOME/
+		scp -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no $PWD/start_gpfdist.sh $PWD/stop_gpfdist.sh $ADMIN_USER@$i:$ADMIN_HOME/
 	done
 }
 
