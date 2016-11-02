@@ -59,7 +59,7 @@ copy_generate_data()
 	#copy generate_data.sh to ~/
 	for i in $(cat $PWD/../segment_hosts.txt); do
 		echo "copy generate_data.sh to $i:$ADMIN_HOME"
-		scp $PWD/generate_data.sh $i:$ADMIN_HOME/
+		scp -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no $PWD/generate_data.sh $i:$ADMIN_HOME/
 	done
 }
 
