@@ -77,7 +77,7 @@ check_variables()
 	#02
 	local count=$(grep "RUN_INIT" $MYVAR | wc -l)
 	if [ "$count" -eq "0" ]; then
-		echo "RUN_INIT=\"false\"" >> $MYVAR
+		echo "RUN_INIT=\"true\"" >> $MYVAR
 		new_variable=$(($new_variable + 1))
 	fi
 	#03

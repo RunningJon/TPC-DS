@@ -22,7 +22,11 @@ get_count_generate_data()
 {
 	count="0"
 	for i in $(cat $PWD/../segment_hosts.txt); do
-		next_count=$(ssh -n -f $i "bash -c 'ps -ef | grep generate_data.sh | grep -v grep | wc -l'")
+		next_count=$(ssh -o ConnectTimeout=0 -n -f $i "bash -c 'ps -ef | grep generate_data.sh | grep -v grep | wc -l'" 2>&1 || true)
+		check="^[0-9]+$"
+		if ! [[ $next_count =~ $check ]] ; then
+			next_count="1"
+		fi
 		count=$(($count + $next_count))
 	done
 }

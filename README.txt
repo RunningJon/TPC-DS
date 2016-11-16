@@ -78,7 +78,10 @@ Segement's PGDATA/pivotalguru directory.  If there isn't enough space in this di
 in each Segment, you can create a symbolic link to a drive location that does have 
 enough space.
 
-For HAWQ 2.0, this directory is named PGDATA/pivotalguru_$i where $i is 1 to 
+########################################################################################
+HAWQ 2.x
+########################################################################################
+For HAWQ 2.x, this directory is named PGDATA/pivotalguru_$i where $i is 1 to 
 the GUC hawq_rm_nvseg_perquery_perseg_limit.  See notes below for more information. 
 Example creating links with PGDATA = /data1/segment
 with gpssh as root:
@@ -88,6 +91,23 @@ for i in $(seq 1 8); do ln -s /data$i/pivotalguru /data/hawq/segment/pivotalguru
 
 The above is only for HAWQ 2.0.  For GPDB and HAWQ 1.3, the segment directory structure
 is different.
+
+########################################################################################
+Ambari installation
+########################################################################################
+If Ambari is used to manage the cluster, you will need to add the following changes to
+"Custom hawq-site.xml":
+optimizer_analyze_root_partition [on]
+optimizer [on]
+
+Change:
+VM Overcommit Ratio [100]
+Segment Memory Usage Limit [200] (based on the availability of RAM)
+hawq_rm_stmt_vseg_memory [16gb] (based on the availability of RAM)
+gp_autostats_mode [none]
+
+Refer to Pivotal HDB documentation on how to set the Segment Memory Usage, VM Overcommit
+Ratio, and Statement Memory settings.
 
 ########################################################################################
 Execution
