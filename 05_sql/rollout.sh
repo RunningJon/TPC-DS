@@ -24,7 +24,7 @@ init_log $step
 
 rm -f $PWD/../log/*single.explain_analyze.log
 for i in $(ls $PWD/*.$SQL_VERSION.*.sql); do
-	for x in (seq 1 $SINGLE_USER_ITERATIONS); do
+	for x in $(seq 1 $SINGLE_USER_ITERATIONS); do
 		id=`echo $i | awk -F '.' '{print $1}'`
 		schema_name=`echo $i | awk -F '.' '{print $2}'`
 		table_name=`echo $i | awk -F '.' '{print $3}'`
