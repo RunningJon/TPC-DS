@@ -118,7 +118,7 @@ Execution
 ########################################################################################
 Notes
 ########################################################################################
-- tpch_variables.sh file will be created with variables you can adjust
+- tpcds_variables.sh file will be created with variables you can adjust
 - Files for the benchmark will be created in a sub-directory named pivotalguru located 
 in each segment directory on each segment host / data node.
 You can update these directories to be symbolic links to better utilize the disk 
