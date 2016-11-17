@@ -62,6 +62,11 @@ check_variables()
 		echo "GEN_DATA_SCALE=\"3000\"" >> $MYVAR
 		new_variable=$(($new_variable + 1))
 	fi
+	local count=$(grep "SINGLE_USER_ITERATIONS" $MYVAR | wc -l)
+	if [ "$count" -eq "0" ]; then
+		echo "SINGLE_USER_ITERATIONS=\"1\"" >> $MYVAR
+		new_variable=$(($new_variable + 1))
+	fi
 	#00
 	local count=$(grep "RUN_COMPILE_TPCDS" $MYVAR | wc -l)
 	if [ "$count" -eq "0" ]; then
@@ -277,5 +282,5 @@ script_check
 check_sudo
 echo_variables
 
-su --session-command="cd \"$INSTALL_DIR/$REPO\"; ./rollout.sh $GEN_DATA_SCALE $EXPLAIN_ANALYZE $SQL_VERSION $RANDOM_DISTRIBUTION $MULTI_USER_COUNT $RUN_COMPILE_TPCDS $RUN_GEN_DATA $RUN_INIT $RUN_DDL $RUN_LOAD $RUN_SQL $RUN_SINGLE_USER_REPORT $RUN_MULTI_USER $RUN_MULTI_USER_REPORT" $ADMIN_USER
+su --session-command="cd \"$INSTALL_DIR/$REPO\"; ./rollout.sh $GEN_DATA_SCALE $EXPLAIN_ANALYZE $SQL_VERSION $RANDOM_DISTRIBUTION $MULTI_USER_COUNT $RUN_COMPILE_TPCDS $RUN_GEN_DATA $RUN_INIT $RUN_DDL $RUN_LOAD $RUN_SQL $RUN_SINGLE_USER_REPORT $RUN_MULTI_USER $RUN_MULTI_USER_REPORT $SINGLE_USER_ITERATIONS" $ADMIN_USER
 

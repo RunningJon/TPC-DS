@@ -10,10 +10,11 @@ EXPLAIN_ANALYZE=$2
 SQL_VERSION=$3
 RANDOM_DISTRIBUTION=$4
 MULTI_USER_COUNT=$5
+SINGLE_USER_ITERATIONS=$6
 
-if [[ "$GEN_DATA_SCALE" == "" || "$EXPLAIN_ANALYZE" == "" || "$SQL_VERSION" == "" || "$RANDOM_DISTRIBUTION" == "" || "$MULTI_USER_COUNT" == "" ]]; then
+if [[ "$GEN_DATA_SCALE" == "" || "$EXPLAIN_ANALYZE" == "" || "$SQL_VERSION" == "" || "$RANDOM_DISTRIBUTION" == "" || "$MULTI_USER_COUNT" == "" || "$SINGLE_USER_ITERATIONS" == "" ]]; then
 	echo "You must provide the scale as a parameter in terms of Gigabytes, true/false to run queries with EXPLAIN ANALYZE option, the SQL_VERSION, and true/false to use random distrbution."
-	echo "Example: ./rollout.sh 100 false tpcds false 5"
+	echo "Example: ./rollout.sh 100 false tpcds false 5 1"
 	echo "This will create 100 GB of data for this test, not run EXPLAIN ANALYZE, use standard TPC-DS, not use random distribution and use 5 sessions for the multi-user test."
 	exit 1
 fi

@@ -26,5 +26,5 @@ CREATE TABLE tpcds.store_sales (
 WITH (:LARGE_STORAGE)
 :DISTRIBUTED_BY
 PARTITION BY RANGE (ss_sold_date_sk)
-(start(2450815) INCLUSIVE end(2453005) INCLUSIVE every (20),
+(start(2450815) INCLUSIVE end(2453005) INCLUSIVE every (10),
 default partition others);
