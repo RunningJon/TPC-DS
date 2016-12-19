@@ -25,7 +25,7 @@ set_segment_bashrc()
 		shortname=$(echo $i | awk -F '.' '{print $1}')
 		if [ "$MASTER_HOST" != "$shortname" ]; then
 			echo "copy new .bashrc to $i:$ADMIN_HOME"
-			scp $PWD/segment_bashrc $i:$ADMIN_HOME/.bashrc
+			scp -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no $PWD/segment_bashrc $i:$ADMIN_HOME/.bashrc
 		fi
 	done
 }
