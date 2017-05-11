@@ -190,7 +190,7 @@ repo_init()
 	echo ""
 
 	internet_down="0"
-	for j in $(curl google.com 2>&1 | grep "Could not resolve host"); do
+	for j in $(curl google.com 2>&1 | grep "Couldn't resolve host"); do
 		internet_down="1"
 	done
 
