@@ -17,6 +17,7 @@ set_segment_bashrc()
 	echo "	. /etc/bashrc" >> $PWD/segment_bashrc
 	echo "fi" >> $PWD/segment_bashrc
 	echo "source $GREENPLUM_PATH" >> $PWD/segment_bashrc
+	echo "export LD_PRELOAD=/lib64/libz.so.1 ps" >> $PWD/segment_bashrc
 	chmod 755 $PWD/segment_bashrc
 
 	#copy generate_data.sh to ~/
