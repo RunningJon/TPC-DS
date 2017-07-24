@@ -71,7 +71,7 @@ for i in $(ls $PWD/*.ext_tpcds.*.sql); do
 
 	counter=0
 
-	if [[ "$VERSION" == "gpdb_4_2" || "$VERSION" == "gpdb_4_3" || "$VERSION" == "hawq_1" ]]; then
+	if [[ "$VERSION" == "gpdb_4_2" || "$VERSION" == "gpdb_4_3" || "$VERSION" == "gpdb_5" || "$VERSION" == "hawq_1" ]]; then
 		for x in $(psql -A -t -c "select rank() over (partition by hostname order by path), trim(hostname) from data_dir order by hostname"); do
 			CHILD=$(echo $x | awk -F '|' '{print $1}')
 			EXT_HOST=$(echo $x | awk -F '|' '{print $2}')

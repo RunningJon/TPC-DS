@@ -36,7 +36,7 @@ check_gucs()
 	update_config="0"
 
 	get_version
-	if [[ "$VERSION" == "gpdb_4_3" || "$VERSION" == "hawq_1" ]]; then
+	if [[ "$VERSION" == "gpdb_4_3" || "$VERSION" == "gpdb_5" || "$VERSION" == "hawq_1" ]]; then
 		echo "check optimizer"
 		counter=$(psql -v ON_ERROR_STOP=ON -t -A -c "show optimizer" | grep -i "on" | wc -l; exit ${PIPESTATUS[0]})
 
