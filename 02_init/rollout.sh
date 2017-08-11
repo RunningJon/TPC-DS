@@ -75,6 +75,18 @@ check_gucs()
 		update_config="1"
 	fi
 
+	echo "check default_statistics_target"
+	counter=$(psql -v ON_ERROR_STOP=ON -t -A -c "show default_statistics_target" | grep "100" | wc -l; exit ${PIPESTATUS[0]})
+	if [ "$counter" -lt "100" ]; then
+		echo "changing default_statistics_target to 100"
+		if [ "$VERSION" == "hawq_2" ]; then
+			hawq config -c default_statistics_target -v 100
+		else
+			gpconfig -c default_statistics_target -v 100
+		fi
+		update_config="1"
+	fi
+
 	if [ "$update_config" -eq "1" ]; then
 		echo "update cluster because of config changes"
 		if [ "$VERSION" == "hawq_2" ]; then
