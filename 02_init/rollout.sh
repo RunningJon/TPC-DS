@@ -63,10 +63,10 @@ check_gucs()
 		fi
 	
 		if [ "$VERSION" == "gpdb_5" ]; then
-			counter=$(psql -v ON_ERROR_STOP=ON -t -A -c "show optimizer_join_arity_for_associativity_commutativity" | grep -i "2147483647" | wc -l; exit ${PIPESTATUS[0]})
+			counter=$(psql -v ON_ERROR_STOP=ON -t -A -c "show optimizer_join_arity_for_associativity_commutativity" | grep -i "18" | wc -l; exit ${PIPESTATUS[0]})
 			if [ "$counter" -eq "0" ]; then
 				echo "setting optimizer_join_arity_for_associativity_commutativity"
-				gpconfig -c optimizer_join_arity_for_associativity_commutativity -v 2147483647 --skipvalidation
+				gpconfig -c optimizer_join_arity_for_associativity_commutativity -v 18 --skipvalidation
 				update_config="1"
 			fi
 		fi
