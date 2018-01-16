@@ -79,6 +79,7 @@ gen_data()
 			EXT_HOST=$(echo $i | awk -F '|' '{print $2}')
 			GEN_DATA_PATH=$(echo $i | awk -F '|' '{print $3}')
 			GEN_DATA_PATH="$GEN_DATA_PATH""/pivotalguru"
+			echo "ssh -n -f $EXT_HOST \"bash -c 'cd ~/; ./generate_data.sh $GEN_DATA_SCALE $CHILD $PARALLEL $GEN_DATA_PATH > generate_data.$CHILD.log 2>&1 < generate_data.$CHILD.log &'\""
 			ssh -n -f $EXT_HOST "bash -c 'cd ~/; ./generate_data.sh $GEN_DATA_SCALE $CHILD $PARALLEL $GEN_DATA_PATH > generate_data.$CHILD.log 2>&1 < generate_data.$CHILD.log &'"
 		done
 	else
@@ -99,6 +100,7 @@ gen_data()
 			for x in $(seq 1 $nvseg_perseg); do
 				GEN_DATA_PATH="$SEG_DATA_PATH""/pivotalguru_""$x"
 				CHILD=$(($CHILD + 1))
+				echo "ssh -n -f $EXT_HOST \"bash -c 'cd ~/; ./generate_data.sh $GEN_DATA_SCALE $CHILD $PARALLEL $GEN_DATA_PATH > generate_data.$CHILD.log 2>&1 < generate_data.$CHILD.log &'\""
 				ssh -n -f $EXT_HOST "bash -c 'cd ~/; ./generate_data.sh $GEN_DATA_SCALE $CHILD $PARALLEL $GEN_DATA_PATH > generate_data.$CHILD.log 2>&1 < generate_data.$CHILD.log &'"
 			done
 		done
