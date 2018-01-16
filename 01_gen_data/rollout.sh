@@ -73,6 +73,10 @@ gen_data()
 	get_version
 	if [[ "$VERSION" == "gpdb_4_2" || "$VERSION" == "gpdb_4_3" || "$VERSION" == "gpdb_5" || "$VERSION" == "hawq_1" ]]; then
 		PARALLEL=$(gpstate | grep "Total primary segments" | awk -F '=' '{print $2}')
+		if [ "$PARALLEL" == "" ]; then
+			echo "ERROR: Unable to determine how many primary segments are in the cluster using gpstate."
+			exit 1
+		fi
 		echo "parallel: $PARALLEL"
 		for i in $(psql -A -t -c "SELECT row_number() over(), trim(hostname), trim(path) FROM public.data_dir"); do
 			CHILD=$(echo $i | awk -F '|' '{print $1}')
