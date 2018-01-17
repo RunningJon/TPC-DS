@@ -99,18 +99,11 @@ if [ "$file_count" -ne "$MULTI_USER_COUNT" ]; then
 	echo "Now executing queries. This make take a while."
 	echo -ne "Executing queries."
 	while [ "$psql_count" -gt "0" ]; do
-		now=$(date)
-		echo "$now"
-		if ls $PWD/../log/rollout_testing_* 1>/dev/null 2>&1; then
-			wc -l $PWD/../log/rollout_testing_*
-		else
-			echo "No queries complete yet."
-		fi
-
+		echo -ne "."
 		sleep 60
 		get_psql_count
 	done
-	echo "queries complete"
+	echo "done."
 	echo ""
 
 	get_file_count
