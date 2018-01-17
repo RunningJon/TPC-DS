@@ -252,12 +252,6 @@ script_check()
 
 }
 
-check_sudo()
-{
-	cp $INSTALL_DIR/$REPO/update_sudo.sh $PWD/update_sudo.sh
-	$PWD/update_sudo.sh
-}
-
 echo_variables()
 {
 	echo "############################################################################"
@@ -279,7 +273,6 @@ check_variables
 yum_installs
 repo_init
 script_check
-check_sudo
 echo_variables
 
 su --session-command="cd \"$INSTALL_DIR/$REPO\"; ./rollout.sh $GEN_DATA_SCALE $EXPLAIN_ANALYZE $SQL_VERSION $RANDOM_DISTRIBUTION $MULTI_USER_COUNT $RUN_COMPILE_TPCDS $RUN_GEN_DATA $RUN_INIT $RUN_DDL $RUN_LOAD $RUN_SQL $RUN_SINGLE_USER_REPORT $RUN_MULTI_USER $RUN_MULTI_USER_REPORT $SINGLE_USER_ITERATIONS" $ADMIN_USER
