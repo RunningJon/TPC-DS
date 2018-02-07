@@ -45,7 +45,7 @@ create_table_data_dir()
 		SEGMENTS="1"
 		#SEGMENTS=$(hawq state | grep "Total segments count" | awk -F '=' '{print $2}')
 	fi
-	psql -a -v ON_ERROR_STOP=1 -v SEGMENTS="$SEGMENTS" -t $PWD/data_dir.sql
+	psql -a -v ON_ERROR_STOP=1 -v SEGMENTS="$SEGMENTS" -f $PWD/data_dir.sql
 }
 
 kill_orphaned_data_gen()
