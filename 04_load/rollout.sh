@@ -37,7 +37,7 @@ stop_gpfdist()
 {
 	echo "stop gpfdist on all ports"
 	for i in $(cat $PWD/../segment_hosts.txt); do
-		ssh -n -t $i "bash -c 'cd ~/; ./stop_gpfdist.sh'"
+		ssh -n -f $i "bash -c 'cd ~/; ./stop_gpfdist.sh'"
 	done
 }
 
@@ -55,7 +55,7 @@ start_gpfdist()
 			GEN_DATA_PATH=$GEN_DATA_PATH/pivotalguru
 			PORT=$(($GPFDIST_PORT + $CHILD))
 			echo "executing on $EXT_HOST ./start_gpfdist.sh $PORT $GEN_DATA_PATH"
-			ssh -n -t $EXT_HOST "bash -c 'cd ~/; ./start_gpfdist.sh $PORT $GEN_DATA_PATH'"
+			ssh -n -f $EXT_HOST "bash -c 'cd ~/; ./start_gpfdist.sh $PORT $GEN_DATA_PATH'"
 			sleep 1
 		done
 	else
@@ -71,7 +71,7 @@ start_gpfdist()
 				GEN_DATA_PATH="$SEG_DATA_PATH""/pivotalguru_""$x"
 				PORT=$(($GPFDIST_PORT + $x))
 				echo "executing on $EXT_HOST ./start_gpfdist.sh $PORT $GEN_DATA_PATH"
-				ssh -n -t $EXT_HOST "bash -c 'cd ~/; ./start_gpfdist.sh $PORT $GEN_DATA_PATH'"
+				ssh -n -f $EXT_HOST "bash -c 'cd ~/; ./start_gpfdist.sh $PORT $GEN_DATA_PATH'"
 				sleep 1
 			done
 		done

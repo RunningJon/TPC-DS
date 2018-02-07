@@ -23,7 +23,7 @@ get_count_generate_data()
 {
 	count="0"
 	for i in $(cat $PWD/../segment_hosts.txt); do
-		next_count=$(ssh -o ConnectTimeout=0 -n -t $i "bash -c 'ps -ef | grep generate_data.sh | grep -v grep | wc -l'" 2>&1 || true)
+		next_count=$(ssh -o ConnectTimeout=0 -n -f $i "bash -c 'ps -ef | grep generate_data.sh | grep -v grep | wc -l'" 2>&1 || true)
 		check="^[0-9]+$"
 		if ! [[ $next_count =~ $check ]] ; then
 			next_count="1"
@@ -83,8 +83,8 @@ gen_data()
 			EXT_HOST=$(echo $i | awk -F '|' '{print $2}')
 			GEN_DATA_PATH=$(echo $i | awk -F '|' '{print $3}')
 			GEN_DATA_PATH="$GEN_DATA_PATH""/pivotalguru"
-			echo "ssh -n -t $EXT_HOST \"bash -c 'cd ~/; ./generate_data.sh $GEN_DATA_SCALE $CHILD $PARALLEL $GEN_DATA_PATH > generate_data.$CHILD.log 2>&1 < generate_data.$CHILD.log &'\""
-			ssh -n -t $EXT_HOST "bash -c 'cd ~/; ./generate_data.sh $GEN_DATA_SCALE $CHILD $PARALLEL $GEN_DATA_PATH > generate_data.$CHILD.log 2>&1 < generate_data.$CHILD.log &'"
+			echo "ssh -n -f $EXT_HOST \"bash -c 'cd ~/; ./generate_data.sh $GEN_DATA_SCALE $CHILD $PARALLEL $GEN_DATA_PATH > generate_data.$CHILD.log 2>&1 < generate_data.$CHILD.log &'\""
+			ssh -n -f $EXT_HOST "bash -c 'cd ~/; ./generate_data.sh $GEN_DATA_SCALE $CHILD $PARALLEL $GEN_DATA_PATH > generate_data.$CHILD.log 2>&1 < generate_data.$CHILD.log &'"
 		done
 	else
 		#HAWQ 2
@@ -104,8 +104,8 @@ gen_data()
 			for x in $(seq 1 $nvseg_perseg); do
 				GEN_DATA_PATH="$SEG_DATA_PATH""/pivotalguru_""$x"
 				CHILD=$(($CHILD + 1))
-				echo "ssh -n -t $EXT_HOST \"bash -c 'cd ~/; ./generate_data.sh $GEN_DATA_SCALE $CHILD $PARALLEL $GEN_DATA_PATH > generate_data.$CHILD.log 2>&1 < generate_data.$CHILD.log &'\""
-				ssh -n -t $EXT_HOST "bash -c 'cd ~/; ./generate_data.sh $GEN_DATA_SCALE $CHILD $PARALLEL $GEN_DATA_PATH > generate_data.$CHILD.log 2>&1 < generate_data.$CHILD.log &'"
+				echo "ssh -n -f $EXT_HOST \"bash -c 'cd ~/; ./generate_data.sh $GEN_DATA_SCALE $CHILD $PARALLEL $GEN_DATA_PATH > generate_data.$CHILD.log 2>&1 < generate_data.$CHILD.log &'\""
+				ssh -n -f $EXT_HOST "bash -c 'cd ~/; ./generate_data.sh $GEN_DATA_SCALE $CHILD $PARALLEL $GEN_DATA_PATH > generate_data.$CHILD.log 2>&1 < generate_data.$CHILD.log &'"
 			done
 		done
 	fi
