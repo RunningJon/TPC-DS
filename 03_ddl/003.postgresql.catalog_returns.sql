@@ -27,4 +27,4 @@ CREATE TABLE tpcds.catalog_returns (
     cr_store_credit numeric(7,2),
     cr_net_loss numeric(7,2)
 );
-alter table tpcds.catalog_returns add primary key (cr_item_sk);
+alter table tpcds.catalog_returns add primary key (cr_item_sk, cr_order_number);
