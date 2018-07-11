@@ -30,82 +30,57 @@ set_segment_bashrc()
 		fi
 	done
 }
-
 check_gucs()
 {
 	update_config="0"
 
-	get_version
-	if [[ "$VERSION" == "gpdb_4_3" || "$VERSION" == "gpdb_5" || "$VERSION" == "hawq_1" ]]; then
-		echo "check optimizer"
-		counter=$(psql -v ON_ERROR_STOP=ON -t -A -c "show optimizer" | grep -i "on" | wc -l; exit ${PIPESTATUS[0]})
-
+	if [ "$VERSION" == "gpdb_5" ]; then
+		counter=$(psql -q -t -A -c "show optimizer_join_arity_for_associativity_commutativity" | grep -i "18" | wc -l; exit ${PIPESTATUS[0]})
 		if [ "$counter" -eq "0" ]; then
-			echo "enabling optimizer"
-			if [ "$VERSION" == "hawq_2" ]; then
-				hawq config -c optimizer -v on
-			else
-				gpconfig -c optimizer -v on --masteronly
-			fi
+			echo "setting optimizer_join_arity_for_associativity_commutativity"
+			gpconfig -c optimizer_join_arity_for_associativity_commutativity -v 18 --skipvalidation
 			update_config="1"
-		fi
-
-		echo "check analyze_root_partition"
-		counter=$(psql -v ON_ERROR_STOP=ON -t -A -c "show optimizer_analyze_root_partition" | grep -i "on" | wc -l; exit ${PIPESTATUS[0]})
-		if [ "$counter" -eq "0" ]; then
-			echo "enabling analyze_root_partition"
-			if [ "$VERSION" == "hawq_2" ]; then
-				hawq config -c analyze_root_partition -v on
-			else
-				gpconfig -c optimizer_analyze_root_partition -v on --masteronly
-			fi
-			update_config="1"
-		fi
-	
-		if [ "$VERSION" == "gpdb_5" ]; then
-			counter=$(psql -v ON_ERROR_STOP=ON -t -A -c "show optimizer_join_arity_for_associativity_commutativity" | grep -i "18" | wc -l; exit ${PIPESTATUS[0]})
-			if [ "$counter" -eq "0" ]; then
-				echo "setting optimizer_join_arity_for_associativity_commutativity"
-				gpconfig -c optimizer_join_arity_for_associativity_commutativity -v 18 --skipvalidation
-				update_config="1"
-			fi
 		fi
 	fi
 
+	echo "check optimizer"
+	counter=$(psql -q -t -A -c "show optimizer" | grep -i "on" | wc -l; exit ${PIPESTATUS[0]})
+
+	if [ "$counter" -eq "0" ]; then
+		echo "enabling optimizer"
+		gpconfig -c optimizer -v on --masteronly
+		update_config="1"
+	fi
+
+	echo "check analyze_root_partition"
+	counter=$(psql -q -t -A -c "show optimizer_analyze_root_partition" | grep -i "on" | wc -l; exit ${PIPESTATUS[0]})
+	if [ "$counter" -eq "0" ]; then
+		echo "enabling analyze_root_partition"
+		gpconfig -c optimizer_analyze_root_partition -v on --masteronly
+		update_config="1"
+	fi
+
 	echo "check gp_autostats_mode"
-	counter=$(psql -v ON_ERROR_STOP=ON -t -A -c "show gp_autostats_mode" | grep -i "none" | wc -l; exit ${PIPESTATUS[0]})
+	counter=$(psql -q -t -A -c "show gp_autostats_mode" | grep -i "none" | wc -l; exit ${PIPESTATUS[0]})
 	if [ "$counter" -eq "0" ]; then
 		echo "changing gp_autostats_mode to none"
-		if [ "$VERSION" == "hawq_2" ]; then
-			hawq config -c gp_autostats_mode -v NONE
-		else
-			gpconfig -c gp_autostats_mode -v none --masteronly
-		fi
+		gpconfig -c gp_autostats_mode -v none --masteronly
 		update_config="1"
 	fi
 
 	echo "check default_statistics_target"
-	counter=$(psql -v ON_ERROR_STOP=ON -t -A -c "show default_statistics_target" | grep "100" | wc -l; exit ${PIPESTATUS[0]})
+	counter=$(psql -q -t -A -c "show default_statistics_target" | grep "100" | wc -l; exit ${PIPESTATUS[0]})
 	if [ "$counter" -eq "0" ]; then
 		echo "changing default_statistics_target to 100"
-		if [ "$VERSION" == "hawq_2" ]; then
-			hawq config -c default_statistics_target -v 100
-		else
-			gpconfig -c default_statistics_target -v 100
-		fi
+		gpconfig -c default_statistics_target -v 100
 		update_config="1"
 	fi
 
 	if [ "$update_config" -eq "1" ]; then
 		echo "update cluster because of config changes"
-		if [ "$VERSION" == "hawq_2" ]; then
-			hawq stop cluster -u -a
-		else
-			gpstop -u
-		fi
+		gpstop -u
 	fi
 }
-
 copy_config()
 {
 	echo "copy config files"
@@ -114,20 +89,21 @@ copy_config()
 		cp $MASTER_DATA_DIRECTORY/postgresql.conf $PWD/../log/
 	fi
 	#gp_segment_configuration
-	psql -q -A -t -v ON_ERROR_STOP=ON -c "SELECT * FROM gp_segment_configuration" -o $PWD/../log/gp_segment_configuration.txt
+	psql -q -A -t -c "SELECT * FROM gp_segment_configuration" -o $PWD/../log/gp_segment_configuration.txt
 }
-
-set_psqlrc()
+set_search_path()
 {
-	echo "set search_path=tpcds,public;" > ~/.psqlrc
-	echo "\timing" >> ~/.psqlrc
-	chmod 600 ~/.psqlrc
+	echo "psql -q -A -t -c \"ALTER USER $USER SET search_path=$schema_name,public;\""
+	psql -q -A -t -c "ALTER USER $USER SET search_path=$schema_name,public;"
 }
 
-set_segment_bashrc
-check_gucs
-copy_config
-set_psqlrc
+get_version
+if [[ "$VERSION" == *"gpdb"* ]]; then
+	set_segment_bashrc
+	check_gucs
+	copy_config
+fi
+set_search_path
 
 log
 

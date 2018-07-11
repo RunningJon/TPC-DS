@@ -8,14 +8,32 @@ step=single_user_reports
 
 init_log $step
 
-for i in $(ls $PWD/*.sql | grep -v report.sql); do
-	table_name=`echo $i | awk -F '.' '{print $3}'`
-	EXECUTE="'cat $PWD/../log/rollout_$table_name.log'"
+get_version
+if [[ "$VERSION" == *"gpdb"* ]]; then
+	filter="gpdb"
+elif [ "$VERSION" == "postgresql" ]; then
+	filter="postgresql"
+else
+	echo "ERROR: Unsupported VERSION!"
+	exit 1
+fi
 
-	echo "psql -v ON_ERROR_STOP=ON -a -f $i -v EXECUTE=\"$EXECUTE\""
-	psql -v ON_ERROR_STOP=ON -a -f $i -v EXECUTE="$EXECUTE"
+for i in $(ls $PWD/*.$filter.*.sql); do
+	echo "psql -a -f $i"
+	psql -a -f $i
 	echo ""
 done
+
+for i in $(ls $PWD/*.copy.*.sql); do
+	logstep=$(echo $i | awk -F 'copy.' '{print $2}' | awk -F '.' '{print $1}')
+	logfile="$PWD""/../log/rollout_""$logstep"".log"
+	logfile="'""$logfile""'"
+	echo "psql -a -f $i -v LOGFILE=\"$logfile\""
+	psql -a -f $i -v LOGFILE="$logfile"
+	echo ""
+done
+
+psql -q -t -A -c "select 'analyze ' || n.nspname || '.' || c.relname || ';' from pg_class c join pg_namespace n on n.oid = c.relnamespace and n.nspname = 'tpcds_reports'" | psql -t -A -e
 
 echo "********************************************************************************"
 echo "Generate Data"

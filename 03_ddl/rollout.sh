@@ -7,15 +7,13 @@ source_bashrc
 
 GEN_DATA_SCALE=$1
 EXPLAIN_ANALYZE=$2
-SQL_VERSION=$3
-RANDOM_DISTRIBUTION=$4
-MULTI_USER_COUNT=$5
-SINGLE_USER_ITERATIONS=$6
+RANDOM_DISTRIBUTION=$3
+MULTI_USER_COUNT=$4
+SINGLE_USER_ITERATIONS=$5
 
-if [[ "$GEN_DATA_SCALE" == "" || "$EXPLAIN_ANALYZE" == "" || "$SQL_VERSION" == "" || "$RANDOM_DISTRIBUTION" == "" || "$MULTI_USER_COUNT" == "" || "$SINGLE_USER_ITERATIONS" == "" ]]; then
-	echo "You must provide the scale as a parameter in terms of Gigabytes, true/false to run queries with EXPLAIN ANALYZE option, the SQL_VERSION, and true/false to use random distrbution."
+if [[ "$GEN_DATA_SCALE" == "" || "$EXPLAIN_ANALYZE" == "" || "$RANDOM_DISTRIBUTION" == "" || "$MULTI_USER_COUNT" == "" || "$SINGLE_USER_ITERATIONS" == "" ]]; then
+	echo "You must provide the scale as a parameter in terms of Gigabytes, true/false to run queries with EXPLAIN ANALYZE option, true/false to use random distrbution, multi-user count, and the number of sql iterations."
 	echo "Example: ./rollout.sh 100 false tpcds false 5 1"
-	echo "This will create 100 GB of data for this test, not run EXPLAIN ANALYZE, use standard TPC-DS, not use random distribution and use 5 sessions for the multi-user test."
 	exit 1
 fi
 
@@ -23,56 +21,55 @@ step=ddl
 init_log $step
 get_version
 
-#Create tables 
-if [ "$SQL_VERSION" == "e9" ]; then
-	filter="e9"
+if [[ "$VERSION" == *"gpdb"* ]]; then
+	filter="gpdb"
+elif [ "$VERSION" == "postgresql" ]; then
+	filter="postgresql"
 else
-	filter="tpcds"
+	echo "ERROR: Unsupported VERSION $VERSION!"
+	exit 1
 fi
 
+#Create tables
 for i in $(ls $PWD/*.$filter.*.sql); do
-	id=`echo $i | awk -F '.' '{print $1}'`
-	schema_name=`echo $i | awk -F '.' '{print $2}'`
-	table_name=`echo $i | awk -F '.' '{print $3}'`
+	id=$(echo $i | awk -F '.' '{print $1}')
+	schema_name=$(echo $i | awk -F '.' '{print $2}')
+	table_name=$(echo $i | awk -F '.' '{print $3}')
 	start_log
 
-	counter=0
-
-	if [ "$RANDOM_DISTRIBUTION" == "true" ]; then
-		DISTRIBUTED_BY="DISTRIBUTED RANDOMLY"
+	if [ "$filter" == "gpdb" ]; then
+		if [ "$RANDOM_DISTRIBUTION" == "true" ]; then
+			DISTRIBUTED_BY="DISTRIBUTED RANDOMLY"
+		else
+			for z in $(cat $PWD/distribution.txt); do
+				table_name2=$(echo $z | awk -F '|' '{print $2}')
+				if [ "$table_name2" == "$table_name" ]; then
+					distribution=$(echo $z | awk -F '|' '{print $3}')
+				fi
+			done
+			DISTRIBUTED_BY="DISTRIBUTED BY (""$distribution"")"
+		fi
 	else
-		for z in $(cat $PWD/distribution.txt); do
-			table_name2=`echo $z | awk -F '|' '{print $2}'`	
-			if [ "$table_name2" == "$table_name" ]; then
-				distribution=`echo $z | awk -F '|' '{print $3}'`
-			fi
-		done
-		DISTRIBUTED_BY="DISTRIBUTED BY (""$distribution"")"
+		DISTRIBUTED_BY=""
 	fi
 
-	if [ "$SQL_VERSION" == "e9" ]; then
-		echo "psql -a -P pager=off -v ON_ERROR_STOP=ON -f $i -v E9_MEDIUM_STORAGE=\"$E9_MEDIUM_STORAGE\" -v E9_LARGE_STORAGE=\"$E9_LARGE_STORAGE\" -v DISTRIBUTED_BY=\"$DISTRIBUTED_BY\""
-		psql -a -P pager=off -v ON_ERROR_STOP=ON -f $i -v E9_MEDIUM_STORAGE="$E9_MEDIUM_STORAGE" -v E9_LARGE_STORAGE="$E9_LARGE_STORAGE" -v DISTRIBUTED_BY="$DISTRIBUTED_BY"
-	else
-		echo "psql -a -P pager=off -v ON_ERROR_STOP=ON -f $i -v SMALL_STORAGE=\"$SMALL_STORAGE\" -v MEDIUM_STORAGE=\"$MEDIUM_STORAGE\" -v LARGE_STORAGE=\"$LARGE_STORAGE\" -v DISTRIBUTED_BY=\"$DISTRIBUTED_BY\""
-		psql -a -P pager=off -v ON_ERROR_STOP=ON -f $i -v SMALL_STORAGE="$SMALL_STORAGE" -v MEDIUM_STORAGE="$MEDIUM_STORAGE" -v LARGE_STORAGE="$LARGE_STORAGE" -v DISTRIBUTED_BY="$DISTRIBUTED_BY"
-	fi
+	echo "psql -q -a -P pager=off -f $i -v SMALL_STORAGE=\"$SMALL_STORAGE\" -v MEDIUM_STORAGE=\"$MEDIUM_STORAGE\" -v LARGE_STORAGE=\"$LARGE_STORAGE\" -v DISTRIBUTED_BY=\"$DISTRIBUTED_BY\""
+	psql -q -a -P pager=off -f $i -v SMALL_STORAGE="$SMALL_STORAGE" -v MEDIUM_STORAGE="$MEDIUM_STORAGE" -v LARGE_STORAGE="$LARGE_STORAGE" -v DISTRIBUTED_BY="$DISTRIBUTED_BY"
 
 	log
 done
 
-#external tables are the same for all SQL_VERSION
-for i in $(ls $PWD/*.ext_tpcds.*.sql); do
-	start_log
+#external tables are the same for all gpdb
+if [ "$filter" == "gpdb" ]; then
+	for i in $(ls $PWD/*.ext_tpcds.*.sql); do
+		start_log
 
-	id=`echo $i | awk -F '.' '{print $1}'`
-	schema_name=`echo $i | awk -F '.' '{print $2}'`
-	table_name=`echo $i | awk -F '.' '{print $3}'`
+		id=$(echo $i | awk -F '.' '{print $1}')
+		schema_name=$(echo $i | awk -F '.' '{print $2}')
+		table_name=$(echo $i | awk -F '.' '{print $3}')
 
-	counter=0
-
-	if [[ "$VERSION" == "gpdb_4_2" || "$VERSION" == "gpdb_4_3" || "$VERSION" == "gpdb_5" || "$VERSION" == "hawq_1" ]]; then
-		for x in $(psql -A -t -c "select rank() over (partition by hostname order by path), trim(hostname) from data_dir order by hostname"); do
+		counter=0
+		for x in $(psql -q -A -t -c "select rank() over (partition by g.hostname order by p.fselocation), g.hostname from gp_segment_configuration g join pg_filespace_entry p on g.dbid = p.fsedbid where content >= 0 order by g.hostname"); do
 			CHILD=$(echo $x | awk -F '|' '{print $1}')
 			EXT_HOST=$(echo $x | awk -F '|' '{print $2}')
 			PORT=$(($GPFDIST_PORT + $CHILD))
@@ -86,33 +83,14 @@ for i in $(ls $PWD/*.ext_tpcds.*.sql); do
 
 			counter=$(($counter + 1))
 		done
-	else
-		#HAWQ 2
-		get_nvseg_perseg
-		segment_count=$(cat $PWD/../segment_hosts.txt | wc -l)
-		segment_count=$(($segment_count * $nvseg_perseg))
-		for x in $(cat $PWD/../segment_hosts.txt); do
-			EXT_HOST=$x
-			for y in $(seq 1 $nvseg_perseg); do
-				PORT=$(($GPFDIST_PORT + $y))
-				if [ "$counter" -eq "0" ]; then
-					LOCATION="'"
-				else
-					LOCATION+="', '"
-				fi
-				LOCATION+="gpfdist://$EXT_HOST:$PORT/"$table_name"_[0-9]*_[0-9]*.dat"
 
-				counter=$(($counter + 1))
-			done
-		done
-	fi
+		LOCATION+="'"
 
-	LOCATION+="'"
+		echo "psql -q -a -P pager=off -f $i -v LOCATION=\"$LOCATION\""
+		psql -q -a -P pager=off -f $i -v LOCATION="$LOCATION" 
 
-	echo "psql -a -P pager=off -v ON_ERROR_STOP=ON -f $i -v LOCATION=\"$LOCATION\""
-	psql -a -P pager=off -v ON_ERROR_STOP=ON -f $i -v LOCATION="$LOCATION" 
-
-	log
-done
+		log
+	done
+fi
 
 end_step $step

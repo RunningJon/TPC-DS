@@ -37,19 +37,19 @@ source_bashrc()
 get_version()
 {
 	#need to call source_bashrc first
-	VERSION=$(psql -v ON_ERROR_STOP=1 -t -A -c "SELECT CASE WHEN POSITION ('HAWQ 2' in version) > 0 THEN 'hawq_2' WHEN POSITION ('HAWQ 1' in version) > 0 THEN 'hawq_1' WHEN POSITION ('HAWQ' in version) = 0 AND POSITION ('Greenplum Database 4.2' IN version) > 0 THEN 'gpdb_4_2' WHEN POSITION ('HAWQ' in version) = 0 AND POSITION ('Greenplum Database 4.3' IN version) > 0 THEN 'gpdb_4_3' WHEN POSITION ('HAWQ' in version) = 0 AND POSITION ('Greenplum Database 5' IN version) > 0 THEN 'gpdb_5' ELSE 'OTHER' END FROM version();")
-	if [[ "$VERSION" == *"hawq"* ]]; then
-		SMALL_STORAGE="appendonly=true, orientation=parquet"
-		MEDIUM_STORAGE="appendonly=true, orientation=parquet, compresstype=snappy"
-		LARGE_STORAGE="appendonly=true, orientation=parquet, compresstype=snappy"
-		E9_MEDIUM_STORAGE="APPENDONLY=TRUE, COMPRESSTYPE=QUICKLZ"
-		E9_LARGE_STORAGE="APPENDONLY=TRUE, ORIENTATION=parquet, COMPRESSTYPE=snappy"
-	else
+	VERSION=$(psql -t -A -c "SELECT CASE WHEN POSITION ('Greenplum Database 4.3' IN version) > 0 THEN 'gpdb_4_3' WHEN POSITION('-oss' IN version) = 0 AND POSITION ('Greenplum Database 5' IN version) > 0 THEN 'gpdb_5' WHEN POSITION('-oss' IN version) = 0 AND POSITION ('Greenplum Database 6' IN version) > 0 THEN 'gpdb_6' WHEN POSITION('-oss' IN version) > 0 THEN 'gpdb_oss' ELSE 'postgresql' END FROM version();")
+	if [[ "$VERSION" == *"oss"* ]]; then
 		SMALL_STORAGE="appendonly=true, orientation=column"
-		MEDIUM_STORAGE="appendonly=true, orientation=column, compresstype=quicklz"
+		MEDIUM_STORAGE="appendonly=true, orientation=column"
+		LARGE_STORAGE="appendonly=true, orientation=column, compresstype=zlib, compresslevel=4"
+	elif [[ "$VERSION" == *"gpdb"* ]]; then
+		SMALL_STORAGE="appendonly=true, orientation=column"
+		MEDIUM_STORAGE="appendonly=true, orientation=column"
 		LARGE_STORAGE="appendonly=true, orientation=column, compresstype=quicklz"
-		E9_MEDIUM_STORAGE="APPENDONLY=TRUE, COMPRESSTYPE=QUICKLZ"
-		E9_LARGE_STORAGE="APPENDONLY=TRUE, ORIENTATION=column, COMPRESSTYPE=QUICKLZ"
+	else
+		SMALL_STORAGE=""
+		MEDIUM_STORAGE=""
+		LARGE_STORAGE=""
 	fi
 }
 
@@ -113,15 +113,10 @@ create_hosts_file()
 {
 	get_version
 
-	if [[ "$VERSION" == "gpdb_4_2" || "$VERSION" == "gpdb_4_3" || "$VERSION" == "gpdb_5" || "$VERSION" == "hawq_1" ]]; then
-		psql -t -A -v ON_ERROR_STOP=1 -c "SELECT DISTINCT hostname FROM gp_segment_configuration WHERE role = 'p' AND content >= 0" -o $LOCAL_PWD/segment_hosts.txt
+	if [ "$VERSION" == *"gpdb"* ]; then
+		psql -t -A -c "SELECT DISTINCT hostname FROM gp_segment_configuration WHERE role = 'p' AND content >= 0" -o $LOCAL_PWD/segment_hosts.txt
 	else
-		#must be HAWQ 2 which doesn't have content column
-		psql -t -A -v ON_ERROR_STOP=1 -c "SELECT DISTINCT hostname FROM gp_segment_configuration WHERE role = 'p'" -o $LOCAL_PWD/segment_hosts.txt
+		#must be PostgreSQL
+		echo $MASTER_HOST > $LOCAL_PWD/segment_hosts.txt
 	fi
-}
-
-get_nvseg_perseg()
-{
-	nvseg_perseg=$(psql -t -A -c "show hawq_rm_nvseg_perquery_perseg_limit")
 }
