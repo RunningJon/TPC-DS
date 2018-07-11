@@ -21,19 +21,31 @@ MASTER_HOST=$(hostname | awk -F '.' '{print $1}')
 
 source_bashrc()
 {
-	for g in $(grep "greenplum_path.sh" ~/.bashrc | grep -v "\#"); do
+	startup_file=".bashrc"
+	if [ ! -f ~/.bashrc ]; then
+		if [ -f ~/.bash_profile ]; then
+			startup_file=".bash_profile"
+		else
+			echo "touch ~/.bashrc"
+			touch ~/.bashrc
+		fi
+	fi
+	for g in $(grep "greenplum_path.sh" ~/$startup_file | grep -v "\#"); do
 		GREENPLUM_PATH=$g
 	done
 	if [ "$GREENPLUM_PATH" == "" ]; then
-		echo ".bashrc file does not contain greenplum_path.sh"
-		echo "Please update your .bashrc file for $ADMIN_USER and try again."
-		exit 1
+		get_version
+		if [[ "$VERSION" == *"gpdb"* || "$VERSION" == *"oss"* ]]; then
+			echo "$startup_file does not contain greenplum_path.sh"
+			echo "Please update your $startup_file for $ADMIN_USER and try again."
+			exit 1
+		fi
 	fi
-	echo "source .bashrc"
-	source ~/.bashrc
+	echo "source ~/$startup_file"
+	# don't fail if an error is happening in the admin's profile
+	source ~/$startup_file || true
 	echo ""
 }
-
 get_version()
 {
 	#need to call source_bashrc first
