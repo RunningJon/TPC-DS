@@ -78,7 +78,6 @@ else
 	echo "parallel: $PARALLEL"
 
 	for i in $(ls $PWD/*.$filter.*.sql); do
-		echo $i
 		short_i=$(basename $i)
 		id=$(echo $short_i | awk -F '.' '{print $1}')
 		schema_name=$(echo $short_i | awk -F '.' '{print $2}')
