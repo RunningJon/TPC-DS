@@ -18,13 +18,11 @@ RUN_SQL="${10}"
 RUN_SINGLE_USER_REPORT="${11}"
 RUN_MULTI_USER="${12}"
 RUN_MULTI_USER_REPORT="${13}"
-SINGLE_USER_ITERATIONS="${14}"
+RUN_SCORE="${14}"
+SINGLE_USER_ITERATIONS="${15}"
 
-if [[ "$GEN_DATA_SCALE" == "" || "$EXPLAIN_ANALYZE" == "" || "$RANDOM_DISTRIBUTION" == "" || "$MULTI_USER_COUNT" == "" || "$RUN_COMPILE_TPCDS" == "" || "$RUN_GEN_DATA" == "" || "$RUN_INIT" == "" || "$RUN_DDL" == "" || "$RUN_LOAD" == "" || "$RUN_SQL" == "" || "$RUN_SINGLE_USER_REPORT" == "" || "$RUN_MULTI_USER" == "" || "$RUN_MULTI_USER_REPORT" == "" || "$SINGLE_USER_ITERATIONS" == "" ]]; then
-	echo "You must provide the scale as a parameter in terms of Gigabytes, true/false to run queries with EXPLAIN ANALYZE option, and true/false to use random distrbution."
-	echo "Example: ./rollout.sh 100 false false 5 true true true true true true true true true 1"
-	echo "This will create 100 GB of data for this test, not run EXPLAIN ANALYZE, and not use random distribution."
-	echo "The next nine run options indicate if you want to force the running of those steps even if the step has already completed."
+if [[ "$GEN_DATA_SCALE" == "" || "$EXPLAIN_ANALYZE" == "" || "$RANDOM_DISTRIBUTION" == "" || "$MULTI_USER_COUNT" == "" || "$RUN_COMPILE_TPCDS" == "" || "$RUN_GEN_DATA" == "" || "$RUN_INIT" == "" || "$RUN_DDL" == "" || "$RUN_LOAD" == "" || "$RUN_SQL" == "" || "$RUN_SINGLE_USER_REPORT" == "" || "$RUN_MULTI_USER" == "" || "$RUN_MULTI_USER_REPORT" == "" || "$RUN_SCORE" == "" || "$SINGLE_USER_ITERATIONS" == "" ]]; then
+	echo "Please run this script from tpcds.sh so the correct parameters are passed to it."
 	exit 1
 fi
 
@@ -86,6 +84,9 @@ if [ "$RUN_MULTI_USER" == "true" ]; then
 fi
 if [ "$RUN_MULTI_USER_REPORT" == "true" ]; then
 	rm -f $PWD/log/end_multi_user_reports.log
+fi
+if [ "$RUN_SCORE" == "true" ]; then
+	rm -f $PWD/log/end_score.log
 fi
 
 for i in $(ls -d $PWD/0*); do
