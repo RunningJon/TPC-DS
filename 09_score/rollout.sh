@@ -22,7 +22,8 @@ init_log $step
 
 load_time=$(psql -q -t -A -c "select sum(extract('epoch' from duration)) from tpcds_reports.load where tuples > 0")
 analyze_time=$(psql -q -t -A -c "select sum(extract('epoch' from duration)) from tpcds_reports.load where tuples = 0")
-queries_time=$(psql -q -t -A -c "select min(extract('epoch' from duration)) from tpcds_reports.sql")
+queries_time=$(psql -q -t -A -c "select sum(extract('epoch' from duration)) from (SELECT split_part(description, '.', 2) AS id,  min(extract('epoch' from duration)) AS duration FROM tpcds_reports.sql GROUP BY split_part(description, '.', 2)) as sub")
+
 concurrent_queries_time=$(psql -q -t -A -c "select sum(extract('epoch' from duration)) from tpcds_testing.sql")
 
 q=$((3*MULTI_USER_COUNT*99))
@@ -37,8 +38,8 @@ score=$(echo "$num_score/$dem_score" | bc)
 echo -e "Scale Factor\t$GEN_DATA_SCALE"
 echo -e "Load\t$load_time"
 echo -e "Analyze\t$analyze_time"
-echo -e "Queries\t$queries_time"
-echo -e "5 Users Sum\t$concurrent_queries_time"
+echo -e "1 User Queries\t$queries_time"
+echo -e "Concurrent Queries\t$concurrent_queries_time"
 echo -e "Q\t$q"
 echo -e "TPT\t$tpt"
 echo -e "TTT\t$concurrent_queries_time"
