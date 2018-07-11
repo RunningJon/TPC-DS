@@ -9,14 +9,14 @@ step="multi_user_reports"
 init_log $step
 
 for i in $(ls $PWD/*.sql | grep -v report.sql); do
-        schema_name=`echo $i | awk -F '.' '{print $2}'`
+        schema_name=$(echo $i | awk -F '.' '{print $2}')
 	EXECUTE="'cat $PWD/../log/rollout_$schema_name*.log'"
-        echo "psql -v ON_ERROR_STOP=ON -a -f $i -v EXECUTE=\"$EXECUTE\""
-        psql -v ON_ERROR_STOP=ON -a -f $i -v EXECUTE="$EXECUTE"
+        echo "psql -a -f $i -v EXECUTE=\"$EXECUTE\""
+        psql -a -f $i -v EXECUTE="$EXECUTE"
         echo ""
 done
 
-psql -F $'\t' -A -v ON_ERROR_STOP=ON -P pager=off -f $PWD/detailed_report.sql
+psql -F $'\t' -A -P pager=off -f $PWD/detailed_report.sql
 echo ""
 
 end_step $step

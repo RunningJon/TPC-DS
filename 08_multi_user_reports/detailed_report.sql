@@ -21,7 +21,7 @@ from	(
 	case when split_part(description, '.', 1) = '8' then extract('epoch' from duration) else 0 end as session_8,
 	case when split_part(description, '.', 1) = '9' then extract('epoch' from duration) else 0 end as session_9,
 	case when split_part(description, '.', 1) = '10' then extract('epoch' from duration) else 0 end as session_10
-	from testing.sql
+	from tpcds_testing.sql
 	) as sub
 group by query_id
 order by 1;
