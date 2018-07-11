@@ -116,6 +116,12 @@ check_variables()
 		echo "RUN_MULTI_USER_REPORT=\"true\"" >> $MYVAR
 		new_variable=$(($new_variable + 1))
 	fi
+	#09
+	local count=$(grep "RUN_SCORE" $MYVAR | wc -l)
+	if [ "$count" -eq "0" ]; then
+		echo "RUN_SCORE=\"true\"" >> $MYVAR
+		new_variable=$(($new_variable + 1))
+	fi
 
 	if [ "$new_variable" -gt "0" ]; then
 		echo "There are new variables in the tpcds_variables.sh file.  Please review to ensure the values are correct and then re-run this script."

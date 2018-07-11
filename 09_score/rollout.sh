@@ -26,14 +26,13 @@ queries_time=$(psql -q -t -A -c "select min(extract('epoch' from duration)) from
 concurrent_queries_time=$(psql -q -t -A -c "select sum(extract('epoch' from duration)) from tpcds_testing.sql")
 
 q=$((3*MULTI_USER_COUNT*99))
-tpt=$((queries_time*MULTI_USER_COUNT))
-tld=$((0.01*MULTI_USER_COUNT*load_time))
 
-num_score=$((GEN_DATA_SCALE*q))
-dem_score=$((tpt+2*concurrent_queries_time+tld))
+tpt=$(echo "$queries_time*$MULTI_USER_COUNT" | bc)
 
-score=$((num_score/dem_score))
-score=$(echo $score | awk -F '.' '{print $1}')
+tld=$(echo "0.01*$MULTI_USER_COUNT*$load_time" | bc)
+num_score=$(echo "$GEN_DATA_SCALE*$q" | bc)
+dem_score=$(echo "$tpt+2*$concurrent_queries_time+$tld" | bc)
+score=$(echo "$num_score/$dem_score" | bc)
 
 echo -e "Scale Factor\t$GEN_DATA_SCALE"
 echo -e "Load\t$load_time"
