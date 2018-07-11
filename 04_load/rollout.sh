@@ -79,11 +79,12 @@ else
 
 	for i in $(ls $PWD/*.$filter.*.sql); do
 		echo $i
-		id=$(echo $i | awk -F '.' '{print $1}')
-		schema_name=$(echo $i | awk -F '.' '{print $2}')
-		table_name=$(echo $i | awk -F '.' '{print $3}')
+		short_i=$(basename $i)
+		id=$(echo $short_i | awk -F '.' '{print $1}')
+		schema_name=$(echo $short_i | awk -F '.' '{print $2}')
+		table_name=$(echo $short_i | awk -F '.' '{print $3}')
 		for p in $(seq 1 $PARALLEL); do
-			filename=$(echo $PGDATA/pivotalguru_$p/"$table_name"_$p_$PARALLEL.dat)
+			filename=$(echo $PGDATA/pivotalguru_$p/"$table_name"_"$p"_"$PARALLEL".dat)
 			if [[ -f $filename && -s $filename ]]; then
 				start_log
 				filename="'""$filename""'"
