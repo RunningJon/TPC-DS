@@ -16,7 +16,7 @@ CREATE TABLE tpcds.customer (
     c_birth_country character varying(20),
     c_login character varying(13),
     c_email_address character varying(50),
-    c_last_review_date character varying(10)
+    c_last_review_date integer
 )
 WITH (:SMALL_STORAGE)
 :DISTRIBUTED_BY;
