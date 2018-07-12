@@ -42,7 +42,7 @@ alter table catalog_sales add foreign key (cs_promo_sk) references promotion (p_
 
 --catalog_returns
 alter table catalog_returns add foreign key (cr_returned_date_sk) references date_dim (d_date_sk);
-alter table catalog_returns add foreign key (cr_return_time_sk) references time_dim (t_time_sk);
+alter table catalog_returns add foreign key (cr_returned_time_sk) references time_dim (t_time_sk);
 alter table catalog_returns add foreign key (cr_item_sk) references item (i_item_sk);
 alter table catalog_returns add foreign key (cr_item_sk, cr_order_number) references catalog_sales (cs_item_sk, cs_order_number);
 alter table catalog_returns add foreign key (cr_refunded_customer_sk) references customer (c_customer_sk);
