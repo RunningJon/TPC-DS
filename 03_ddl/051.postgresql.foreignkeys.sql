@@ -29,7 +29,7 @@ alter table catalog_sales add foreign key (cs_bill_customer_sk) references custo
 alter table catalog_sales add foreign key (cs_bill_cdemo_sk) references customer_demographics (cd_demo_sk);
 alter table catalog_sales add foreign key (cs_bill_hdemo_sk) references household_demographics (hd_demo_sk);
 alter table catalog_sales add foreign key (cs_bill_addr_sk) references customer_address (ca_address_sk);
-alter table catalog_sales add foreign key (cs_ship_customer_sk) references household_demographics (hd_demo_sk);
+alter table catalog_sales add foreign key (cs_ship_customer_sk) references customer (c_customer_sk);
 alter table catalog_sales add foreign key (cs_ship_cdemo_sk) references customer_demographics (cd_demo_sk);
 alter table catalog_sales add foreign key (cs_ship_hdemo_sk) references household_demographics (hd_demo_sk);
 alter table catalog_sales add foreign key (cs_ship_addr_sk) references customer_address (ca_address_sk);
