@@ -39,7 +39,7 @@ start_gpfdist()
 {
 	stop_gpfdist
 	sleep 1
-	for i in $(psql -q -A -t -c "select rank() over (partition by g.hostname order by p.fselocation), g.hostname, p.fselocation as path from gp_segment_configuration g join pg_filespace_entry p on g.dbid = p.fsedbid where content >= 0 order by g.hostname"); do
+	for i in $(psql -q -A -t -c "select rank() over (partition by g.hostname order by p.fselocation), g.hostname, p.fselocation as path from gp_segment_configuration g join pg_filespace_entry p on g.dbid = p.fsedbid where content >= 0 and g.role = 'p' order by g.hostname"); do
 		CHILD=$(echo $i | awk -F '|' '{print $1}')
 		EXT_HOST=$(echo $i | awk -F '|' '{print $2}')
 		GEN_DATA_PATH=$(echo $i | awk -F '|' '{print $3}')
