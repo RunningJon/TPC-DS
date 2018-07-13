@@ -152,13 +152,14 @@ yum_installs()
 {
 	### Install and Update Demos ###
 	echo "############################################################################"
-	echo "Install git and gcc with yum."
+	echo "Install git, gcc, and bc with yum."
 	echo "############################################################################"
 	echo ""
 	# Install git and gcc if not found
 	local YUM_INSTALLED=$(yum --help 2> /dev/null | wc -l)
 	local CURL_INSTALLED=$(gcc --help 2> /dev/null | wc -l)
 	local GIT_INSTALLED=$(git --help 2> /dev/null | wc -l)
+	local BC_INSTALLED=$(bc --help 2> /dev/null | wc -l)
 
 	if [ "$YUM_INSTALLED" -gt "0" ]; then
 		if [ "$CURL_INSTALLED" -eq "0" ]; then
@@ -166,6 +167,9 @@ yum_installs()
 		fi
 		if [ "$GIT_INSTALLED" -eq "0" ]; then
 			yum -y install git
+		fi
+		if [ "$BC_INSTALLED" -eq "0" ]; then
+			yum -y install bc
 		fi
 	else
 		if [ "$CURL_INSTALLED" -eq "0" ]; then
@@ -176,6 +180,11 @@ yum_installs()
 		if [ "$GIT_INSTALLED" -eq "0" ]; then
 			echo "git not installed and yum not found to install it."
 			echo "Please install git and try again."
+			exit 1
+		fi
+		if [ "$BC_INSTALLED" -eq "0" ]; then
+			echo "bc not installed and yum not found to install it."
+			echo "Please install bc and try again."
 			exit 1
 		fi
 	fi
