@@ -24,7 +24,7 @@ CREATE TABLE tpcds.web_returns (
     wr_account_credit numeric(7,2),
     wr_net_loss numeric(7,2)
 )
-partition by (wr_returned_date_sk);
+partition by range (wr_returned_date_sk);
 
 CREATE TABLE tpcds.web_returns_2450815 PARTITION OF tpcds.web_returns FOR VALUES FROM (2450815) TO (2450995);
 CREATE TABLE tpcds.web_returns_2450995 PARTITION OF tpcds.web_returns FOR VALUES FROM (2450995) TO (2451175);
