@@ -1,3 +1,4 @@
+/*
 --store_sales
 alter table store_sales add foreign key (ss_sold_date_sk) references date_dim (d_date_sk);
 alter table store_sales add foreign key (ss_sold_time_sk) references time_dim (t_time_sk);
@@ -133,3 +134,4 @@ alter table household_demographics add foreign key (hd_income_band_sk) reference
 alter table promotion add foreign key (p_start_date_sk) references date_dim (d_date_sk);
 alter table promotion add foreign key (p_end_date_sk) references date_dim (d_date_sk);
 alter table promotion add foreign key (p_item_sk) references item (i_item_sk);
+*/

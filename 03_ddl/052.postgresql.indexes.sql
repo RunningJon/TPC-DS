@@ -1,3 +1,4 @@
+/*
 create index ss_sold_date_sk_index on store_sales (ss_sold_date_sk);
 create index ss_sold_time_sk_index on store_sales (ss_sold_time_sk);
 create index ss_item_sk_index on store_sales (ss_item_sk);
@@ -107,3 +108,5 @@ create index c_current_hdemo_sk_index on customer (c_current_hdemo_sk);
 create index c_current_addr_sk_index on customer (c_current_addr_sk);
 create index c_first_shipto_date_sk_index on customer (c_first_shipto_date_sk);
 create index c_first_sales_date_sk_index on customer (c_first_sales_date_sk);
+
+*/
