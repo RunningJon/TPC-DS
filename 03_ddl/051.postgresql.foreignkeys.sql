@@ -1,137 +1,123 @@
+create index idx_ss_sold_date_sk on store_sales (ss_sold_date_sk);
+create index idx_ss_sold_time_sk on store_sales (ss_sold_time_sk);
+create index idx_ss_item_sk on store_sales (ss_item_sk);
+create index idx_ss_customer_sk on store_sales (ss_customer_sk);
+create index idx_ss_cdemo_sk on store_sales (ss_cdemo_sk);
+create index idx_ss_hdemo_sk on store_sales (ss_hdemo_sk);
+create index idx_ss_addr_sk on store_sales (ss_addr_sk);
+create index idx_ss_store_sk on store_sales (ss_store_sk);
+create index idx_ss_promo_sk on store_sales (ss_promo_sk);
+create index idx_ss_ticket_number on store_sales (ss_ticket_number);
 
---store_sales
-alter table store_sales add foreign key (ss_sold_date_sk) references date_dim (d_date_sk);
-alter table store_sales add foreign key (ss_sold_time_sk) references time_dim (t_time_sk);
-alter table store_sales add foreign key (ss_item_sk) references item (i_item_sk);
-alter table store_sales add foreign key (ss_customer_sk) references customer (c_customer_sk);
-alter table store_sales add foreign key (ss_cdemo_sk) references customer_demographics (cd_demo_sk);
-alter table store_sales add foreign key (ss_hdemo_sk) references household_demographics (hd_demo_sk);
-alter table store_sales add foreign key (ss_addr_sk) references customer_address (ca_address_sk);
-alter table store_sales add foreign key (ss_store_sk) references store (s_store_sk);
-alter table store_sales add foreign key (ss_promo_sk) references promotion (p_promo_sk);
+create index idx_sr_returned_date_sk on store_returns (sr_returned_date_sk);
+create index idx_sr_return_time_sk on store_returns (sr_return_time_sk);
+create index idx_sr_item_sk on store_returns (sr_item_sk);
+create index idx_sr_customer_sk on store_returns (sr_customer_sk);
+create index idx_sr_cdemo_sk on store_returns (sr_cdemo_sk);
+create index idx_sr_hdemo_sk on store_returns (sr_hdemo_sk);
+create index idx_sr_addr_sk on store_returns (sr_addr_sk);
+create index idx_sr_store_sk on store_returns (sr_store_sk);
+create index idx_sr_reason_sk on store_returns (sr_reason_sk);
+create index idx_sr_ticket_number on store_returns (sr_ticket_number);
 
---store_returns
-alter table store_returns add foreign key (sr_returned_date_sk) references date_dim (d_date_sk);
-alter table store_returns add foreign key (sr_return_time_sk) references time_dim (t_time_sk);
-alter table store_returns add foreign key (sr_item_sk) references item (i_item_sk);
-alter table store_returns add foreign key (sr_item_sk, sr_ticket_number) references store_sales (ss_item_sk, ss_ticket_number);
-alter table store_returns add foreign key (sr_customer_sk) references customer (c_customer_sk);
-alter table store_returns add foreign key (sr_cdemo_sk) references customer_demographics (cd_demo_sk);
-alter table store_returns add foreign key (sr_hdemo_sk) references household_demographics (hd_demo_sk);
-alter table store_returns add foreign key (sr_addr_sk) references customer_address (ca_address_sk);
-alter table store_returns add foreign key (sr_store_sk) references store (s_store_sk);
-alter table store_returns add foreign key (sr_reason_sk) references reason (r_reason_sk);
+create index idx_cs_sold_date_sk on catalog_sales (cs_sold_date_sk);
+create index idx_cs_sold_time_sk on catalog_sales (cs_sold_time_sk);
+create index idx_cs_ship_date_sk on catalog_sales (cs_ship_date_sk);
+create index idx_cs_bill_customer_sk on catalog_sales (cs_bill_customer_sk);
+create index idx_cs_bill_cdemo_sk on catalog_sales (cs_bill_cdemo_sk);
+create index idx_cs_bill_hdemo_sk on catalog_sales (cs_bill_hdemo_sk);
+create index idx_cs_bill_addr_sk on catalog_sales (cs_bill_addr_sk);
+create index idx_cs_ship_customer_sk on catalog_sales (cs_ship_customer_sk);
+create index idx_cs_ship_cdemo_sk on catalog_sales (cs_ship_cdemo_sk);
+create index idx_cs_ship_hdemo_sk on catalog_sales (cs_ship_hdemo_sk);
+create index idx_cs_ship_addr_sk on catalog_sales (cs_ship_addr_sk);
+create index idx_cs_call_center_sk on catalog_sales (cs_call_center_sk);
+create index idx_cs_catalog_page_sk on catalog_sales (cs_catalog_page_sk);
+create index idx_cs_ship_mode_sk on catalog_sales (cs_ship_mode_sk);
+create index idx_cs_warehouse_sk on catalog_sales (cs_warehouse_sk);
+create index idx_cs_item_sk on catalog_sales (cs_item_sk);
+create index idx_cs_promo_sk on catalog_sales (cs_promo_sk);
+create index idx_cs_order_number on catalog_sales (cs_order_number);
 
---catalog_sales
-alter table catalog_sales add foreign key (cs_sold_date_sk) references date_dim (d_date_sk);
-alter table catalog_sales add foreign key (cs_sold_time_sk) references time_dim (t_time_sk);
-alter table catalog_sales add foreign key (cs_ship_date_sk) references date_dim (d_date_sk);
-alter table catalog_sales add foreign key (cs_bill_customer_sk) references customer (c_customer_sk);
-alter table catalog_sales add foreign key (cs_bill_cdemo_sk) references customer_demographics (cd_demo_sk);
-alter table catalog_sales add foreign key (cs_bill_hdemo_sk) references household_demographics (hd_demo_sk);
-alter table catalog_sales add foreign key (cs_bill_addr_sk) references customer_address (ca_address_sk);
-alter table catalog_sales add foreign key (cs_ship_customer_sk) references customer (c_customer_sk);
-alter table catalog_sales add foreign key (cs_ship_cdemo_sk) references customer_demographics (cd_demo_sk);
-alter table catalog_sales add foreign key (cs_ship_hdemo_sk) references household_demographics (hd_demo_sk);
-alter table catalog_sales add foreign key (cs_ship_addr_sk) references customer_address (ca_address_sk);
-alter table catalog_sales add foreign key (cs_call_center_sk) references call_center (cc_call_center_sk);
-alter table catalog_sales add foreign key (cs_catalog_page_sk) references catalog_page (cp_catalog_page_sk);
-alter table catalog_sales add foreign key (cs_ship_mode_sk) references ship_mode (sm_ship_mode_sk);
-alter table catalog_sales add foreign key (cs_warehouse_sk) references warehouse (w_warehouse_sk);
-alter table catalog_sales add foreign key (cs_item_sk) references item (i_item_sk);
-alter table catalog_sales add foreign key (cs_promo_sk) references promotion (p_promo_sk);
+create index idx_cr_returned_date_sk on catalog_returns (cr_returned_date_sk);
+create index idx_cr_returned_time_sk on catalog_returns (cr_returned_time_sk);
+create index idx_cr_item_sk on catalog_returns (cr_item_sk);
+create index idx_cr_refunded_customer_sk on catalog_returns (cr_refunded_customer_sk);
+create index idx_cr_refunded_cdemo_sk on catalog_returns (cr_refunded_cdemo_sk);
+create index idx_cr_refunded_hdemo_sk on catalog_returns (cr_refunded_hdemo_sk);
+create index idx_cr_refunded_addr_sk on catalog_returns (cr_refunded_addr_sk);
+create index idx_cr_returning_customer_sk on catalog_returns (cr_returning_customer_sk);
+create index idx_cr_returning_cdemo_sk on catalog_returns (cr_returning_cdemo_sk);
+create index idx_cr_returning_hdemo_sk on catalog_returns (cr_returning_hdemo_sk);
+create index idx_cr_returning_addr_sk on catalog_returns (cr_returning_addr_sk);
+create index idx_cr_call_center_sk on catalog_returns (cr_call_center_sk);
+create index idx_cr_catalog_page_sk on catalog_returns (cr_catalog_page_sk);
+create index idx_cr_ship_mode_sk on catalog_returns (cr_ship_mode_sk);
+create index idx_cr_warehouse_sk on catalog_returns (cr_warehouse_sk);
+create index idx_cr_reason_sk on catalog_returns (cr_reason_sk);
+create index idx_cr_order_number on catalog_returns (cr_order_number);
 
---catalog_returns
-alter table catalog_returns add foreign key (cr_returned_date_sk) references date_dim (d_date_sk);
-alter table catalog_returns add foreign key (cr_returned_time_sk) references time_dim (t_time_sk);
-alter table catalog_returns add foreign key (cr_item_sk) references item (i_item_sk);
-alter table catalog_returns add foreign key (cr_item_sk, cr_order_number) references catalog_sales (cs_item_sk, cs_order_number);
-alter table catalog_returns add foreign key (cr_refunded_customer_sk) references customer (c_customer_sk);
-alter table catalog_returns add foreign key (cr_refunded_cdemo_sk) references customer_demographics (cd_demo_sk);
-alter table catalog_returns add foreign key (cr_refunded_hdemo_sk) references household_demographics (hd_demo_sk);
-alter table catalog_returns add foreign key (cr_refunded_addr_sk) references customer_address (ca_address_sk);
-alter table catalog_returns add foreign key (cr_returning_customer_sk) references customer (c_customer_sk);
-alter table catalog_returns add foreign key (cr_returning_hdemo_sk) references household_demographics (hd_demo_sk);
-alter table catalog_returns add foreign key (cr_returning_addr_sk) references customer_address (ca_address_sk);
-alter table catalog_returns add foreign key (cr_call_center_sk) references call_center (cc_call_center_sk);
-alter table catalog_returns add foreign key (cr_catalog_page_sk) references catalog_page (cp_catalog_page_sk);
-alter table catalog_returns add foreign key (cr_ship_mode_sk) references ship_mode (sm_ship_mode_sk);
-alter table catalog_returns add foreign key (cr_warehouse_sk) references warehouse (w_warehouse_sk);
-alter table catalog_returns add foreign key (cr_reason_sk) references reason (r_reason_sk);
+create index idx_ws_sold_date_sk on web_sales (ws_sold_date_sk);
+create index idx_ws_sold_time_sk on web_sales (ws_sold_time_sk);
+create index idx_ws_ship_date_sk on web_sales (ws_ship_date_sk);
+create index idx_ws_item_sk on web_sales (ws_item_sk);
+create index idx_ws_bill_customer_sk on web_sales (ws_bill_customer_sk);
+create index idx_ws_bill_cdemo_sk on web_sales (ws_bill_cdemo_sk);
+create index idx_ws_bill_hdemo_sk on web_sales (ws_bill_hdemo_sk);
+create index idx_ws_bill_addr_sk on web_sales (ws_bill_addr_sk);
+create index idx_ws_ship_customer_sk on web_sales (ws_ship_customer_sk);
+create index idx_ws_ship_cdemo_sk on web_sales (ws_ship_cdemo_sk);
+create index idx_ws_ship_hdemo_sk on web_sales (ws_ship_hdemo_sk);
+create index idx_ws_ship_addr_sk on web_sales (ws_ship_addr_sk);
+create index idx_ws_web_page_sk on web_sales (ws_web_page_sk);
+create index idx_ws_web_site_sk on web_sales (ws_web_site_sk);
+create index idx_ws_ship_mode_sk on web_sales (ws_ship_mode_sk);
+create index idx_ws_warehouse_sk on web_sales (ws_warehouse_sk);
+create index idx_ws_promo_sk on web_sales (ws_promo_sk);
+create index idx_ws_order_number on web_sales (ws_order_number);
 
---web_sales
-alter table web_sales add foreign key (ws_sold_date_sk) references date_dim (d_date_sk);
-alter table web_sales add foreign key (ws_sold_time_sk) references time_dim (t_time_sk);
-alter table web_sales add foreign key (ws_ship_date_sk) references date_dim (d_date_sk);
-alter table web_sales add foreign key (ws_item_sk) references item (i_item_sk);
-alter table web_sales add foreign key (ws_bill_customer_sk) references customer (c_customer_sk);
-alter table web_sales add foreign key (ws_bill_cdemo_sk) references customer_demographics (cd_demo_sk);
-alter table web_sales add foreign key (ws_bill_hdemo_sk) references household_demographics (hd_demo_sk);
-alter table web_sales add foreign key (ws_bill_addr_sk) references customer_address (ca_address_sk);
-alter table web_sales add foreign key (ws_ship_customer_sk) references customer (c_customer_sk);
-alter table web_sales add foreign key (ws_ship_cdemo_sk) references customer_demographics (cd_demo_sk);
-alter table web_sales add foreign key (ws_ship_hdemo_sk) references household_demographics (hd_demo_sk);
-alter table web_sales add foreign key (ws_ship_addr_sk) references customer_address (ca_address_sk);
-alter table web_sales add foreign key (ws_web_page_sk) references web_page (wp_web_page_sk);
-alter table web_sales add foreign key (ws_web_site_sk) references web_site (web_site_sk);
-alter table web_sales add foreign key (ws_ship_mode_sk) references ship_mode (sm_ship_mode_sk);
-alter table web_sales add foreign key (ws_warehouse_sk) references warehouse (w_warehouse_sk);
-alter table web_sales add foreign key (ws_promo_sk) references promotion (p_promo_sk);
+create index idx_wr_returned_date_sk on web_returns (wr_returned_date_sk);
+create index idx_wr_returned_time_sk on web_returns (wr_returned_time_sk);
+create index idx_wr_item_sk on web_returns (wr_item_sk);
+create index idx_wr_refunded_customer_sk on web_returns (wr_refunded_customer_sk);
+create index idx_wr_refunded_cdemo_sk on web_returns (wr_refunded_cdemo_sk);
+create index idx_wr_refunded_hdemo_sk on web_returns (wr_refunded_hdemo_sk);
+create index idx_wr_refunded_addr_sk on web_returns (wr_refunded_addr_sk);
+create index idx_wr_returning_customer_sk on web_returns (wr_returning_customer_sk);
+create index idx_wr_returning_cdemo_sk on web_returns (wr_returning_cdemo_sk);
+create index idx_wr_returning_hdemo_sk on web_returns (wr_returning_hdemo_sk);
+create index idx_wr_returning_addr_sk on web_returns (wr_returning_addr_sk);
+create index idx_wr_web_page_sk on web_returns (wr_web_page_sk);
+create index idx_wr_reason_sk on web_returns (wr_reason_sk);
+create index idx_wr_order_number on web_returns (wr_order_number);
 
---web_returns
-alter table web_returns add foreign key (wr_returned_date_sk) references date_dim (d_date_sk);
-alter table web_returns add foreign key (wr_returned_time_sk) references time_dim (t_time_sk);
-alter table web_returns add foreign key (wr_item_sk) references item (i_item_sk);
-alter table web_returns add foreign key (wr_item_sk, wr_order_number) references web_sales (ws_item_sk, ws_order_number);
-alter table web_returns add foreign key (wr_refunded_customer_sk) references customer (c_customer_sk);
-alter table web_returns add foreign key (wr_refunded_cdemo_sk) references customer_demographics (cd_demo_sk);
-alter table web_returns add foreign key (wr_refunded_hdemo_sk) references household_demographics (hd_demo_sk);
-alter table web_returns add foreign key (wr_refunded_addr_sk) references customer_address (ca_address_sk);
-alter table web_returns add foreign key (wr_returning_customer_sk) references customer (c_customer_sk);
-alter table web_returns add foreign key (wr_returning_cdemo_sk) references customer_demographics (cd_demo_sk);
-alter table web_returns add foreign key (wr_returning_hdemo_sk) references household_demographics (hd_demo_sk);
-alter table web_returns add foreign key (wr_returning_addr_sk) references customer_address (ca_address_sk);
-alter table web_returns add foreign key (wr_web_page_sk) references web_page (wp_web_page_sk);
-alter table web_returns add foreign key (wr_reason_sk) references reason (r_reason_sk);
+create index idx_inv_date_sk  on inventory (inv_date_sk );
+create index idx_inv_item_sk  on inventory (inv_item_sk );
+create index idx_inv_warehouse_sk on inventory (inv_warehouse_sk);
 
---inventory
-alter table inventory add foreign key (inv_date_sk) references date_dim (d_date_sk);
-alter table inventory add foreign key (inv_item_sk) references time_dim (t_time_sk);
-alter table inventory add foreign key (inv_warehouse_sk) references warehouse (w_warehouse_sk);
+create index idx_s_closed_date_sk on store (s_closed_date_sk);
 
---store
-alter table store add foreign key (s_closed_date_sk) references date_dim (d_date_sk);
+create index idx_cc_closed_date_sk on call_center (cc_closed_date_sk);
+create index idx_cc_open_date_sk on call_center (cc_open_date_sk);
 
---call_center
-alter table call_center add foreign key (cc_closed_date_sk) references date_dim (d_date_sk);
-alter table call_center add foreign key (cc_open_date_sk) references date_dim (d_date_sk);
+create index idx_cp_start_date_sk on catalog_page (cp_start_date_sk);
+create index idx_cp_end_date_sk on catalog_page (cp_end_date_sk);
 
---catalog_page
-alter table catalog_page add foreign key (cp_start_date_sk) references date_dim (d_date_sk);
-alter table catalog_page add foreign key (cp_end_date_sk) references date_dim (d_date_sk);
+create index idx_web_open_date_sk on web_site (web_open_date_sk);
+create index idx_web_close_date_sk on web_site (web_close_date_sk);
 
---web_site
-alter table web_site add foreign key (web_open_date_sk) references date_dim (d_date_sk);
-alter table web_site add foreign key (web_close_date_sk) references date_dim (d_date_sk);
+create index idx_wp_creation_date_sk on web_page (wp_creation_date_sk);
+create index idx_wp_access_date_sk on web_page (wp_access_date_sk);
+create index idx_wp_customer_sk on web_page (wp_customer_sk);
 
---web_page
-alter table web_page add foreign key (wp_creation_date_sk) references date_dim (d_date_sk);
-alter table web_page add foreign key (wp_access_date_sk) references date_dim (d_date_sk);
-alter table web_page add foreign key (wp_customer_sk) references customer (c_customer_sk);
+create index idx_c_current_cdemo_sk on customer (c_current_cdemo_sk);
+create index idx_c_current_hdemo_sk on customer (c_current_hdemo_sk);
+create index idx_c_current_addr_sk on customer (c_current_addr_sk);
+create index idx_c_first_shipto_date_sk on customer (c_first_shipto_date_sk);
+create index idx_c_first_sales_date_sk on customer (c_first_sales_date_sk);
 
---customer
-alter table customer add foreign key (c_current_cdemo_sk) references customer_demographics (cd_demo_sk);
-alter table customer add foreign key (c_current_hdemo_sk) references household_demographics (hd_demo_sk);
-alter table customer add foreign key (c_current_addr_sk) references customer_address (ca_address_sk);
-alter table customer add foreign key (c_first_shipto_date_sk) references date_dim (d_date_sk);
-alter table customer add foreign key (c_first_sales_date_sk) references date_dim (d_date_sk);
-alter table customer add foreign key (c_last_review_date) references date_dim (d_date_sk);
+create index idx_hd_income_band_sk on household_demographics (hd_income_band_sk);
 
---household_demographics
-alter table household_demographics add foreign key (hd_income_band_sk) references income_band (ib_income_band_sk);
-
---promotion
-alter table promotion add foreign key (p_start_date_sk) references date_dim (d_date_sk);
-alter table promotion add foreign key (p_end_date_sk) references date_dim (d_date_sk);
-alter table promotion add foreign key (p_item_sk) references item (i_item_sk);
-
+create index idx_p_start_date_sk on promotion (p_start_date_sk);
+create index idx_p_end_date_sk on promotion (p_end_date_sk);
+create index idx_p_item_sk on promotion (p_item_sk);
