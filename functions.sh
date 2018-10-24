@@ -16,7 +16,7 @@ LOCAL_PWD=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
 OSVERSION=`uname`
 ADMIN_USER=`whoami`
 ADMIN_HOME=$(eval echo ~$ADMIN_USER)
-GPFDIST_PORT=9000
+GPFDIST_PORT=5000
 MASTER_HOST=$(hostname | awk -F '.' '{print $1}')
 
 source_bashrc()
