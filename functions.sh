@@ -35,7 +35,7 @@ source_bashrc()
 	done
 	if [ "$GREENPLUM_PATH" == "" ]; then
 		get_version
-		if [[ "$VERSION" == *"gpdb"* || "$VERSION" == *"oss"* ]]; then
+		if [[ "$VERSION" == *"gpdb"* ]]; then
 			echo "$startup_file does not contain greenplum_path.sh"
 			echo "Please update your $startup_file for $ADMIN_USER and try again."
 			exit 1
@@ -49,15 +49,18 @@ source_bashrc()
 get_version()
 {
 	#need to call source_bashrc first
-	VERSION=$(psql -t -A -c "SELECT CASE WHEN POSITION ('Greenplum Database 4.3' IN version) > 0 THEN 'gpdb_4_3' WHEN POSITION('-oss' IN version) = 0 AND POSITION ('Greenplum Database 5' IN version) > 0 THEN 'gpdb_5' WHEN POSITION('-oss' IN version) = 0 AND POSITION ('Greenplum Database 6' IN version) > 0 THEN 'gpdb_6' WHEN POSITION('-oss' IN version) > 0 THEN 'gpdb_oss' ELSE 'postgresql' END FROM version();")
-	if [[ "$VERSION" == *"oss"* ]]; then
-		SMALL_STORAGE="appendonly=true, orientation=column"
-		MEDIUM_STORAGE="appendonly=true, orientation=column"
-		LARGE_STORAGE="appendonly=true, orientation=column, compresstype=zlib, compresslevel=4"
-	elif [[ "$VERSION" == *"gpdb"* ]]; then
-		SMALL_STORAGE="appendonly=true, orientation=column"
-		MEDIUM_STORAGE="appendonly=true, orientation=column"
-		LARGE_STORAGE="appendonly=true, orientation=column, compresstype=quicklz"
+	VERSION=$(psql -t -A -c "SELECT CASE WHEN POSITION ('Greenplum Database 4.3' IN version) > 0 THEN 'gpdb_4_3' WHEN POSITION ('Greenplum Database 5' IN version) > 0 THEN 'gpdb_5' WHEN POSITION ('Greenplum Database 6' IN version) > 0 THEN 'gpdb_6' ELSE 'postgresql' END FROM version();") 
+	if [[ "$VERSION" == *"gpdb"* ]]; then
+		quicklz_test=$(psql -t -A -c "SELECT COUNT(*) FROM pg_compression WHERE compname = 'quicklz'")
+		if [ "$quicklz_test" -eq "1" ]; then
+			SMALL_STORAGE="appendonly=true, orientation=column"
+			MEDIUM_STORAGE="appendonly=true, orientation=column"
+			LARGE_STORAGE="appendonly=true, orientation=column, compresstype=quicklz"
+		else
+			SMALL_STORAGE="appendonly=true, orientation=column"
+			MEDIUM_STORAGE="appendonly=true, orientation=column"
+			LARGE_STORAGE="appendonly=true, orientation=column, compresstype=zlib, compresslevel=4"
+		fi
 	else
 		SMALL_STORAGE=""
 		MEDIUM_STORAGE=""
@@ -125,7 +128,7 @@ create_hosts_file()
 {
 	get_version
 
-	if [[ "$VERSION" == *"gpdb"* || "$VERSION" == *"oss"* ]]; then
+	if [[ "$VERSION" == *"gpdb"* ]]; then
 		psql -t -A -c "SELECT DISTINCT hostname FROM gp_segment_configuration WHERE role = 'p' AND content >= 0" -o $LOCAL_PWD/segment_hosts.txt
 	else
 		#must be PostgreSQL
