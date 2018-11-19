@@ -20,10 +20,10 @@ fi
 step="score"
 init_log $step
 
-load_time=$(psql -q -t -A -c "select sum(extract('epoch' from duration)) from tpcds_reports.load where tuples > 0")
-analyze_time=$(psql -q -t -A -c "select sum(extract('epoch' from duration)) from tpcds_reports.load where tuples = 0")
-queries_time=$(psql -q -t -A -c "select sum(extract('epoch' from duration)) from (SELECT split_part(description, '.', 2) AS id,  min(duration) AS duration FROM tpcds_reports.sql GROUP BY split_part(description, '.', 2)) as sub")
-concurrent_queries_time=$(psql -q -t -A -c "select sum(extract('epoch' from duration)) from tpcds_testing.sql")
+load_time=$(psql -v ON_ERROR_STOP=1 -q -t -A -c "select sum(extract('epoch' from duration)) from tpcds_reports.load where tuples > 0")
+analyze_time=$(psql -v ON_ERROR_STOP=1 -q -t -A -c "select sum(extract('epoch' from duration)) from tpcds_reports.load where tuples = 0")
+queries_time=$(psql -v ON_ERROR_STOP=1 -q -t -A -c "select sum(extract('epoch' from duration)) from (SELECT split_part(description, '.', 2) AS id,  min(duration) AS duration FROM tpcds_reports.sql GROUP BY split_part(description, '.', 2)) as sub")
+concurrent_queries_time=$(psql -v ON_ERROR_STOP=1 -q -t -A -c "select sum(extract('epoch' from duration)) from tpcds_testing.sql")
 
 q=$((3*MULTI_USER_COUNT*99))
 
