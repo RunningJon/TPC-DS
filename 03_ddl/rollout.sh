@@ -53,8 +53,8 @@ for i in $(ls $PWD/*.$filter.*.sql); do
 		DISTRIBUTED_BY=""
 	fi
 
-	echo "psql -q -a -P pager=off -f $i -v SMALL_STORAGE=\"$SMALL_STORAGE\" -v MEDIUM_STORAGE=\"$MEDIUM_STORAGE\" -v LARGE_STORAGE=\"$LARGE_STORAGE\" -v DISTRIBUTED_BY=\"$DISTRIBUTED_BY\""
-	psql -q -a -P pager=off -f $i -v SMALL_STORAGE="$SMALL_STORAGE" -v MEDIUM_STORAGE="$MEDIUM_STORAGE" -v LARGE_STORAGE="$LARGE_STORAGE" -v DISTRIBUTED_BY="$DISTRIBUTED_BY"
+	echo "psql -v ON_ERROR_STOP=1 -q -a -P pager=off -f $i -v SMALL_STORAGE=\"$SMALL_STORAGE\" -v MEDIUM_STORAGE=\"$MEDIUM_STORAGE\" -v LARGE_STORAGE=\"$LARGE_STORAGE\" -v DISTRIBUTED_BY=\"$DISTRIBUTED_BY\""
+	psql -v ON_ERROR_STOP=1 -q -a -P pager=off -f $i -v SMALL_STORAGE="$SMALL_STORAGE" -v MEDIUM_STORAGE="$MEDIUM_STORAGE" -v LARGE_STORAGE="$LARGE_STORAGE" -v DISTRIBUTED_BY="$DISTRIBUTED_BY"
 
 	log
 done
@@ -71,7 +71,7 @@ if [ "$filter" == "gpdb" ]; then
 		counter=0
 
 		if [ "$VERSION" == "gpdb_6" ]; then
-			for x in $(psql -q -A -t -c "select rank() over(partition by g.hostname order by g.datadir), g.hostname from gp_segment_configuration g where g.content >= 0 and g.role = 'p' order by g.hostname"); do
+			for x in $(psql -v ON_ERROR_STOP=1 -q -A -t -c "select rank() over(partition by g.hostname order by g.datadir), g.hostname from gp_segment_configuration g where g.content >= 0 and g.role = 'p' order by g.hostname"); do
 				CHILD=$(echo $x | awk -F '|' '{print $1}')
 				EXT_HOST=$(echo $x | awk -F '|' '{print $2}')
 				PORT=$(($GPFDIST_PORT + $CHILD))
@@ -86,7 +86,7 @@ if [ "$filter" == "gpdb" ]; then
 				counter=$(($counter + 1))
 			done
 		else
-			for x in $(psql -q -A -t -c "select rank() over (partition by g.hostname order by p.fselocation), g.hostname from gp_segment_configuration g join pg_filespace_entry p on g.dbid = p.fsedbid join pg_tablespace t on t.spcfsoid = p.fsefsoid where g.content >= 0 and g.role = 'p' and t.spcname = 'pg_default' order by g.hostname"); do
+			for x in $(psql -v ON_ERROR_STOP=1 -q -A -t -c "select rank() over (partition by g.hostname order by p.fselocation), g.hostname from gp_segment_configuration g join pg_filespace_entry p on g.dbid = p.fsedbid join pg_tablespace t on t.spcfsoid = p.fsefsoid where g.content >= 0 and g.role = 'p' and t.spcname = 'pg_default' order by g.hostname"); do
 				CHILD=$(echo $x | awk -F '|' '{print $1}')
 				EXT_HOST=$(echo $x | awk -F '|' '{print $2}')
 				PORT=$(($GPFDIST_PORT + $CHILD))
@@ -103,8 +103,8 @@ if [ "$filter" == "gpdb" ]; then
 		fi
 		LOCATION+="'"
 
-		echo "psql -q -a -P pager=off -f $i -v LOCATION=\"$LOCATION\""
-		psql -q -a -P pager=off -f $i -v LOCATION="$LOCATION" 
+		echo "psql -v ON_ERROR_STOP=1 -q -a -P pager=off -f $i -v LOCATION=\"$LOCATION\""
+		psql -v ON_ERROR_STOP=1 -q -a -P pager=off -f $i -v LOCATION="$LOCATION" 
 
 		log
 	done

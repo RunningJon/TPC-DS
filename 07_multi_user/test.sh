@@ -81,14 +81,14 @@ for i in $(ls $sql_dir/*.sql); do
 	table_name=$(basename $i | awk -F '.' '{print $3}')
 
 	if [ "$EXPLAIN_ANALYZE" == "false" ]; then
-		echo "psql -A -q -t -P pager=off -v EXPLAIN_ANALYZE="" -f $i | wc -l"
-		tuples=$(psql -A -q -t -P pager=off -v EXPLAIN_ANALYZE="" -f $i | wc -l; exit ${PIPESTATUS[0]})
+		echo "psql -v ON_ERROR_STOP=1 -A -q -t -P pager=off -v EXPLAIN_ANALYZE="" -f $i | wc -l"
+		tuples=$(psql -v ON_ERROR_STOP=1 -A -q -t -P pager=off -v EXPLAIN_ANALYZE="" -f $i | wc -l; exit ${PIPESTATUS[0]})
 		tuples=$(($tuples-1))
 	else
 		myfilename=$(basename $i)
 		mylogfile=$PWD/../log/"$session_id"".""$myfilename"".multi.explain_analyze.log"
-		echo "psql -A -q -t -P pager=off -v EXPLAIN_ANALYZE=\"EXPLAIN ANALYZE\" -f $i"
-		psql -A -q -t -P pager=off -v EXPLAIN_ANALYZE="EXPLAIN ANALYZE" -f $i > $mylogfile
+		echo "psql -v ON_ERROR_STOP=1 -A -q -t -P pager=off -v EXPLAIN_ANALYZE=\"EXPLAIN ANALYZE\" -f $i"
+		psql -v ON_ERROR_STOP=1 -A -q -t -P pager=off -v EXPLAIN_ANALYZE="EXPLAIN ANALYZE" -f $i > $mylogfile
 		tuples="0"
 	fi
 		

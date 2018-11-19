@@ -57,7 +57,7 @@ gen_data()
 		fi
 		echo "parallel: $PARALLEL"
 		if [ "$VERSION" == "gpdb_6" ]; then
-			for i in $(psql -q -A -t -c "select row_number() over(), g.hostname, g.datadir from gp_segment_configuration g where g.content >= 0 and g.role = 'p' order by 1, 2, 3"); do
+			for i in $(psql -v ON_ERROR_STOP=1 -q -A -t -c "select row_number() over(), g.hostname, g.datadir from gp_segment_configuration g where g.content >= 0 and g.role = 'p' order by 1, 2, 3"); do
 				CHILD=$(echo $i | awk -F '|' '{print $1}')
 				EXT_HOST=$(echo $i | awk -F '|' '{print $2}')
 				GEN_DATA_PATH=$(echo $i | awk -F '|' '{print $3}')
@@ -66,7 +66,7 @@ gen_data()
 				ssh -n -f $EXT_HOST "bash -c 'cd ~/; ./generate_data.sh $GEN_DATA_SCALE $CHILD $PARALLEL $GEN_DATA_PATH > generate_data.$CHILD.log 2>&1 < generate_data.$CHILD.log &'"
 			done
 		else
-			for i in $(psql -q -A -t -c "select row_number() over(), g.hostname, p.fselocation as path from gp_segment_configuration g join pg_filespace_entry p on g.dbid = p.fsedbid join pg_tablespace t on t.spcfsoid = p.fsefsoid where g.content >= 0 and g.role = 'p' and t.spcname = 'pg_default' order by 1, 2, 3"); do
+			for i in $(psql -v ON_ERROR_STOP=1 -q -A -t -c "select row_number() over(), g.hostname, p.fselocation as path from gp_segment_configuration g join pg_filespace_entry p on g.dbid = p.fsedbid join pg_tablespace t on t.spcfsoid = p.fsefsoid where g.content >= 0 and g.role = 'p' and t.spcname = 'pg_default' order by 1, 2, 3"); do
 				CHILD=$(echo $i | awk -F '|' '{print $1}')
 				EXT_HOST=$(echo $i | awk -F '|' '{print $2}')
 				GEN_DATA_PATH=$(echo $i | awk -F '|' '{print $3}')
