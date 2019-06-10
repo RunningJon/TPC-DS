@@ -21,12 +21,26 @@ set_segment_bashrc()
 	chmod 755 $PWD/segment_bashrc
 
 	#copy generate_data.sh to ~/
-	for i in $(cat $PWD/../segment_hosts.txt); do
+	for ext_host in $(cat $PWD/../segment_hosts.txt); do
 		# don't overwrite the master.  Only needed on single node installs
-		shortname=$(echo $i | awk -F '.' '{print $1}')
+		shortname=$(echo $ext_host | awk -F '.' '{print $1}')
 		if [ "$MASTER_HOST" != "$shortname" ]; then
-			echo "copy new .bashrc to $i:$ADMIN_HOME"
-			scp $PWD/segment_bashrc $i:$ADMIN_HOME/.bashrc
+			bashrc_exists=$(ssh $ext_host "ls ~/.bashrc" 2> /dev/null | wc -l)
+			if [ "$bashrc_exists" -eq "0" ]; then
+				echo "copy new .bashrc to $i:$ADMIN_HOME"
+				scp $PWD/segment_bashrc $i:$ADMIN_HOME/.bashrc
+			else
+				count=$(ssh $ext_host "grep greenplum_path ~/.bashrc" 2> /dev/null | wc -l)
+				if [ "$count" -eq "0" ]; then
+					echo "Adding greenplum_path to $ext_host .bashrc"
+					ssh $ext_host "echo \"source $GREENPLUM_PATH\" >> ~/.bashrc"
+				fi
+				count=$(ssh $ext_host "grep LD_PRELOAD ~/.bashrc" 2> /dev/null | wc -l)
+				if [ "$count" -eq "0" ]; then
+					echo "Adding LD_PRELOAD to $ext_host .bashrc"
+					ssh $ext_host "echo \"export LD_PRELOAD=/lib64/libz.so.1 ps\" >> ~/.bashrc"
+				fi
+			fi
 		fi
 	done
 }

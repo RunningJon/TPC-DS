@@ -17,7 +17,7 @@ OSVERSION=`uname`
 ADMIN_USER=`whoami`
 ADMIN_HOME=$(eval echo ~$ADMIN_USER)
 GPFDIST_PORT=5000
-MASTER_HOST=$(hostname | awk -F '.' '{print $1}')
+MASTER_HOST=$(hostname -s)
 
 source_bashrc()
 {
