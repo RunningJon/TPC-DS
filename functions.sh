@@ -16,24 +16,34 @@ LOCAL_PWD=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
 OSVERSION=`uname`
 ADMIN_USER=`whoami`
 ADMIN_HOME=$(eval echo ~$ADMIN_USER)
-GPFDIST_PORT=5000
 MASTER_HOST=$(hostname -s)
+
+get_gpfdist_port()
+{
+	all_ports=$(psql -t -A -c "select min(case when role = 'p' then port else 999999 end), min(case when role = 'm' then port else 999999 end) from gp_segment_configuration where content >= 0")
+	primary_base=$(echo $all_ports | awk -F '|' '{print $1}' | head -c1)
+	mirror_base=$(echo $all_ports | awk -F '|' '{print $2}' | head -c1)
+
+	for i in $(seq 4 9); do
+		if [ "$primary_base" -ne "$i" ] && [ "$mirror_base" -ne "$i" ]; then
+			GPFDIST_PORT="$i""000"
+			break
+		fi
+	done
+}
 
 source_bashrc()
 {
-	startup_file=".bashrc"
-	if [ ! -f ~/.bashrc ]; then
-		if [ -f ~/.bash_profile ]; then
-			startup_file=".bash_profile"
-		else
-			echo "touch ~/.bashrc"
-			touch ~/.bashrc
-		fi
+	if [ -f ~/.bashrc ]; then
+		# don't fail if an error is happening in the admin's profile
+		source ~/.bashrc || true
 	fi
-	for g in $(grep "greenplum_path.sh" ~/$startup_file | grep -v "\#"); do
-		GREENPLUM_PATH=$g
-	done
-	if [ "$GREENPLUM_PATH" == "" ]; then
+	if [ -f ~/.bash_profile ]; then
+		# don't fail if an error is happening in the admin's profile
+		source ~/.bash_profile || true
+	fi
+	count=$(grep -v "^#" ~/.bashrc | grep "greenplum_path" | wc -l)
+	if [ "$count" -eq "0" ]; then
 		get_version
 		if [[ "$VERSION" == *"gpdb"* ]]; then
 			echo "$startup_file does not contain greenplum_path.sh"
@@ -41,10 +51,6 @@ source_bashrc()
 			exit 1
 		fi
 	fi
-	echo "source ~/$startup_file"
-	# don't fail if an error is happening in the admin's profile
-	source ~/$startup_file || true
-	echo ""
 }
 get_version()
 {

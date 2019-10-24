@@ -61,6 +61,9 @@ done
 
 #external tables are the same for all gpdb
 if [ "$filter" == "gpdb" ]; then
+
+	get_gpfdist_port
+
 	for i in $(ls $PWD/*.ext_tpcds.*.sql); do
 		start_log
 
