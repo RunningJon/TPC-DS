@@ -134,7 +134,7 @@ if [[ "$VERSION" == *"gpdb"* ]]; then
 
 	#make sure root stats are gathered
 	if [ "$VERSION" == "gpdb_6" ]; then
-		for i in $(psql -v ON_ERROR_STOP=1 -q -t -A -f $PWD/missing_root_stats.gp6.sql); do
+		for i in $(psql -v ON_ERROR_STOP=1 -q -t -A -c "select n.nspname, c.relname from pg_class c join pg_namespace n on c.relnamespace = n.oid left outer join (select starelid from pg_statistic group by starelid) s on c.oid = s.starelid join (select tablename from pg_partitions group by tablename) p on p.tablename = c.relname where n.nspname = 'tpcds' and s.starelid is null order by 1, 2"); do
 			schema_name=$(echo $i | awk -F '|' '{print $1}')
 			table_name=$(echo $i | awk -F '|' '{print $2}')
 			echo "Missing root stats for $schema_name.$table_name"
@@ -142,7 +142,7 @@ if [[ "$VERSION" == *"gpdb"* ]]; then
 			psql -v ON_ERROR_STOP=1 -q -t -A -c "ANALYZE ROOTPARTITION $schema_name.$table_name;"
 		done
 	elif [ "$VERSION" == "gpdb_5" ]; then
-		for i in $(psql -v ON_ERROR_STOP=1 -q -t -A -f $PWD/missing_root_stats.gp5.sql); do
+		for i in $(psql -v ON_ERROR_STOP=1 -q -t -A -c "select n.nspname, c.relname from pg_class c join pg_namespace n on c.relnamespace = n.oid join pg_partitions p on p.schemaname = n.nspname and p.tablename = c.relname where n.nspname = 'tpcds' and p.partitionrank is null and c.reltuples = 0 order by 1, 2"); do
 			schema_name=$(echo $i | awk -F '|' '{print $1}')
 			table_name=$(echo $i | awk -F '|' '{print $2}')
 			echo "Missing root stats for $schema_name.$table_name"
