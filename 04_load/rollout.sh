@@ -132,6 +132,25 @@ if [[ "$VERSION" == *"gpdb"* ]]; then
 	#Analyze schema using analyzedb
 	analyzedb -d $dbname -s tpcds --full -a
 
+	#make sure root stats are gathered
+	if [ "$VERSION" == "gpdb_6" ]; then
+		for i in $(psql -v ON_ERROR_STOP=1 -q -t -A -f $PWD/missing_root_stats.gp6.sql); do
+			schema_name=$(echo $i | awk -F '|' '{print $1}')
+			table_name=$(echo $i | awk -F '|' '{print $2}')
+			echo "Missing root stats for $schema_name.$table_name"
+			echo "psql -v ON_ERROR_STOP=1 -q -t -A -c \"ANALYZE ROOTPARTITION $schema_name.$table_name;\""
+			psql -v ON_ERROR_STOP=1 -q -t -A -c "ANALYZE ROOTPARTITION $schema_name.$table_name;"
+		done
+	elif [ "$VERSION" == "gpdb_5" ]; then
+		for i in $(psql -v ON_ERROR_STOP=1 -q -t -A -f $PWD/missing_root_stats.gp5.sql); do
+			schema_name=$(echo $i | awk -F '|' '{print $1}')
+			table_name=$(echo $i | awk -F '|' '{print $2}')
+			echo "Missing root stats for $schema_name.$table_name"
+			echo "psql -v ON_ERROR_STOP=1 -q -t -A -c \"ANALYZE ROOTPARTITION $schema_name.$table_name;\""
+			psql -v ON_ERROR_STOP=1 -q -t -A -c "ANALYZE ROOTPARTITION $schema_name.$table_name;"
+		done
+	fi
+
 	tuples="0"
 	log $tuples
 else
