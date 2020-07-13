@@ -13,10 +13,11 @@ table_name="init"
 
 set_segment_bashrc()
 {
+	#this is only needed if the segment hosts don't have the bashrc file created
 	echo "if [ -f /etc/bashrc ]; then" > $PWD/segment_bashrc
 	echo "	. /etc/bashrc" >> $PWD/segment_bashrc
 	echo "fi" >> $PWD/segment_bashrc
-	echo "source $GREENPLUM_PATH" >> $PWD/segment_bashrc
+	echo "source /usr/local/greenplum-db/greenplum_path.sh" >> $PWD/segment_bashrc
 	echo "export LD_PRELOAD=/lib64/libz.so.1 ps" >> $PWD/segment_bashrc
 	chmod 755 $PWD/segment_bashrc
 
@@ -27,8 +28,8 @@ set_segment_bashrc()
 		if [ "$MASTER_HOST" != "$shortname" ]; then
 			bashrc_exists=$(ssh $ext_host "ls ~/.bashrc" 2> /dev/null | wc -l)
 			if [ "$bashrc_exists" -eq "0" ]; then
-				echo "copy new .bashrc to $i:$ADMIN_HOME"
-				scp $PWD/segment_bashrc $i:$ADMIN_HOME/.bashrc
+				echo "copy new .bashrc to $ext_host:$ADMIN_HOME"
+				scp $PWD/segment_bashrc $ext_host:$ADMIN_HOME/.bashrc
 			else
 				count=$(ssh $ext_host "grep greenplum_path ~/.bashrc" 2> /dev/null | wc -l)
 				if [ "$count" -eq "0" ]; then

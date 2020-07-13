@@ -38,10 +38,6 @@ source_bashrc()
 		# don't fail if an error is happening in the admin's profile
 		source ~/.bashrc || true
 	fi
-	if [ -f ~/.bash_profile ]; then
-		# don't fail if an error is happening in the admin's profile
-		source ~/.bash_profile || true
-	fi
 	count=$(grep -v "^#" ~/.bashrc | grep "greenplum_path" | wc -l)
 	if [ "$count" -eq "0" ]; then
 		get_version
