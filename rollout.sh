@@ -80,6 +80,7 @@ if [ "$RUN_SINGLE_USER_REPORT" == "true" ]; then
 	rm -f $PWD/log/end_single_user_reports.log
 fi
 if [ "$RUN_MULTI_USER" == "true" ]; then
+        rm -f $PWD/log/end_multi_user.log
 	rm -f $PWD/log/end_testing_*.log
 fi
 if [ "$RUN_MULTI_USER_REPORT" == "true" ]; then
