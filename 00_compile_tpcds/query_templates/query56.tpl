@@ -38,7 +38,7 @@
  define COLOR=ulist(dist(colors,1,1),3);
  define _LIMIT=100;
 
- with ss as (
+ with /*tpcdsquery56*/ ss as (
  select i_item_id,sum(ss_ext_sales_price) total_sales
  from
  	store_sales,

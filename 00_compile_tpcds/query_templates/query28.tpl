@@ -38,7 +38,7 @@ define COUPONAMT=ulist(random(0, 18000, uniform),6);
 define WHOLESALECOST=ulist(random(0, 80, uniform),6);
 define _LIMIT=100;
 
-[_LIMITA] select [_LIMITB] *
+[_LIMITA] select /*tpcdsquery28*/ [_LIMITB] *
 from (select avg(ss_list_price) B1_LP
             ,count(ss_list_price) B1_CNT
             ,count(distinct ss_list_price) B1_CNTD

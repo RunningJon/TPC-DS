@@ -37,7 +37,7 @@ Define HOUR= text({"20",1},{"15",1},{"16",1},{"8",1});
 Define DEPCNT=random(0,9,uniform);
 define _LIMIT=100;
 
-[_LIMITA] select [_LIMITB] count(*) 
+[_LIMITA] select /*tpcdsquery96*/ [_LIMITB] count(*) 
 from store_sales
     ,household_demographics 
     ,time_dim, store

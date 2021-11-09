@@ -39,7 +39,7 @@ define GMT = text({"-6",1},{"-7",1});
 define CATEGORY = text({"Books",1},{"Home",1},{"Electronics",1},{"Jewelry",1},{"Sports",1});
 define _LIMIT=100;
 
-[_LIMITA] select [_LIMITB] promotions,total,cast(promotions as decimal(15,4))/cast(total as decimal(15,4))*100
+[_LIMITA] select /*tpcdsquery61*/ [_LIMITB] promotions,total,cast(promotions as decimal(15,4))/cast(total as decimal(15,4))*100
 from
   (select sum(ss_ext_sales_price) promotions
    from  store_sales

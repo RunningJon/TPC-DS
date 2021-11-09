@@ -34,7 +34,7 @@
 -- 
  define DMS = random(1176,1224,uniform);
  define _LIMIT=100; 
- [_LIMITA] select [_LIMITB]
+ [_LIMITA] select /*tpcdsquery65*/ [_LIMITB]
 	s_store_name,
 	i_item_desc,
 	sc.revenue,

@@ -37,7 +37,7 @@
  define TOPPERCENT=random(95,95,uniform); 
  define _LIMIT=100;
  
- with frequent_ss_items as 
+ with /*tpcdsquery23*/ frequent_ss_items as 
  (select substr(i_item_desc,1,30) itemdesc,i_item_sk item_sk,d_date solddate,count(*) cnt
   from store_sales
       ,date_dim 

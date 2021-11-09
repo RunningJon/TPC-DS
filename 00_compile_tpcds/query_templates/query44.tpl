@@ -37,7 +37,7 @@ define STORE=random(1,rowcount("STORE"),uniform);
 define _LIMIT=100;
 
 
-[_LIMITA] select [_LIMITB] asceding.rnk, i1.i_product_name best_performing, i2.i_product_name worst_performing
+[_LIMITA] select /*tpcdsquery44*/ [_LIMITB] asceding.rnk, i1.i_product_name best_performing, i2.i_product_name worst_performing
 from(select *
      from (select item_sk,rank() over (order by rank_col asc) rnk
            from (select ss_item_sk item_sk,avg(ss_net_profit) rank_col 

@@ -39,7 +39,7 @@
  define AGGTHREE= text({"sum",1},{"min",1},{"max",1},{"avg",1},{"stddev_samp",1}); 
  define _LIMIT=100;
  
- [_LIMITA] select [_LIMITB]  
+ [_LIMITA] select /*tpcdsquery35*/ [_LIMITB]  
   ca_state,
   cd_gender,
   cd_marital_status,

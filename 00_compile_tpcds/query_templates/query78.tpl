@@ -37,7 +37,7 @@ define SELECTONE=text({"ss_sold_year",1},{"ss_item_sk",1},{"ss_customer_sk",1},{
 
 define _LIMIT = 100;
 
-with ws as
+with /*tpcdsquery78*/ ws as
   (select d_year AS ws_sold_year, ws_item_sk,
     ws_bill_customer_sk ws_customer_sk,
     sum(ws_quantity) ws_qty,

@@ -35,7 +35,7 @@
  define HOUR = ulist(random(-1,4,uniform),3);
  define STORE = dist(stores,1,1);
 
-select  *
+select /*tpcdsquery88*/  *
 from
  (select count(*) h8_30_to_9
  from store_sales, household_demographics , time_dim, store

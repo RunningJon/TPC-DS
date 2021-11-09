@@ -37,7 +37,7 @@
  define STATE= ulist(dist(fips_county, 3, 1), 3);
  define _LIMIT=100;
  
- [_LIMITA] select [_LIMITB] 
+ [_LIMITA] select /*tpcdsquery69*/ [_LIMITB] 
   cd_gender,
   cd_marital_status,
   cd_education_status,

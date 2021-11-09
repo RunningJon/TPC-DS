@@ -37,7 +37,7 @@ define YEAR = random(1998,2002,uniform);
 define MONTH = random(8,10,uniform);
 define _LIMIT=100;
 
-[_LIMITA] select [_LIMITB] 
+[_LIMITA] select /*tpcdsquery50*/ [_LIMITB] 
    s_store_name
   ,s_company_id
   ,s_street_number

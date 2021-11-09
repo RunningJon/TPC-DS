@@ -36,7 +36,7 @@
 define REASON= dist(return_reasons, 1, 1);
 define _LIMIT=100;
 
-[_LIMITA] select [_LIMITB] ss_customer_sk
+[_LIMITA] select /*tpcdsquery93*/ [_LIMITB] ss_customer_sk
             ,sum(act_sales) sumsales
       from (select ss_item_sk
                   ,ss_ticket_number

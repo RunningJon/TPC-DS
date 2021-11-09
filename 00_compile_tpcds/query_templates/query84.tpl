@@ -36,7 +36,7 @@
  define INCOME = random(0, 70000, uniform);
  define _LIMIT=100;
  
- [_LIMITA] select [_LIMITB] c_customer_id as customer_id
+ [_LIMITA] select /*tpcdsquery84*/ [_LIMITB] c_customer_id as customer_id
        ,c_last_name || ', ' || c_first_name as customername
  from customer
      ,customer_address

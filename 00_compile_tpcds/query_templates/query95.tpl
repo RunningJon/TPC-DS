@@ -38,7 +38,7 @@ define MONTH = random(2,5,uniform);
 define STATE = dist(fips_county,3,1);
 define _LIMIT=100;
 
-with ws_wh as
+with /*tpcdsquery95*/ ws_wh as
 (select ws1.ws_order_number,ws1.ws_warehouse_sk wh1,ws2.ws_warehouse_sk wh2
  from web_sales ws1,web_sales ws2
  where ws1.ws_order_number = ws2.ws_order_number

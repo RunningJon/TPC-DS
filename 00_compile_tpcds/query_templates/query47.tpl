@@ -38,7 +38,7 @@
  define SELECTTWO= text({",v1.d_year",1},{",v1.d_year, v1.d_moy",1}); 
 
 
- with v1 as(
+ with /*tpcdsquery47*/ v1 as(
  select i_category, i_brand,
         s_store_name, s_company_name,
         d_year, d_moy,

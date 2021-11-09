@@ -38,7 +38,7 @@ define MONTH = random(2,5,uniform);
 define STATE = dist(fips_county,3,1);   
 define _LIMIT=100;
 
-[_LIMITA] select [_LIMITB] 
+[_LIMITA] select /*tpcdsquery94*/ [_LIMITB] 
    count(distinct ws_order_number) as "order count"
   ,sum(ws_ext_ship_cost) as "total shipping cost"
   ,sum(ws_net_profit) as "total net profit"

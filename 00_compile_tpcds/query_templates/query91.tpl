@@ -38,7 +38,7 @@ Define MONTH = random(11,12,uniform);
 Define BUY_POTENTIAL = text({"1001-5000",1},{">10000",1},{"501-1000",1},{"0-500",1},{"Unknown",1},{"5001-10000",1});
 Define GMT = text({"-6",1},{"-7",1});
 
-select  
+select /*tpcdsquery91*/  
         cc_call_center_id Call_Center,
         cc_name Call_Center_Name,
         cc_manager Manager,

@@ -35,7 +35,7 @@
 define DMS = random(1176,1224,uniform);
 define _LIMIT=100;
 
-[_LIMITA] select [_LIMITB] * 
+[_LIMITA] select /*tpcdsquery63*/ [_LIMITB] * 
 from (select i_manager_id
              ,sum(ss_sales_price) sum_sales
              ,avg(sum(ss_sales_price)) over (partition by i_manager_id) avg_monthly_sales

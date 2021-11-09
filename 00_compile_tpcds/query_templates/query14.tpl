@@ -36,7 +36,7 @@
  define DAY = random(1,28,uniform);
  define _LIMIT=100; 
 
-with  cross_items as
+with /*tpcdsquery14*/ cross_items as
  (select i_item_sk ss_item_sk
  from item,
  (select iss.i_brand_id brand_id

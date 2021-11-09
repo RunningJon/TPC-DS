@@ -44,7 +44,7 @@ define COUNTY_D = distmember(fips_county, [COUNTYNUMBER.4], 2);
 define COUNTY_E = distmember(fips_county, [COUNTYNUMBER.5], 2);
 define _LIMIT=100;
 
-[_LIMITA] select [_LIMITB] 
+[_LIMITA] select /*tpcdsquery16*/ [_LIMITB] 
    count(distinct cs_order_number) as "order count"
   ,sum(cs_ext_ship_cost) as "total shipping cost"
   ,sum(cs_net_profit) as "total net profit"

@@ -37,7 +37,7 @@
  define CATEGORY=ulist(dist(categories,1,1),3);
  define _LIMIT=100; 
 
- [_LIMITA] select [_LIMITB] i_item_id
+ [_LIMITA] select /*tpcdsquery20*/ [_LIMITB] i_item_id
        ,i_item_desc 
        ,i_category 
        ,i_class 

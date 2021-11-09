@@ -34,7 +34,7 @@
 -- 
  define YEAR=random(1998,2001,uniform);
   
- with wscs as
+ with /*tpcdsquery02*/ wscs as
  (select sold_date_sk
         ,sales_price
   from  (select ws_sold_date_sk sold_date_sk

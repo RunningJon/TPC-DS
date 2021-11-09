@@ -37,7 +37,7 @@
  define MANAGER=random(1,100,uniform); 
  define _LIMIT=100;
  
-[_LIMITA]  select [_LIMITB] i_brand_id brand_id, i_brand brand,
+[_LIMITA]  select /*tpcdsquery55*/ [_LIMITB] i_brand_id brand_id, i_brand brand,
  	sum(ss_ext_sales_price) ext_price
  from date_dim, store_sales, item
  where d_date_sk = ss_sold_date_sk

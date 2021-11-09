@@ -38,7 +38,7 @@
  define YEAR = random(1998,2002,uniform);
  define _LIMIT=100;
  
- [_LIMITA] select [_LIMITB] i_item_id, 
+ [_LIMITA] select /*tpcdsquery07*/ [_LIMITB] i_item_id, 
         avg(ss_quantity) agg1,
         avg(ss_list_price) agg2,
         avg(ss_coupon_amt) agg3,

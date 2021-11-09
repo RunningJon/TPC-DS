@@ -37,7 +37,7 @@
  define YEAR = random(1999,2002,uniform);
  define _LIMIT=100; 
 
- [_LIMITA] select [_LIMITB] 
+ [_LIMITA] select /*tpcdsquery10*/ [_LIMITB] 
   cd_gender,
   cd_marital_status,
   cd_education_status,

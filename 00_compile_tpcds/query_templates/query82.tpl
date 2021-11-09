@@ -38,7 +38,7 @@
  define MANUFACT_ID=ulist(random(1,1000,uniform),4);
  define _LIMIT=100;
  
- [_LIMITA] select [_LIMITB] i_item_id
+ [_LIMITA] select /*tpcdsquery82*/ [_LIMITB] i_item_id
        ,i_item_desc
        ,i_current_price
  from item, inventory, date_dim, store_sales

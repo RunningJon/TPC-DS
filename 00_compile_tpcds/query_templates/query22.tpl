@@ -35,7 +35,7 @@
 
 define _LIMIT=100;
 define DMS = random(1176,1224,uniform); 
-[_LIMITA] select [_LIMITB] i_product_name
+[_LIMITA] select /*tpcdsquery22*/ [_LIMITB] i_product_name
              ,i_brand
              ,i_class
              ,i_category

@@ -36,7 +36,7 @@ define AGGCTHEN= text({"ss_ext_discount_amt",1},{"ss_ext_sales_price",1},{"ss_ex
 define AGGCELSE= text({"ss_net_paid",1},{"ss_net_paid_inc_tax",1},{"ss_net_profit",1});
 define RC=ulist(random(1, rowcount("store_sales")/5,uniform),5);
 
-select case when (select count(*) 
+select /*tpcdsquery09*/ case when (select count(*) 
                   from store_sales 
                   where ss_quantity between 1 and 20) > [RC.1]
             then (select avg([AGGCTHEN]) 

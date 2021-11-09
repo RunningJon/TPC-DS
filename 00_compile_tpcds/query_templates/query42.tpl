@@ -36,7 +36,7 @@
  define YEAR = random(1998,2002,uniform);
  define _LIMIT=100;
  
-[_LIMITA]  select [_LIMITB] dt.d_year
+[_LIMITA]  select /*tpcdsquery42*/ [_LIMITB] dt.d_year
  	,item.i_category_id
  	,item.i_category
  	,sum(ss_ext_sales_price)

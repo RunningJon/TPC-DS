@@ -39,7 +39,7 @@
  define CLASS = dist(distmember(categories,[CINDX],2),1,1); 
  define _LIMIT=100;
  
- with my_customers as (
+ with /*tpcdsquery54*/ my_customers as (
  select distinct c_customer_sk
         , c_current_addr_sk
  from   

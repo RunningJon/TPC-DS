@@ -34,7 +34,7 @@
 -- 
 define DMS = random(1176,1224, uniform); 
 
-select count(*) 
+select /*tpcdsquery87*/ count(*) 
 from ((select distinct c_last_name, c_first_name, d_date
        from store_sales, date_dim, customer
        where store_sales.ss_sold_date_sk = date_dim.d_date_sk

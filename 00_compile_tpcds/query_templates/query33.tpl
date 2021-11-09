@@ -39,7 +39,7 @@ define GMT=distmember(fips_county,[COUNTY], 6);
 define CATEGORY = text({"Books",1},{"Home",1},{"Electronics",1},{"Jewelry",1},{"Sports",1});
 define _LIMIT=100;
  
- with ss as (
+ with /*tpcdsquery33*/ ss as (
  select
           i_manufact_id,sum(ss_ext_sales_price) total_sales
  from

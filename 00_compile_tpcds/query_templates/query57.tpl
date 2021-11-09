@@ -38,7 +38,7 @@
 
  define _LIMIT=100;
 
- with v1 as(
+ with /*tpcdsquery57*/ v1 as(
  select i_category, i_brand,
         cc_name,
         d_year, d_moy,

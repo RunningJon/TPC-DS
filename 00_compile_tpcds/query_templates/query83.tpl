@@ -38,7 +38,7 @@
  define RETURNED_DATE_THREE=date([YEAR]+"-11-01",[YEAR]+"-11-24",sales);
  define _LIMIT=100;
  
- with sr_items as
+ with /*tpcdsquery83*/ sr_items as
  (select i_item_id item_id,
         sum(sr_return_quantity) sr_item_qty
  from store_returns,
