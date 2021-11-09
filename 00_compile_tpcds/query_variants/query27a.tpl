@@ -45,7 +45,7 @@
  define STATE_F=distmember(fips_county,[STATENUMBER.6], 3);
  define _LIMIT=100;
 
-with results as
+with /*tpcdsquery27a*/ results as
  (select i_item_id,
         s_state, 0 as g_state,
         ss_quantity agg1,

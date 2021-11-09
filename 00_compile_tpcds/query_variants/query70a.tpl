@@ -34,7 +34,7 @@
 -- 
  define _LIMIT=100; 
  define DMS = random(1176,1224,uniform);
- with results as
+ with /*tpcdsquery70a*/ results as
 ( select
     sum(ss_net_profit) as total_sum ,s_state ,s_county, 0 as gstate, 0 as g_county
  from

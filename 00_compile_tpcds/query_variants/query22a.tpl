@@ -36,7 +36,7 @@
 define DMS = random(1176,1224,uniform); 
 define _LIMIT=100;
 
-with results as 
+with /*tpcdsquery22a*/ results as 
 (select  i_product_name
              ,i_brand
              ,i_class
