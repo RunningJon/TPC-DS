@@ -13,8 +13,8 @@ SINGLE_USER_ITERATIONS=$5
 
 
 #luka multiplying qiantity of partitions with EVERY=1 parameter in DDL
-#WEB_RETURNS_EVERY="180"
-WEB_RETURNS_EVERY="1"
+#EVERY for web_returns was "180"
+EVERY="1"
 
 
 
@@ -61,7 +61,7 @@ for i in $(ls $PWD/*.$filter.*.sql); do
 	fi
 
 	echo "psql -v ON_ERROR_STOP=1 -q -a -P pager=off -f $i -v SMALL_STORAGE=\"$SMALL_STORAGE\" -v MEDIUM_STORAGE=\"$MEDIUM_STORAGE\" -v LARGE_STORAGE=\"$LARGE_STORAGE\" -v DISTRIBUTED_BY=\"$DISTRIBUTED_BY\""
-	psql -v ON_ERROR_STOP=1 -q -a -P pager=off -f $i -v SMALL_STORAGE="$SMALL_STORAGE" -v MEDIUM_STORAGE="$MEDIUM_STORAGE" -v LARGE_STORAGE="$LARGE_STORAGE" -v DISTRIBUTED_BY="$DISTRIBUTED_BY"
+	psql -v ON_ERROR_STOP=1 -q -a -P pager=off -f $i -v SMALL_STORAGE="$SMALL_STORAGE" -v MEDIUM_STORAGE="$MEDIUM_STORAGE" -v LARGE_STORAGE="$LARGE_STORAGE" -v DISTRIBUTED_BY="$DISTRIBUTED_BY" -v EVERY="$EVERY"
 
 	log
 done
