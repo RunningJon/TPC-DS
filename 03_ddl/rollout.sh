@@ -14,7 +14,7 @@ SINGLE_USER_ITERATIONS=$5
 
 #luka multiplying qiantity of partitions with EVERY=1 parameter in DDL
 #EVERY for web_returns was "180"
-EVERY="1"
+EVERY="10"
 
 
 
