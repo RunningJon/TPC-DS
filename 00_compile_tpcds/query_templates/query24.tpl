@@ -38,7 +38,7 @@ define MARKET=random(5,10,uniform);
 define AMOUNTONE=text({"ss_net_paid",1},{"ss_net_paid_inc_tax",1},{"ss_net_profit",1},{"ss_sales_price",1},{"ss_ext_sales_price",1});
 define COLOR=ulist(dist(colors,1,1),2);
 
-with /*tpcdsquery24*/ ssales as
+with /*tpcdsquery24-1*/ ssales as
 (select c_last_name
       ,c_first_name
       ,s_store_name
@@ -87,7 +87,7 @@ having sum(netpaid) > (select 0.05*avg(netpaid)
                                  from ssales)
 ;
 
-with ssales as
+with /*tpcdsquery24-2*/ ssales as
 (select c_last_name
       ,c_first_name
       ,s_store_name
