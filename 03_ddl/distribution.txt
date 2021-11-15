@@ -8,7 +8,7 @@
 8|date_dim|d_date_sk
 9|household_demographics|hd_demo_sk
 10|income_band|ib_income_band_sk
-11|inventory|inv_warehouse_sk
+11|inventory|inv_date_sk,inv_item_sk,inv_warehouse_sk
 12|item|i_item_sk
 13|promotion|p_promo_sk
 14|reason|r_reason_sk
