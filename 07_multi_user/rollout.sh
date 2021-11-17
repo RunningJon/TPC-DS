@@ -72,6 +72,8 @@ if [ "$file_count" -ne "$MULTI_USER_COUNT" ]; then
 		sql_dir=$PWD/$stream_number
 		echo "mv $i $sql_dir/"
 		mv $i $sql_dir/
+		# we substitute multi_user query with Jx_* prefix to tell them from single_user runs
+		sed -i s/tpcdsquery/j$MULTI_USER_COUNT_tpcdsquery/g  $sql_dir/*.sql
 	done
 
 	for x in $(seq 1 $MULTI_USER_COUNT); do
