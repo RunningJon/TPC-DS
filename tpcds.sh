@@ -232,7 +232,7 @@ repo_init()
 			echo "-------------------------------------------------------------------------"
 			mkdir $INSTALL_DIR/$REPO
 			chown $ADMIN_USER $INSTALL_DIR/$REPO
-			su -c "cd $INSTALL_DIR; GIT_SSL_NO_VERIFY=true; git clone $REPO_URL;git checkout $REPO_BRANCH" $ADMIN_USER
+			su -c "cd $INSTALL_DIR; GIT_SSL_NO_VERIFY=true; git clone $REPO_URL; cd $INSTALL_DIR/$REPO; git checkout $REPO_BRANCH" $ADMIN_USER
 		fi
 	else
 		if [ "$internet_down" -eq "0" ]; then
