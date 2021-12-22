@@ -34,16 +34,6 @@ Prerequisites
 3. Root access
 
 ########################################################################################
-Installation
-########################################################################################
-1. ssh to the master host with root
-ssh gpadmin@mdw; sudo bash
-
-2. Download the tpcds.sh file
-curl https://raw.githubusercontent.com/dsbenchmark/TPC-DS/master/tpcds.sh > tpcds.sh
-chmod 755 tpcds.sh
-
-########################################################################################
 Variables and Configuration
 ########################################################################################
 By default, the installation will create the scripts in /dsbenchmark/TPC-DS on the 
