@@ -17,16 +17,6 @@ check_variables()
 		touch $PWD/$MYVAR
 		new_variable=$(($new_variable + 1))
 	fi
-	local count=$(grep "REPO=" $MYVAR | wc -l)
-	if [ "$count" -eq "0" ]; then
-		echo "REPO=\"TPC-DS\"" >> $MYVAR
-		new_variable=$(($new_variable + 1))
-	fi
-	local count=$(grep "REPO_URL=" $MYVAR | wc -l)
-	if [ "$count" -eq "0" ]; then
-		echo "REPO_URL=\"https://github.com/dsbenchmark/TPC-DS\"" >> $MYVAR
-		new_variable=$(($new_variable + 1))
-	fi
 	local count=$(grep "ADMIN_USER=" $MYVAR | wc -l)
 	if [ "$count" -eq "0" ]; then
 		echo "ADMIN_USER=\"gpadmin\"" >> $MYVAR
@@ -148,82 +138,9 @@ check_user()
 	fi
 }
 
-repo_init()
-{
-	### Install repo ###
-	echo "############################################################################"
-	echo "Install the github repository."
-	echo "############################################################################"
-	echo ""
-
-	internet_down="0"
-	for j in $(curl google.com 2>&1 | grep "Couldn't resolve host"); do
-		internet_down="1"
-	done
-
-	if [ ! -d $INSTALL_DIR ]; then
-		if [ "$internet_down" -eq "1" ]; then
-			echo "Unable to continue because repo hasn't been downloaded and Internet is not available."
-			exit 1
-		else
-			echo ""
-			echo "Creating install dir"
-			echo "-------------------------------------------------------------------------"
-			mkdir $INSTALL_DIR
-			chown $ADMIN_USER $INSTALL_DIR
-		fi
-	fi
-
-	if [ ! -d $INSTALL_DIR/$REPO ]; then
-		if [ "$internet_down" -eq "1" ]; then
-			echo "Unable to continue because repo hasn't been downloaded and Internet is not available."
-			exit 1
-		else
-			echo ""
-			echo "Creating $REPO directory"
-			echo "-------------------------------------------------------------------------"
-			mkdir $INSTALL_DIR/$REPO
-			chown $ADMIN_USER $INSTALL_DIR/$REPO
-			su -c "cd $INSTALL_DIR; GIT_SSL_NO_VERIFY=true; git clone --depth=1 $REPO_URL" $ADMIN_USER
-		fi
-	else
-		if [ "$internet_down" -eq "0" ]; then
-			git config --global user.email "$ADMIN_USER@$HOSTNAME"
-			git config --global user.name "$ADMIN_USER"
-			su -c "cd $INSTALL_DIR/$REPO; GIT_SSL_NO_VERIFY=true; git fetch --all; git reset --hard origin/master" $ADMIN_USER
-		fi
-	fi
-}
-
-script_check()
-{
-	### Make sure the repo doesn't have a newer version of this script. ###
-	echo "############################################################################"
-	echo "Make sure this script is up to date."
-	echo "############################################################################"
-	echo ""
-	# Must be executed after the repo has been pulled
-	local d=`diff $PWD/$MYCMD $INSTALL_DIR/$REPO/$MYCMD | wc -l`
-
-	if [ "$d" -eq "0" ]; then
-		echo "$MYCMD script is up to date so continuing to TPC-DS."
-		echo ""
-	else
-		echo "$MYCMD script is NOT up to date."
-		echo ""
-		cp $INSTALL_DIR/$REPO/$MYCMD $PWD/$MYCMD
-		echo "After this script completes, restart the $MYCMD with this command:"
-		echo "./$MYCMD"
-		exit 1
-	fi
-
-}
-
 echo_variables()
 {
 	echo "############################################################################"
-	echo "REPO: $REPO"
-	echo "REPO_URL: $REPO_URL"
 	echo "ADMIN_USER: $ADMIN_USER"
 	echo "INSTALL_DIR: $INSTALL_DIR"
 	echo "MULTI_USER_COUNT: $MULTI_USER_COUNT"
@@ -237,8 +154,6 @@ echo_variables()
 
 check_user
 check_variables
-repo_init
-script_check
 echo_variables
 
-su -l $ADMIN_USER -c "cd \"$INSTALL_DIR/$REPO\"; ./rollout.sh $GEN_DATA_SCALE $EXPLAIN_ANALYZE $RANDOM_DISTRIBUTION $MULTI_USER_COUNT $RUN_COMPILE_TPCDS $RUN_GEN_DATA $RUN_INIT $RUN_DDL $RUN_LOAD $RUN_SQL $RUN_SINGLE_USER_REPORT $RUN_MULTI_USER $RUN_MULTI_USER_REPORT $RUN_SCORE $SINGLE_USER_ITERATIONS"
+su -l $ADMIN_USER -c "cd \"$INSTALL_DIR/TPC-DS\"; ./rollout.sh $GEN_DATA_SCALE $EXPLAIN_ANALYZE $RANDOM_DISTRIBUTION $MULTI_USER_COUNT $RUN_COMPILE_TPCDS $RUN_GEN_DATA $RUN_INIT $RUN_DDL $RUN_LOAD $RUN_SQL $RUN_SINGLE_USER_REPORT $RUN_MULTI_USER $RUN_MULTI_USER_REPORT $RUN_SCORE $SINGLE_USER_ITERATIONS"
