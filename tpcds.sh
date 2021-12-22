@@ -148,49 +148,6 @@ check_user()
 	fi
 }
 
-yum_installs()
-{
-	### Install and Update Demos ###
-	echo "############################################################################"
-	echo "Install git, gcc, and bc with yum."
-	echo "############################################################################"
-	echo ""
-	# Install git and gcc if not found
-	local YUM_INSTALLED=$(yum --help 2> /dev/null | wc -l)
-	local CURL_INSTALLED=$(gcc --help 2> /dev/null | wc -l)
-	local GIT_INSTALLED=$(git --help 2> /dev/null | wc -l)
-	local BC_INSTALLED=$(bc --help 2> /dev/null | wc -l)
-
-	if [ "$YUM_INSTALLED" -gt "0" ]; then
-		if [ "$CURL_INSTALLED" -eq "0" ]; then
-			yum -y install gcc
-		fi
-		if [ "$GIT_INSTALLED" -eq "0" ]; then
-			yum -y install git
-		fi
-		if [ "$BC_INSTALLED" -eq "0" ]; then
-			yum -y install bc
-		fi
-	else
-		if [ "$CURL_INSTALLED" -eq "0" ]; then
-			echo "gcc not installed and yum not found to install it."
-			echo "Please install gcc and try again."
-			exit 1
-		fi
-		if [ "$GIT_INSTALLED" -eq "0" ]; then
-			echo "git not installed and yum not found to install it."
-			echo "Please install git and try again."
-			exit 1
-		fi
-		if [ "$BC_INSTALLED" -eq "0" ]; then
-			echo "bc not installed and yum not found to install it."
-			echo "Please install bc and try again."
-			exit 1
-		fi
-	fi
-	echo ""
-}
-
 repo_init()
 {
 	### Install repo ###
@@ -280,7 +237,6 @@ echo_variables()
 
 check_user
 check_variables
-yum_installs
 repo_init
 script_check
 echo_variables

@@ -14,6 +14,15 @@ Version 2.x now uses TPC-DS version 2.1 for the standard queries.
 Version 2.2.x now supports Greenplum version 5.x.
 
 ########################################################################################
+Prerequisites
+########################################################################################
+Install the dependencies for this benchmark
+
+```
+yum -y install gcc git bc make
+```
+
+########################################################################################
 Query Options
 ########################################################################################
 You can have the queries execute with "EXPLAIN ANALYZE" in order to see exactly the 
