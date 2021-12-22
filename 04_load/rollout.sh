@@ -45,7 +45,7 @@ start_gpfdist()
 			CHILD=$(echo $i | awk -F '|' '{print $1}')
 			EXT_HOST=$(echo $i | awk -F '|' '{print $2}')
 			GEN_DATA_PATH=$(echo $i | awk -F '|' '{print $3}')
-			GEN_DATA_PATH=$GEN_DATA_PATH/pivotalguru
+			GEN_DATA_PATH=$GEN_DATA_PATH/dsbenchmark
 			PORT=$(($GPFDIST_PORT + $CHILD))
 			echo "executing on $EXT_HOST ./start_gpfdist.sh $PORT $GEN_DATA_PATH"
 			ssh -n -f $EXT_HOST "bash -c 'cd ~/; ./start_gpfdist.sh $PORT $GEN_DATA_PATH'"
@@ -56,7 +56,7 @@ start_gpfdist()
 			CHILD=$(echo $i | awk -F '|' '{print $1}')
 			EXT_HOST=$(echo $i | awk -F '|' '{print $2}')
 			GEN_DATA_PATH=$(echo $i | awk -F '|' '{print $3}')
-			GEN_DATA_PATH=$GEN_DATA_PATH/pivotalguru
+			GEN_DATA_PATH=$GEN_DATA_PATH/dsbenchmark
 			PORT=$(($GPFDIST_PORT + $CHILD))
 			echo "executing on $EXT_HOST ./start_gpfdist.sh $PORT $GEN_DATA_PATH"
 			ssh -n -f $EXT_HOST "bash -c 'cd ~/; ./start_gpfdist.sh $PORT $GEN_DATA_PATH'"
@@ -97,7 +97,7 @@ else
 		schema_name=$(echo $short_i | awk -F '.' '{print $2}')
 		table_name=$(echo $short_i | awk -F '.' '{print $3}')
 		for p in $(seq 1 $PARALLEL); do
-			filename=$(echo $PGDATA/pivotalguru_$p/"$table_name"_"$p"_"$PARALLEL".dat)
+			filename=$(echo $PGDATA/dsbenchmark_$p/"$table_name"_"$p"_"$PARALLEL".dat)
 			if [[ -f $filename && -s $filename ]]; then
 				start_log
 				filename="'""$filename""'"

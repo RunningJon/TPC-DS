@@ -40,18 +40,18 @@ Installation
 ssh gpadmin@mdw; sudo bash
 
 2. Download the tpcds.sh file
-curl https://raw.githubusercontent.com/pivotalguru/TPC-DS/master/tpcds.sh > tpcds.sh
+curl https://raw.githubusercontent.com/dsbenchmark/TPC-DS/master/tpcds.sh > tpcds.sh
 chmod 755 tpcds.sh
 
 ########################################################################################
 Variables and Configuration
 ########################################################################################
-By default, the installation will create the scripts in /pivotalguru/TPC-DS on the 
+By default, the installation will create the scripts in /dsbenchmark/TPC-DS on the 
 Master host.  This can be changed by editing the dynamically configured 
 tpcds_variables.sh file that is created the first time tpcds.sh is run.  
 
 Also by default, TPC-DS files are generated on each Segment Host / Data Node in the 
-Segement's PGDATA/pivotalguru directory.  If there isn't enough space in this directory
+Segement's PGDATA/dsbenchmark directory.  If there isn't enough space in this directory
 in each Segment, you can create a symbolic link to a drive location that does have 
 enough space.
 
@@ -65,7 +65,7 @@ nohup ./tpcds.sh > tpcds.log 2>&1 < tpcds.log &
 Notes
 ########################################################################################
 - tpcds_variables.sh file will be created with variables you can adjust
-- Files for the benchmark will be created in a sub-directory named pivotalguru located 
+- Files for the benchmark will be created in a sub-directory named dsbenchmark located 
 in each segment directory on each segment host / data node.
 You can update these directories to be symbolic links to better utilize the disk 
 volumes you have available.
