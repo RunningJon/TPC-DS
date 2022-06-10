@@ -38,7 +38,7 @@
  define PRICE=random(10,70,uniform);
  define _LIMIT=100;
   
- [_LIMITA] select [_LIMITB] i_item_id
+ [_LIMITA] select /*tpcdsquery37*/ [_LIMITB] i_item_id
        ,i_item_desc
        ,i_current_price
  from item, inventory, date_dim, catalog_sales

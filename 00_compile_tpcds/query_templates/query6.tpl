@@ -36,7 +36,7 @@
  define MONTH= random(1,7,uniform);
  define _LIMIT=100;
  
- [_LIMITA] select [_LIMITB] a.ca_state state, count(*) cnt
+ [_LIMITA] select /*tpcdsquery06*/ [_LIMITB] a.ca_state state, count(*) cnt
  from customer_address a
      ,customer c
      ,store_sales s

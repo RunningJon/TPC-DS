@@ -37,7 +37,7 @@
  define AGG= text({"sum",1},{"min",1},{"max",1},{"avg",1},{"stddev_samp",1}); 
  define _LIMIT=100;
  
- [_LIMITA] select [_LIMITB]  
+ [_LIMITA] select /*tpcdsquery29*/ [_LIMITB]  
      i_item_id
     ,i_item_desc
     ,s_store_id

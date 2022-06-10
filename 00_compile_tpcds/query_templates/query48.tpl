@@ -37,7 +37,7 @@
  define STATE= ulist(dist(fips_county, 3, 1), 9);
  define YEAR= random(1998,2002, uniform);
 
- select sum (ss_quantity)
+ select /*tpcdsquery48*/ sum (ss_quantity)
  from store_sales, store, customer_demographics, customer_address, date_dim
  where s_store_sk = ss_store_sk
  and  ss_sold_date_sk = d_date_sk and d_year = [YEAR]

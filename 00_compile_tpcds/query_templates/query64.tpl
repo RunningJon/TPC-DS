@@ -37,7 +37,7 @@ define COLOR=ulist(dist(colors,1,1),6);
 define PRICE=random(0,85,uniform);
 define YEAR = random(1999, 2001, uniform);
 
-with cs_ui as
+with /*tpcdsquery64*/ cs_ui as
  (select cs_item_sk
         ,sum(cs_ext_list_price) as sale,sum(cr_refunded_cash+cr_reversed_charge+cr_store_credit) as refund
   from catalog_sales

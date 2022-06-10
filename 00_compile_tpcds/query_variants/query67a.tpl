@@ -35,7 +35,7 @@
  define DMS = random(1176,1224,uniform);
  define _LIMIT=100;
 
-with results as
+with /*tpcdsquery67a*/ results as
 (     select i_category ,i_class ,i_brand ,i_product_name ,d_year ,d_qoy ,d_moy ,s_store_id
                   ,sum(coalesce(ss_sales_price*ss_quantity,0)) sumsales
             from store_sales ,date_dim ,store ,item

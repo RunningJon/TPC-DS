@@ -36,7 +36,7 @@
  define SALES_DATE=date([YEAR]+"-08-01",[YEAR]+"-08-30",sales);
  define _LIMIT=100;
  
- with ss as
+ with /*tpcdsquery77a*/ ss as
  (select s_store_sk,
          sum(ss_ext_sales_price) as sales,
          sum(ss_net_profit) as profit

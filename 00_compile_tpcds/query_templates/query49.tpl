@@ -36,7 +36,7 @@
  define MONTH=random(11,12,uniform);
  define _LIMIT=100;
  
- [_LIMITA] select [_LIMITB] 
+ [_LIMITA] select /*tpcdsquery49*/ [_LIMITB] 
  'web' as channel
  ,web.item
  ,web.return_ratio

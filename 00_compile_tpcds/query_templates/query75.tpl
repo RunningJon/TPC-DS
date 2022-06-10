@@ -38,7 +38,7 @@ define CATEGORY = distmember(categories,[CINDX],1);
 define YEAR = random(1999,2002,uniform);
 define _LIMIT=100;
 
-WITH all_sales AS (
+WITH /*tpcdsquery75*/ all_sales AS (
  SELECT d_year
        ,i_brand_id
        ,i_class_id

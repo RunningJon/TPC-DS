@@ -39,7 +39,7 @@ define SELECTONE= text({"t_s_secyear.customer_preferred_cust_flag",1}
                        ,{"t_s_secyear.customer_email_address",1});
 define _LIMIT=100;
 
-with year_total as (
+with /*tpcdsquery04*/ year_total as (
  select c_customer_id customer_id
        ,c_first_name customer_first_name
        ,c_last_name customer_last_name

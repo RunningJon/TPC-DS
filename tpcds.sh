@@ -24,7 +24,12 @@ check_variables()
 	fi
 	local count=$(grep "REPO_URL=" $MYVAR | wc -l)
 	if [ "$count" -eq "0" ]; then
-		echo "REPO_URL=\"https://github.com/pivotalguru/TPC-DS\"" >> $MYVAR
+		echo "REPO_URL=\"https://github.com/arenadata/TPC-DS\"" >> $MYVAR
+		new_variable=$(($new_variable + 1))
+	fi
+	local count=$(grep "REPO_BRANCH=" $MYVAR | wc -l)
+	if [ "$count" -eq "0" ]; then
+		echo "REPO_BRANCH=\"master\"" >> $MYVAR
 		new_variable=$(($new_variable + 1))
 	fi
 	local count=$(grep "ADMIN_USER=" $MYVAR | wc -l)
@@ -34,7 +39,7 @@ check_variables()
 	fi
 	local count=$(grep "INSTALL_DIR=" $MYVAR | wc -l)
 	if [ "$count" -eq "0" ]; then
-		echo "INSTALL_DIR=\"/pivotalguru\"" >> $MYVAR
+		echo "INSTALL_DIR=\"/arenadata\"" >> $MYVAR
 		new_variable=$(($new_variable + 1))
 	fi
 	local count=$(grep "EXPLAIN_ANALYZE=" $MYVAR | wc -l)
@@ -227,13 +232,13 @@ repo_init()
 			echo "-------------------------------------------------------------------------"
 			mkdir $INSTALL_DIR/$REPO
 			chown $ADMIN_USER $INSTALL_DIR/$REPO
-			su -c "cd $INSTALL_DIR; GIT_SSL_NO_VERIFY=true; git clone --depth=1 $REPO_URL" $ADMIN_USER
+			su -c "cd $INSTALL_DIR; GIT_SSL_NO_VERIFY=true; git clone $REPO_URL; cd $INSTALL_DIR/$REPO; git checkout $REPO_BRANCH" $ADMIN_USER
 		fi
 	else
 		if [ "$internet_down" -eq "0" ]; then
 			git config --global user.email "$ADMIN_USER@$HOSTNAME"
 			git config --global user.name "$ADMIN_USER"
-			su -c "cd $INSTALL_DIR/$REPO; GIT_SSL_NO_VERIFY=true; git fetch --all; git reset --hard origin/master" $ADMIN_USER
+			su -c "cd $INSTALL_DIR/$REPO; GIT_SSL_NO_VERIFY=true; git checkout $REPO_BRANCH; git fetch --all; git reset --hard" $ADMIN_USER
 		fi
 	fi
 }

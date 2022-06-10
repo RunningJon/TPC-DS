@@ -37,7 +37,7 @@
  define MANUFACT= random(1,1000,uniform);
  define _LIMIT=100;
 
- [_LIMITA] select [_LIMITB] dt.d_year 
+ [_LIMITA] select /*tpcdsquery03*/ [_LIMITB] dt.d_year 
        ,item.i_brand_id brand_id 
        ,item.i_brand brand
        ,sum([AGGC]) sum_agg

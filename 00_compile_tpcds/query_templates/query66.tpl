@@ -41,7 +41,7 @@
  define SALESTWO = text({"cs_sales_price",1},{"cs_ext_sales_price",1},{"cs_ext_list_price",1});
  define _LIMIT=100; 
  
- [_LIMITA] select [_LIMITB]  
+ [_LIMITA] select /*tpcdsquery66*/ [_LIMITB]  
          w_warehouse_name
  	,w_warehouse_sq_ft
  	,w_city

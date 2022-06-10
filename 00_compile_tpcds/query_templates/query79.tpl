@@ -37,7 +37,7 @@
  define VEHCNT=random(-1,4,uniform);
  define _LIMIT=100;
  
- [_LIMITA] select [_LIMITB]
+ [_LIMITA] select /*tpcdsquery79*/ [_LIMITB]
   c_last_name,c_first_name,substr(s_city,1,30),ss_ticket_number,amt,profit
   from
    (select ss_ticket_number

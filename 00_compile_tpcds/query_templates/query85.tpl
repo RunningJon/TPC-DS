@@ -38,7 +38,7 @@
  define YEAR= random(1998,2002, uniform);
  define _LIMIT=100;
 
- [_LIMITA] select [_LIMITB] substr(r_reason_desc,1,20)
+ [_LIMITA] select /*tpcdsquery85*/ [_LIMITB] substr(r_reason_desc,1,20)
        ,avg(ws_quantity)
        ,avg(wr_refunded_cash)
        ,avg(wr_fee)

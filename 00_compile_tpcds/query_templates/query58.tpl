@@ -36,7 +36,7 @@
  define SALES_DATE=date([YEAR]+"-01-01",[YEAR]+"-07-24",sales); 
  define _LIMIT=100;
  
- with ss_items as
+ with /*tpcdsquery58*/ ss_items as
  (select i_item_id item_id
         ,sum(ss_ext_sales_price) ss_item_rev 
  from store_sales

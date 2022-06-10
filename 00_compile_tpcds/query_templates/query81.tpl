@@ -36,7 +36,7 @@
  define YEAR= random(1998, 2002, uniform);
  define _LIMIT=100; 
  
- with customer_total_return as
+ with /*tpcdsquery81*/ customer_total_return as
  (select cr_returning_customer_sk as ctr_customer_sk
         ,ca_state as ctr_state, 
  	sum(cr_return_amt_inc_tax) as ctr_total_return

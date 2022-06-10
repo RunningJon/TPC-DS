@@ -35,7 +35,7 @@
   define YEAR= random(1998, 2002, uniform);
  define MONTH=random(11,12,uniform);
 
- select i_brand_id brand_id, i_brand brand,t_hour,t_minute,
+ select /*tpcdsquery71*/ i_brand_id brand_id, i_brand brand,t_hour,t_minute,
  	sum(ext_price) ext_price
  from item, (select ws_ext_sales_price as ext_price, 
                         ws_sold_date_sk as sold_date_sk,

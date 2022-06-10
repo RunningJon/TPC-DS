@@ -36,7 +36,7 @@
  define SALES_DATE=date([YEAR]+"-01-31",[YEAR]+"-7-01",sales);
  define _LIMIT=100;
  
- [_LIMITA] select [_LIMITB] *
+ [_LIMITA] select /*tpcdsquery21*/ [_LIMITB] *
  from(select w_warehouse_name
             ,i_item_id
             ,sum(case when (cast(d_date as date) < cast ('[SALES_DATE]' as date))

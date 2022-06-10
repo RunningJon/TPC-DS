@@ -39,7 +39,7 @@
  define MONTH=ulist(random(1,12,uniform),6);
  define _LIMIT=100;
  
- with results as
+ with /*tpcdsquery18a*/ results as
  (select i_item_id,
         ca_country,
         ca_state, 

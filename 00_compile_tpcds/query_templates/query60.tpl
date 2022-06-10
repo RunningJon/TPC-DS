@@ -38,7 +38,7 @@
  define CATEGORY = text({"Children",1},{"Men",1},{"Music",1},{"Jewelry",1},{"Shoes",1});
  define _LIMIT=100;
  
- with ss as (
+ with /*tpcdsquery60*/ ss as (
  select
           i_item_id,sum(ss_ext_sales_price) total_sales
  from

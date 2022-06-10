@@ -38,7 +38,7 @@ define _LIMIT = 100;
 define BP= text({"1001-5000",1},{">10000",1},{"501-1000",1});
 define MS= dist(marital_status, 1, 1);
 
-[_LIMITA] select [_LIMITB] i_item_desc
+[_LIMITA] select /*tpcdsquery72*/ [_LIMITB] i_item_desc
       ,w_warehouse_name
       ,d1.d_week_seq
       ,sum(case when p_promo_sk is null then 1 else 0 end) no_promo

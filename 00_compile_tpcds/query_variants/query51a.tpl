@@ -35,7 +35,7 @@
 define DMS = random(1176,1224,uniform);
 define _LIMIT=100;
 
-WITH web_tv as (
+WITH /*tpcdsquery51a*/ web_tv as (
 select
   ws_item_sk item_sk, d_date, sum(ws_sales_price) sumws,
   row_number()

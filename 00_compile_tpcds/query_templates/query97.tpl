@@ -38,7 +38,7 @@ define _LIMIT=100;
 
 
 
-with ssci as (
+with /*tpcdsquery97*/ ssci as (
 select ss_customer_sk customer_sk
       ,ss_item_sk item_sk
 from store_sales,date_dim

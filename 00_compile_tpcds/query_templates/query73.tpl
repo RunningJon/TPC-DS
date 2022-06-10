@@ -41,7 +41,7 @@
  define COUNTY_C=distmember(fips_county, [COUNTYNUMBER.3], 2);
  define COUNTY_D=distmember(fips_county, [COUNTYNUMBER.4], 2);
  
- select c_last_name
+ select /*tpcdsquery73*/ c_last_name
        ,c_first_name
        ,c_salutation
        ,c_preferred_cust_flag 

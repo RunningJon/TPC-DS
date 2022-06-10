@@ -40,7 +40,7 @@
  define CITY_B = distmember(cities, [CITYNUMBER.2], 1);
  define _LIMIT=100;
  
- [_LIMITA] select [_LIMITB] c_last_name
+ [_LIMITA] select /*tpcdsquery68*/ [_LIMITB] c_last_name
        ,c_first_name
        ,ca_city
        ,bought_city

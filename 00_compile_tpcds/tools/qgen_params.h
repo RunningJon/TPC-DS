@@ -61,7 +61,7 @@ option_t options[] =
 {"STREAMS",		OPT_INT,			10, "generate <n> query streams/versions", NULL, "1"}, 
 {"INPUT",		OPT_STR,			11, "read template names from <s>", NULL, ""}, 
 {"SCALE",		OPT_INT,			12, "assume a database of <n> GB", NULL, "1"}, 
-{"RNGSEED",		OPT_INT|OPT_ADV,	13, "seed the RNG with <n>", NULL, "19620718"}, 
+{"RNGSEED",		OPT_INT|OPT_ADV,	13, "seed the RNG with <n>", NULL, "91686806"}, 
 {"RELEASE",		OPT_FLG|OPT_ADV,	14, "display QGEN release info", printReleaseInfo, ""}, 
 {"TEMPLATE",	OPT_STR|OPT_ADV,	15, "build queries from template <s> ONLY", NULL, ""}, 
 {"COUNT",		OPT_INT|OPT_ADV,	16, "generate <n> versions per stream (used with TEMPLATE)", NULL, "1"}, 

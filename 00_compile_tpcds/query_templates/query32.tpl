@@ -37,7 +37,7 @@ define YEAR  = random(1998,2002,uniform);
 define CSDATE = date([YEAR]+"-01-01",[YEAR]+"-04-01",sales);
 define _LIMIT=100;
 
-[_LIMITA] select [_LIMITB] sum(cs_ext_discount_amt)  as "excess discount amount" 
+[_LIMITA] select /*tpcdsquery32*/ [_LIMITB] sum(cs_ext_discount_amt)  as "excess discount amount" 
 from 
    catalog_sales 
    ,item 

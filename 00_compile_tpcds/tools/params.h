@@ -65,7 +65,7 @@ option_t options[] =
 {"VALIDATE",	OPT_FLG,			21, "produce rows for data validation", NULL, "N"}, 
 {"VCOUNT",		OPT_INT|OPT_ADV,	22, "set number of validation rows to be produced", NULL, "50"}, 
 {"VSUFFIX",		OPT_STR|OPT_ADV,	23, "set file suffix for data validation", NULL, ".vld"}, 
-{"RNGSEED",		OPT_INT|OPT_ADV,	24, "set RNG seed", NULL, "19620718"}, 
+{"RNGSEED",		OPT_INT|OPT_ADV,	24, "set RNG seed", NULL, "91686806"}, 
 {NULL}
 };
 

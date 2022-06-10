@@ -36,7 +36,7 @@
 define DMS = random(1176,1224,uniform);
 define _LIMIT=100;
 
-WITH web_v1 as (
+WITH /*tpcdsquery51*/ web_v1 as (
 select
   ws_item_sk item_sk, d_date,
   sum(sum(ws_sales_price))

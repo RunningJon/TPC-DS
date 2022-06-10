@@ -36,7 +36,7 @@
 define DMS = random(1176,1224,uniform);
 define _LIMIT=100;
 
-[_LIMITA] select [_LIMITB] 
+[_LIMITA] select /*tpcdsquery62*/ [_LIMITB] 
    substr(w_warehouse_name,1,20)
   ,sm_type
   ,web_name

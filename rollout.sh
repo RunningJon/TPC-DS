@@ -89,6 +89,10 @@ if [ "$RUN_SCORE" == "true" ]; then
 	rm -f $PWD/log/end_score.log
 fi
 
+
+# false steps are skipped during $i/rollout.sh when $PWD/log/end*.log files are checked in init_log
+# If you have trouble with skipping steps make sure that corresponding $PWD/log/end*.log exists! 
+
 for i in $(ls -d $PWD/0*); do
 	echo "$i/rollout.sh"
 	$i/rollout.sh $GEN_DATA_SCALE $EXPLAIN_ANALYZE $RANDOM_DISTRIBUTION $MULTI_USER_COUNT $SINGLE_USER_ITERATIONS

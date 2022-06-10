@@ -37,7 +37,7 @@
  define ZIP=ulist(random(10000,99999,uniform),400);  
  define _LIMIT=100;
 
- [_LIMITA] select [_LIMITB] s_store_name
+ [_LIMITA] select /*tpcdsquery08*/ [_LIMITB] s_store_name
       ,sum(ss_net_profit)
  from store_sales
      ,date_dim

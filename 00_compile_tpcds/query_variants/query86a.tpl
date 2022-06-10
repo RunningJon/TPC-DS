@@ -35,7 +35,7 @@
  define DMS = random(1176,1224,uniform);
  define _LIMIT=100;
  
- with results as
+ with /*tpcdsquery86a*/ results as
 ( select sum(ws_net_paid) as total_sum, i_category, i_class, 0 as g_category, 0 as g_class 
  from
     web_sales

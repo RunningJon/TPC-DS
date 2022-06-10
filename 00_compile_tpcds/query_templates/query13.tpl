@@ -37,7 +37,7 @@
  define STATE= ulist(dist(fips_county, 3, 1), 9);
  
 
- select avg(ss_quantity)
+ select /*tpcdsquery13*/ avg(ss_quantity)
        ,avg(ss_ext_sales_price)
        ,avg(ss_ext_wholesale_cost)
        ,sum(ss_ext_wholesale_cost)

@@ -36,7 +36,7 @@
  define QOY=random(1,2,uniform);
  define _LIMIT=100;
  
- [_LIMITA] select [_LIMITB] ca_zip
+ [_LIMITA] select /*tpcdsquery15*/ [_LIMITB] ca_zip
        ,sum(cs_sales_price)
  from catalog_sales
      ,customer

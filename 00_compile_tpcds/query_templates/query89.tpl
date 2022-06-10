@@ -48,7 +48,7 @@ define CAT_F = distmember(categories, [IDX.6], 1);
 define CLASS_F = DIST(distmember(categories, [IDX.6], 2), 1, 1);
 define _LIMIT=100;
 
-[_LIMITA] select [_LIMITB] *
+[_LIMITA] select /*tpcdsquery89*/ [_LIMITB] *
 from(
 select i_category, i_class, i_brand,
        s_store_name, s_company_name,

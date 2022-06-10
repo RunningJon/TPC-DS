@@ -38,7 +38,7 @@ Define YEAR  = random(1998,2002,uniform);
 Define WSDATE = date([YEAR]+"-01-01",[YEAR]+"-04-01",sales);
 define _LIMIT=100;
 
-[_LIMITA] select [_LIMITB] 
+[_LIMITA] select /*tpcdsquery92*/ [_LIMITB] 
    sum(ws_ext_discount_amt)  as "Excess Discount Amount" 
 from 
     web_sales 

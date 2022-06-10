@@ -37,7 +37,7 @@
  define QOY=random(1,2,uniform);
  define _LIMIT=100;
  
- [_LIMITA] select [_LIMITB] ca_zip, [GBOBC], sum(ws_sales_price)
+ [_LIMITA] select /*tpcdsquery45*/ [_LIMITB] ca_zip, [GBOBC], sum(ws_sales_price)
  from web_sales, customer, customer_address, date_dim, item
  where ws_bill_customer_sk = c_customer_sk
  	and c_current_addr_sk = ca_address_sk 
