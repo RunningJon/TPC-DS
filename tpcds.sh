@@ -24,7 +24,7 @@ check_variables()
 	fi
 	local count=$(grep "REPO_URL=" $MYVAR | wc -l)
 	if [ "$count" -eq "0" ]; then
-		echo "REPO_URL=\"https://github.com/ivanievlev/TPC-DS\"" >> $MYVAR
+		echo "REPO_URL=\"https://github.com/arenadata/TPC-DS\"" >> $MYVAR
 		new_variable=$(($new_variable + 1))
 	fi
 	local count=$(grep "REPO_BRANCH=" $MYVAR | wc -l)
@@ -39,7 +39,7 @@ check_variables()
 	fi
 	local count=$(grep "INSTALL_DIR=" $MYVAR | wc -l)
 	if [ "$count" -eq "0" ]; then
-		echo "INSTALL_DIR=\"/ivanievlev\"" >> $MYVAR
+		echo "INSTALL_DIR=\"/arenadata\"" >> $MYVAR
 		new_variable=$(($new_variable + 1))
 	fi
 	local count=$(grep "EXPLAIN_ANALYZE=" $MYVAR | wc -l)
