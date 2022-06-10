@@ -118,12 +118,20 @@ set_memory_limit()
 	psql -v ON_ERROR_STOP=1 -q -A -t -c "ALTER RESOURCE GROUP admin_group SET MEMORY_LIMIT 80;"
 }
 
+set_concurrency()
+{
+	echo "psql -v ON_ERROR_STOP=1 -q -A -t -c \"ALTER RESOURCE GROUP admin_group SET CONCURRENCY 25;\""
+	psql -v ON_ERROR_STOP=1 -q -A -t -c "ALTER RESOURCE GROUP admin_group SET CONCURRENCY 25;"
+}
+
+
 get_version
 if [[ "$VERSION" == *"gpdb"* ]]; then
 	set_segment_bashrc
 	check_gucs
 	copy_config
 	set_memory_limit
+	set_concurrency
 fi
 set_search_path
 
