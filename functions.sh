@@ -57,11 +57,11 @@ get_version()
 		if [ "$quicklz_test" -eq "1" ]; then
 			SMALL_STORAGE="appendonly=true, orientation=column"
 			MEDIUM_STORAGE="appendonly=true, orientation=column"
-			LARGE_STORAGE="appendonly=true, orientation=column, compresstype=none"
+			LARGE_STORAGE="appendonly=true, orientation=column"
 		else
 			SMALL_STORAGE="appendonly=true, orientation=column"
 			MEDIUM_STORAGE="appendonly=true, orientation=column"
-			LARGE_STORAGE="appendonly=true, orientation=column, compresstype=none, compresslevel=0"
+			LARGE_STORAGE="appendonly=true, orientation=column"
 		fi
 	else
 		SMALL_STORAGE=""
