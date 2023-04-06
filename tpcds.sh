@@ -24,7 +24,7 @@ check_variables()
 	fi
 	local count=$(grep "REPO_URL=" $MYVAR | wc -l)
 	if [ "$count" -eq "0" ]; then
-		echo "REPO_URL=\"https://github.com/pivotalguru/TPC-DS\"" >> $MYVAR
+		echo "REPO_URL=\"https://github.com/NAndreyA/TPC-DS.git\"" >> $MYVAR
 		new_variable=$(($new_variable + 1))
 	fi
 	local count=$(grep "ADMIN_USER=" $MYVAR | wc -l)
